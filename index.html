@@ -1,0 +1,237 @@
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+#nm-wrap *{box-sizing:border-box;margin:0;padding:0;}
+#nm-wrap{font-family:'Noto Sans KR',sans-serif;width:100%;background:#111;}
+
+#nm-hdr{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:#1a1a1a;
+  padding:0 24px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nm-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.nm-mark{width:30px;height:30px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.nm-mark svg{width:17px;height:17px;fill:#fff;}
+.nm-brand{font-size:15px;font-weight:900;color:#fff;}
+.nm-brand span{color:#4ade80;}
+.nm-hbtn{padding:8px 16px;background:#1D9E75;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-decoration:none;white-space:nowrap;}
+
+.nm-ls{
+  width:100%;min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:90px 7% 80px;
+  position:relative;overflow:hidden;
+}
+.nm-ls-bg{background-size:cover;background-position:center;}
+.nm-ls-bg::before{content:'';position:absolute;inset:0;z-index:0;}
+.nm-ls-bg > *{position:relative;z-index:1;}
+
+.nm-s1{background:#111;color:#fff;}
+.nm-s2{background:#f0f5f0;color:#1a1a1a;}
+.nm-s3{color:#1a1a1a;background-image:url('https://images.unsplash.com/photo-1604156425963-9be03f86a428?w=1400&q=80');background-size:cover;background-position:center;}
+.nm-s3::before{background:rgba(215,232,215,0.84);content:'';position:absolute;inset:0;z-index:0;}
+.nm-s3>*{position:relative;z-index:1;}
+.nm-s4{background:#1a1a1a;color:#fff;}
+.nm-s5{color:#fff;background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1400&q=80');background-size:cover;background-position:center;}
+.nm-s5::before{background:rgba(10,10,10,0.78);content:'';position:absolute;inset:0;z-index:0;}
+.nm-s5>*{position:relative;z-index:1;}
+.nm-s6{background:#f8f8f4;color:#1a1a1a;}
+.nm-s7{color:#1a1a1a;background-image:url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1400&q=80');background-size:cover;background-position:center;}
+.nm-s7::before{background:rgba(228,238,228,0.86);content:'';position:absolute;inset:0;z-index:0;}
+.nm-s7>*{position:relative;z-index:1;}
+.nm-s8{color:#fff;background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1400&q=80');background-size:cover;background-position:center;}
+.nm-s8::before{background:rgba(8,100,65,0.84);content:'';position:absolute;inset:0;z-index:0;}
+.nm-s8>*{position:relative;z-index:1;}
+
+.nm-eyebrow{display:inline-block;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:20px;}
+.nm-s1 .nm-eyebrow{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);}
+.nm-s2 .nm-eyebrow{background:#d1fae5;color:#065f46;}
+.nm-s3 .nm-eyebrow{background:rgba(255,255,255,0.65);color:#1a4a1a;}
+.nm-s4 .nm-eyebrow{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);}
+.nm-s5 .nm-eyebrow{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);}
+.nm-s6 .nm-eyebrow{background:#d1fae5;color:#065f46;}
+.nm-s7 .nm-eyebrow{background:rgba(255,255,255,0.65);color:#1a3a1a;}
+.nm-s8 .nm-eyebrow{background:rgba(255,255,255,0.15);color:#fff;}
+
+.nm-h{font-size:clamp(30px,5.5vw,60px);font-weight:900;line-height:1.18;margin-bottom:20px;word-break:keep-all;max-width:640px;}
+.nm-s1 .nm-h{color:#fff;}
+.nm-s1 .nm-h em{font-style:normal;color:#1D9E75;}
+.nm-s2 .nm-h{color:#111;}
+.nm-s3 .nm-h{color:#111;}
+.nm-s3 .nm-h em{font-style:normal;color:#0F6E56;}
+.nm-s4 .nm-h{color:#fff;}
+.nm-s4 .nm-h em{font-style:normal;color:#1D9E75;}
+.nm-s5 .nm-h{color:#fff;}
+.nm-s5 .nm-h em{font-style:normal;color:#4ade80;}
+.nm-s6 .nm-h{color:#111;}
+.nm-s6 .nm-h em{font-style:normal;color:#1D9E75;}
+.nm-s7 .nm-h{color:#111;}
+.nm-s7 .nm-h em{font-style:normal;color:#0F6E56;}
+.nm-s8 .nm-h{color:#fff;}
+.nm-s8 .nm-h em{font-style:normal;color:#FEE500;}
+
+.nm-b{font-size:clamp(15px,2vw,18px);line-height:1.9;max-width:580px;word-break:keep-all;margin-bottom:10px;}
+.nm-s1 .nm-b{color:rgba(255,255,255,0.72);}
+.nm-s2 .nm-b{color:#333;}
+.nm-s3 .nm-b{color:#222;}
+.nm-s4 .nm-b{color:rgba(255,255,255,0.72);}
+.nm-s5 .nm-b{color:rgba(255,255,255,0.8);}
+.nm-s6 .nm-b{color:#333;}
+.nm-s7 .nm-b{color:#222;}
+.nm-s8 .nm-b{color:rgba(255,255,255,0.88);}
+.nm-b strong{font-weight:700;}
+.nm-s1 .nm-b strong,.nm-s4 .nm-b strong,.nm-s5 .nm-b strong{color:#fff;}
+.nm-s2 .nm-b strong,.nm-s3 .nm-b strong,.nm-s6 .nm-b strong,.nm-s7 .nm-b strong{color:#0F6E56;}
+
+.nm-quote{font-size:clamp(20px,3vw,30px);font-weight:900;line-height:1.4;padding:0 0 0 22px;border-left:4px solid #1D9E75;color:#1D9E75;margin:8px 0 24px;max-width:640px;word-break:keep-all;}
+
+.nm-div{width:36px;height:3px;margin:18px 0;border-radius:2px;}
+.nm-s1 .nm-div,.nm-s4 .nm-div,.nm-s5 .nm-div,.nm-s8 .nm-div{background:rgba(255,255,255,0.2);}
+.nm-s2 .nm-div,.nm-s3 .nm-div,.nm-s6 .nm-div,.nm-s7 .nm-div{background:#1D9E75;opacity:0.4;}
+
+.nm-arrow{margin-top:40px;display:flex;animation:nm-bounce 2s infinite;}
+@keyframes nm-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+.nm-arrow svg{width:22px;height:22px;}
+.nm-s1 .nm-arrow svg,.nm-s4 .nm-arrow svg,.nm-s5 .nm-arrow svg,.nm-s8 .nm-arrow svg{stroke:#fff;opacity:0.3;}
+.nm-s2 .nm-arrow svg,.nm-s3 .nm-arrow svg,.nm-s6 .nm-arrow svg,.nm-s7 .nm-arrow svg{stroke:#1D9E75;opacity:0.5;}
+
+.nm-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin-top:32px;}
+.nm-btn{padding:16px 18px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-decoration:none;display:flex;align-items:center;gap:8px;border:none;transition:transform 0.15s;word-break:keep-all;}
+.nm-btn:hover{transform:translateY(-2px);}
+.nm-yellow{background:#FEE500;color:#391B1B;}
+.nm-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.45);}
+.nm-outline:hover{background:rgba(255,255,255,0.1);}
+
+.nm-dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:9998;}
+.nm-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.25);cursor:pointer;transition:all 0.25s;border:none;padding:0;}
+.nm-dot.on{background:#1D9E75;transform:scale(1.5);}
+
+@media(max-width:600px){
+  .nm-ls{padding:80px 6% 60px;}
+  .nm-btns{grid-template-columns:1fr;}
+  .nm-dots{display:none;}
+  .nm-hbtn{font-size:11px;padding:7px 10px;}
+}
+</style>
+
+<div id="nm-wrap">
+
+  <!-- 헤더 -->
+  <header id="nm-hdr">
+    <a href="#" class="nm-logo">
+      <div class="nm-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L20 9v7l-8 4-8-4V9l8-4.5z" opacity=".4"/><path d="M12 6l-6 3v6l6 3 6-3V9l-6-3z"/></svg>
+      </div>
+      <div class="nm-brand">나이스<span>모터스</span></div>
+    </a>
+    <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-hbtn">허위매물 걱정 없이 매물보기 →</a>
+  </header>
+
+  <!-- 도트 -->
+  <nav class="nm-dots" id="nm-dots"></nav>
+
+  <!-- S1: 히어로 -->
+  <section class="nm-ls nm-s1" id="nm0">
+    <div class="nm-eyebrow">청주 나이스모터스 · 손영준 딜러</div>
+    <h1 class="nm-h">"세상에<br><em>싸고 좋은 차</em>는<br>없습니다."</h1>
+    <p class="nm-b">그래도 <strong>합리적이고 안전한 차</strong>는 분명히 있습니다.<br>제가 직접 찾아드릴게요.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S2: 저의 이야기 -->
+  <section class="nm-ls nm-s2" id="nm1">
+    <div class="nm-eyebrow">저의 이야기</div>
+    <h2 class="nm-h">저는 평생<br>가성비만 좇았습니다.</h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">똑같은 물건 하나를 사더라도 남들보다 더 싸게 사보겠다고 온갖 정보와 데이터를 뒤지고 비교하며 한두 달씩 시간을 쏟아붓곤 했죠.</p>
+    <p class="nm-b" style="margin-top:16px;">그런데 어느 날 친구를 보며 생각했습니다.<br><strong>"내가 시간과 에너지를 쏟아가며 아낀 돈이 과연 그만한 가치가 있었을까?"</strong></p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S3: 뼈아픈 경험 -->
+  <section class="nm-ls nm-s3 nm-ls-bg" id="nm2">
+    <div class="nm-eyebrow">뼈아픈 경험</div>
+    <h2 class="nm-h">싸게 샀다가<br><em>두 배로 썼습니다.</em></h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">저렴한 가격에 혹해 사기를 당하거나, 싼 맛에 샀다가 고장이 나서 결국 돈이 이중으로 들어가는 <strong>'중복투자'</strong>의 뼈아픈 경험을 수차례 겪었습니다.</p>
+    <p class="nm-b" style="margin-top:16px;">이제는 무조건적인 가성비만 좇기보다,<br><strong>'안전'과 '확실성'</strong>이라는 가치와 적당히 타협하며 살아가려 합니다.<br>이 깨달음은 자동차 시장에서도 똑같이 적용됩니다.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S4: 중고차 시장의 진실 -->
+  <section class="nm-ls nm-s4" id="nm3">
+    <div class="nm-eyebrow">중고차 시장의 진실</div>
+    <div class="nm-quote">"가격은 절대<br>거짓말을 하지 않습니다."</div>
+    <p class="nm-b">상태가 좋고 누구에게나 자신 있게 내놓을 수 있는 물건을<br>굳이 시세보다 싸게 팔 판매자는 세상에 없습니다.</p>
+    <p class="nm-b" style="margin-top:16px;">현장에서 큰 피해를 입으시는 사례들을 보면<br>대부분 <strong>유독 저렴한 차를 좇으시다가</strong> 발생합니다.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S5: 새 차도 예외 아님 -->
+  <section class="nm-ls nm-s5 nm-ls-bg" id="nm4">
+    <div class="nm-eyebrow">새 차도 예외는 아닙니다</div>
+    <h2 class="nm-h">저희 가족<br><em>GV80 신차가</em><br>터널에서 멈췄습니다.</h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">출고 1년도 안 되어 터널 한가운데서 멈춰 선 아찔한 경험.<br>자동차는 수만 개의 부품이 맞물려 돌아가는 기계이기에,<br><strong>새 차라고 해서 완벽을 보장할 수는 없습니다.</strong></p>
+    <p class="nm-b" style="margin-top:12px;">중고차라고 해서 무조건 문제가 생기는 것도 아닙니다.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S6: 최선은? -->
+  <section class="nm-ls nm-s6" id="nm5">
+    <div class="nm-eyebrow">그렇다면 최선은?</div>
+    <h2 class="nm-h">리스크를<br><em>최소화하는 것.</em></h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">현재까지 <strong>'알려진 정보'</strong>들을 투명하게 확인하고,<br><strong>'적정한 가격'</strong> 안에서<br>앞으로 <strong>'문제가 될 만한 요소'</strong>들을 최대한 꼼꼼하게 배제하며 차를 골라내는 것.</p>
+    <p class="nm-b" style="margin-top:16px;">100% 완벽한 차가 아니라, <strong>가장 합리적이고 안전한 선택지</strong>를 찾는 것입니다.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S7: 솔직하게 -->
+  <section class="nm-ls nm-s7 nm-ls-bg" id="nm6">
+    <div class="nm-eyebrow">솔직하게 말씀드리면</div>
+    <h2 class="nm-h">아직 저를<br>먼저 찾아주시는 분이<br><em>많지 않습니다.</em></h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">그래서 저를 믿고 연락해 주시는 한 분 한 분이 제게는 더욱 소중하고 간절합니다.</p>
+    <p class="nm-b" style="margin-top:16px;"><strong>정직하게 제 몫을 벌면서, 고객님께 좋은 차를 찾아드릴 수 있다면</strong> 얼마나 좋을까 늘 생각하며 일하고 있습니다.</p>
+    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
+  </section>
+
+  <!-- S8: CTA -->
+  <section class="nm-ls nm-s8 nm-ls-bg" id="nm7">
+    <div class="nm-eyebrow">함께 고민해요</div>
+    <h2 class="nm-h">제가 겪었던<br>실패를 고객님은<br><em>겪지 않도록.</em></h2>
+    <div class="nm-div"></div>
+    <p class="nm-b">단순히 차를 파는 사람이 아니라,<br>안전하고 합리적인 선택을 돕는 <strong>든든한 파트너</strong>가 되겠습니다.</p>
+    <p class="nm-b" style="margin-top:8px;">싸게 사는 게 아니라, <strong>후회하지 않는 선택</strong>을 도와드립니다.</p>
+    <div class="nm-btns">
+      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-yellow">🚗 이 가격에 괜찮은 차 있는지 물어보기</a>
+      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-outline">실매물 먼저 둘러보기</a>
+      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-yellow">허위매물인지 체크받기</a>
+      <a href="tel:01045619599" class="nm-btn nm-outline">이 차 사도 되는지 전화상담</a>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var secs = document.querySelectorAll('.nm-ls[id]');
+  var nav = document.getElementById('nm-dots');
+  secs.forEach(function(s, i){
+    var d = document.createElement('button');
+    d.className = 'nm-dot' + (i===0?' on':'');
+    d.onclick = function(){ s.scrollIntoView({behavior:'smooth'}); };
+    nav.appendChild(d);
+  });
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx = Array.from(secs).indexOf(e.target);
+        document.querySelectorAll('.nm-dot').forEach(function(d,i){ d.classList.toggle('on', i===idx); });
+      }
+    });
+  },{threshold:0.5});
+  secs.forEach(function(s){ obs.observe(s); });
+})();
+</script>
