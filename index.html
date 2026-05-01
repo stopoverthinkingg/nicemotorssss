@@ -2117,12 +2117,24 @@ function submitRecommend(){
   const msg=`[맞춤 차량 컨설팅 요청]\n\n💰 총 예산: ${budgetMin||'?'}~${budgetMax||'?'}만원\n🚗 차종: ${carTypes||'미선택'}\n📅 연식: ${years||'미선택'}\n📍 주행거리: ${km||'미선택'}\n🎯 주요 용도: ${usage||'미입력'}\n⭐ 중요사항: ${priority||'미선택'}\n✅ 필수 조건: ${must||'없음'}\n❌ 기피 조건: ${never||'없음'}\n📝 추가 요청: ${memo||'없음'}\n📞 연락처: ${phone||'미입력'}`;
   const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
   navigator.clipboard.writeText(msg).catch(()=>{});
-  const toast = document.createElement('div');
-  toast.textContent = '✅ 조건이 클립보드에 복사됐어요! 카카오톡에서 붙여넣기(길게 누르기)해서 보내주세요.';
-  Object.assign(toast.style, {position:'fixed',bottom:'80px',left:'50%',transform:'translateX(-50%)',background:'#1D9E75',color:'#fff',padding:'14px 20px',borderRadius:'12px',fontSize:'13px',zIndex:'99999',maxWidth:'90vw',textAlign:'center',lineHeight:'1.5',boxShadow:'0 4px 16px rgba(0,0,0,0.2)'});
-  document.body.appendChild(toast);
-  setTimeout(()=>toast.remove(), 4000);
-  setTimeout(()=>window.open(kakaoUrl,'_blank'), 300);
+  showSendModal(kakaoUrl);
+}
+
+function showSendModal(kakaoUrl) {
+  const overlay = document.createElement('div');
+  Object.assign(overlay.style, {position:'fixed',inset:'0',background:'rgba(0,0,0,0.55)',zIndex:'99999',display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'});
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:28px 24px;max-width:360px;width:100%;text-align:center;">
+      <div style="font-size:28px;margin-bottom:12px;">✅</div>
+      <div style="font-size:16px;font-weight:900;margin-bottom:10px;color:#111;">조건이 복사됐어요!</div>
+      <div style="font-size:13px;color:#555;line-height:1.7;margin-bottom:24px;">
+        아래 버튼을 누르면 카카오톡 채널이 열립니다.<br>
+        채팅창에서 <strong>길게 누르기 → 붙여넣기</strong>로<br>조건을 전송해주세요.
+      </div>
+      <button onclick="window.open('${kakaoUrl}','_blank');this.closest('div[style]').parentNode.remove();" style="width:100%;padding:14px;background:#FEE500;color:#391B1B;border:none;border-radius:10px;font-size:15px;font-weight:900;cursor:pointer;margin-bottom:10px;">카카오톡으로 전송하기</button>
+      <button onclick="this.closest('div[style]').parentNode.remove();" style="width:100%;padding:12px;background:#f4f4f2;color:#555;border:none;border-radius:10px;font-size:14px;cursor:pointer;">닫기</button>
+    </div>`;
+  document.body.appendChild(overlay);
 }
 
 /* ━━━ 매입 폼 ━━━ */
@@ -2140,12 +2152,7 @@ function submitBuy(){
   const msg=`[매입 신청]\n\n🚗 차량: ${name}\n📅 연식: ${year||'미입력'}\n📍 주행거리: ${km||'미입력'}\n🎨 색상: ${color||'미입력'}\n🔧 사고이력: ${accident}\n💰 희망가격: ${hopePrice?hopePrice+'만원':'협의'}\n📝 메모: ${memo||'없음'}\n📞 연락처: ${phone}`;
   const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
   navigator.clipboard.writeText(msg).catch(()=>{});
-  const toast = document.createElement('div');
-  toast.textContent = '✅ 내용이 클립보드에 복사됐어요! 카카오톡에서 붙여넣기(길게 누르기)해서 보내주세요.';
-  Object.assign(toast.style, {position:'fixed',bottom:'80px',left:'50%',transform:'translateX(-50%)',background:'#1D9E75',color:'#fff',padding:'14px 20px',borderRadius:'12px',fontSize:'13px',zIndex:'99999',maxWidth:'90vw',textAlign:'center',lineHeight:'1.5',boxShadow:'0 4px 16px rgba(0,0,0,0.2)'});
-  document.body.appendChild(toast);
-  setTimeout(()=>toast.remove(), 4000);
-  setTimeout(()=>window.open(kakaoUrl,'_blank'), 300);
+  showSendModal(kakaoUrl);
 }
 
 /* ━━━ 초기화 ━━━ */
