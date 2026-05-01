@@ -2434,7 +2434,7 @@ window.saveEdit = async function() {
       priceNum,
       phone: document.getElementById('ePh').value.trim(),
       dealer: document.getElementById('eDealer').value.trim() || '나이스모터스',
-      notes: document.getElementById('eNote').value.trim(),
+      notes: (()=>{const a=document.getElementById('eAccident').value;const n=document.getElementById('eNote').value.trim().split('·').filter(x=>x&&x!=='완전무사고'&&x!=='무사고'&&x!=='사고').join('·');return [a,n].filter(Boolean).join('·');})(),
       photos: editPhotos,
       extra,
       regDate: oldCar.regDate || todayKey,
