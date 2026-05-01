@@ -2151,12 +2151,9 @@ document.getElementById('aboutPhone').textContent=settings.phone||'번호를 설
 </script>
 </div><!-- /main-app -->
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ━━━ Supabase 연결 ━━━ */
-const SUPA_URL = 'https://ormjkxizgqyusdfkzibb.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ybWpreGl6Z3F5dXNkZmt6aWJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1NzQ0ODMsImV4cCI6MjA5MjE1MDQ4M30.cYmPGPJuIaXeDlyx57ZN6OTGhGqB4zPXKpdOr9y8IZs';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+/* ━━━ Supabase 연결 (sb 재사용) ━━━ */
+const supa = sb;
 
 /* ━━━ DB에서 매물 불러오기: 속도 최적화 + 캐시 우선 + 20대씩 로딩 ━━━ */
 const CAR_PAGE_SIZE = 20;
