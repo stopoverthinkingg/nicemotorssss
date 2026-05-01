@@ -766,7 +766,7 @@ footer strong{color:#fff;}
         </div>
         <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
           <button class="ls-btn-sub" style="background:#FEE500;border-color:#FEE500;color:#391B1B;font-weight:900;" onclick="goKakao()">허위매물인지 체크받기</button>
-          <button class="ls-btn-sub" onclick="callDealer()">이 차 사도 되는지 전화상담</button>
+          <button class="ls-btn-sub" onclick="callDealer()">차량상담</button>
         </div>
       </div>
     </div>
@@ -1253,7 +1253,7 @@ footer strong{color:#fff;}
       <div class="detail-tags" id="detailTags"></div>
       <div id="detailRows"></div>
       <div class="detail-actions">
-        <button class="act-btn act-kakao" id="detailKakaoBtn">이 차 사도 되는지 바로 상담</button>
+        <button class="act-btn act-kakao" id="detailKakaoBtn">차량상담</button>
         <button class="act-btn act-call" id="detailCallBtn">📞 전화하기</button>
         <button class="act-btn act-edit admin-only" id="detailEditBtn">수정하기</button>
       </div>
@@ -1780,7 +1780,7 @@ function renderCars(){
         <div class="car-insight">${dealerInsight(c)}</div>
         ${c.extra?`<div class="car-extra">${c.extra}</div>`:''}
         <div class="card-actions">
-          <button class="act-btn act-kakao" onclick="event.stopPropagation();kakaoContact('${c.phone||''}','${c.name}','${c.price||''}')">이 차 사도 되는지 상담</button>
+          <button class="act-btn act-kakao" onclick="event.stopPropagation();kakaoContact('${c.phone||''}','${c.name}','${c.price||''}')">차량상담</button>
           <button class="act-btn act-call" onclick="event.stopPropagation();callContact('${c.phone||''}')">📞 전화</button>
           <button class="act-btn act-edit admin-only" onclick="event.stopPropagation();openEditModal('${c.id}')">수정</button>
           <button class="act-btn act-del admin-only" onclick="event.stopPropagation();deleteCar('${c.id}')">삭제</button>
