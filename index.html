@@ -324,6 +324,7 @@ textarea:focus{outline:none;border-color:#1D9E75;background:#fff;}
 .tag-gray{background:#f0f0ea;color:#666;}
 .tag-purple{background:#f3f0ff;color:#6d28d9;}
 .tag-orange{background:#fff7ed;color:#c2410c;}
+.tag-red{background:#FEE2E2;color:#b91c1c;}
 .car-extra{font-size:10px;color:#aaa;line-height:1.5;border-top:1px solid #f4f4f2;padding-top:6px;margin-bottom:7px;}
 .car-info-mini{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
 .mini-pill{font-size:10px;padding:2px 6px;border-radius:999px;background:#f8f8f4;color:#555;border:1px solid #eee;font-weight:700;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -887,7 +888,12 @@ footer strong{color:#fff;}
         </div>
         <div class="filter-section">
           <div class="filter-label">조건</div>
-          <label class="check-item"><input type="checkbox" id="fNoAcc" onchange="renderCars()"/><span>무사고만</span></label>
+          <select class="filter-select" id="fAccident" onchange="renderCars()" style="margin-top:4px;">
+            <option value="">사고유무 전체</option>
+            <option value="완전무사고">완전무사고</option>
+            <option value="무사고">무사고</option>
+            <option value="사고">사고</option>
+          </select>
           <label class="check-item"><input type="checkbox" id="fHasPhoto" onchange="renderCars()"/><span>사진 있음</span></label>
         </div>
       </div>
@@ -1213,8 +1219,17 @@ footer strong{color:#fff;}
       <div class="form-row"><label class="form-label">구동</label><input type="text" id="eDrive" placeholder="2WD, 4WD"/></div>
     </div>
     <div class="form-row"><label class="form-label">주요 옵션</label><input type="text" id="eOptions" placeholder="썬루프, 통풍시트, HUD, 어라운드뷰"/></div>
-    <div class="form-row"><label class="form-label">용도/사고 이력</label><input type="text" id="eHistory" placeholder="렌트이력 없음 / 무사고 / 단순교환"/></div>
-    <div class="form-row"><label class="form-label">특이사항</label><input type="text" id="eNote" placeholder="무사고, 단순교환, 법인차 등"/></div>
+    <div class="form-row"><label class="form-label">용도/사고 이력</label><input type="text" id="eHistory" placeholder="렌트이력 없음 / 단순교환 등"/></div>
+    <div class="form-row">
+      <label class="form-label">사고유무</label>
+      <select class="filter-select" id="eAccident" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-size:14px;font-family:inherit;">
+        <option value="">선택안함</option>
+        <option value="완전무사고">완전무사고</option>
+        <option value="무사고">무사고</option>
+        <option value="사고">사고</option>
+      </select>
+    </div>
+    <div class="form-row"><label class="form-label">특이사항</label><input type="text" id="eNote" placeholder="법인차, 단순교환 등"/></div>
     <div class="form-row">
       <label class="form-label">차량 사진</label>
       <div class="photo-drop" id="photoDrop" onclick="document.getElementById('photoInput').click()">클릭하여 사진 추가 · 또는 밴드 사진 복사 후 Ctrl+V (여러 장 가능)</div>
@@ -1648,7 +1663,8 @@ function updateTypeFilter(){
 function resetFilters(){
   ['fType','fYear'].forEach(id=>document.getElementById(id).value='');
   ['priceMin','priceMax','searchInput'].forEach(id=>document.getElementById(id).value='');
-  ['fNoAcc','fHasPhoto','fOwn','fAlson'].forEach(id=>document.getElementById(id).checked=false);
+  ['fHasPhoto','fOwn','fAlson'].forEach(id=>document.getElementById(id).checked=false);
+  document.getElementById('fAccident').value='';
   renderCars();
 }
 
@@ -1718,7 +1734,7 @@ function renderCars(){
   const yf=parseInt(document.getElementById('fYear').value)||0;
   const pMin=parseInt(document.getElementById('priceMin').value)||0;
   const pMax=parseInt(document.getElementById('priceMax').value)||0;
-  const noAcc=document.getElementById('fNoAcc').checked;
+  const accFilter=document.getElementById('fAccident').value;
   const hasPhoto=document.getElementById('fHasPhoto').checked;
   const fOwn=document.getElementById('fOwn').checked;
   const fAlson=document.getElementById('fAlson').checked;
@@ -1729,7 +1745,9 @@ function renderCars(){
     if(yf&&c.yearNum&&c.yearNum<yf)return false;
     if(pMin&&c.priceNum<pMin)return false;
     if(pMax&&c.priceNum>pMax)return false;
-    if(noAcc&&!c.notes.includes('무사고'))return false;
+    if(accFilter==='완전무사고'&&!c.notes.includes('완전무사고'))return false;
+    if(accFilter==='무사고'&&!c.notes.includes('무사고'))return false;
+    if(accFilter==='사고'&&c.notes.includes('무사고'))return false;
     if(hasPhoto&&(!c.photos||!c.photos.length))return false;
     if(fOwn&&!fAlson&&c.carType!=='own')return false;
     if(fAlson&&!fOwn&&c.carType!=='alson')return false;
@@ -1755,7 +1773,7 @@ function renderCars(){
     const isWished=wishes.has(c.id);
     const hasImg=c.photos&&c.photos.length>0;
     const noteArr=c.notes?c.notes.split('·').filter(Boolean):[];
-    const tagHtml=noteArr.map(n=>`<span class="tag ${n==='무사고'?'tag-green':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
+    const tagHtml=noteArr.map(n=>`<span class="tag ${n==='완전무사고'?'tag-green':n==='무사고'?'tag-green':n==='사고'?'tag-red':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
     const typeBadge=isOwn?'<div class="badge-own">직접매입</div>':'<div class="badge-alson">알선</div>';
 
     return `<div class="card" onclick="openDetailModal('${c.id}')">
@@ -1809,7 +1827,7 @@ function openDetailModal(id){
   document.getElementById('detailPrice').textContent=c.price||'가격문의';
   document.getElementById('detailInsight').innerHTML='<strong>딜러 한 줄 평가</strong>'+stripDealerInsight(dealerInsight(c));
   const noteArr=c.notes?c.notes.split('·').filter(Boolean):[];
-  document.getElementById('detailTags').innerHTML=noteArr.map(n=>`<span class="tag ${n==='무사고'?'tag-green':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
+  document.getElementById('detailTags').innerHTML=noteArr.map(n=>`<span class="tag ${n==='완전무사고'?'tag-green':n==='무사고'?'tag-green':n==='사고'?'tag-red':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
   const info=parseExtraInfo(c.extra||'');
   const optChips=optionChipsHtml(info.options);
   document.getElementById('detailRows').innerHTML=`
@@ -1985,6 +2003,7 @@ function openAddModal(){
   editingId=null;editPhotos=[];editingOriginalPhotosKey='[]';
   document.getElementById('modalTitle').textContent='새 매물 등록';
   ['eN','eY','eC','eK','eP','ePh','eDealer','eGrade','eFuel','eMission','eDrive','eOptions','eHistory','eNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eAccident').value='';
   document.getElementById('eDealer').value='나이스모터스';
   document.getElementById('eType').value='own';
   document.getElementById('photoPreview').innerHTML='';
@@ -2008,7 +2027,10 @@ function openEditModal(id){
   document.getElementById('eDrive').value=info.drive||'';
   document.getElementById('eOptions').value=info.options||'';
   document.getElementById('eHistory').value=info.usage||info.accident||info.memo||'';
-  document.getElementById('eNote').value=c.notes||'';
+  const noteArr=(c.notes||'').split('·');
+  const accVal=['완전무사고','무사고','사고'].find(a=>noteArr.includes(a))||'';
+  document.getElementById('eAccident').value=accVal;
+  document.getElementById('eNote').value=noteArr.filter(n=>n!=='완전무사고'&&n!=='무사고'&&n!=='사고').join('·');
   document.getElementById('eType').value=c.carType||'alson';
   renderPhotoPreview();
   document.getElementById('editModal').classList.add('open');
@@ -2081,7 +2103,11 @@ async function saveEdit(){
   }
   const finalPhotos = [...existingUrls, ...uploadedUrls];
 
-  const data={name,year:yearRaw,yearNum,color:document.getElementById('eC').value.trim(),km:kmRaw,kmNum,price,priceNum,phone:document.getElementById('ePh').value.trim(),dealer:document.getElementById('eDealer').value.trim()||'나이스모터스',notes:document.getElementById('eNote').value.trim(),carType:document.getElementById('eType').value,photos:finalPhotos,extra};
+  const accidentVal = document.getElementById('eAccident').value;
+  const rawNote = document.getElementById('eNote').value.trim();
+  const noteWithoutAcc = rawNote.split('·').filter(n=>n!=='완전무사고'&&n!=='무사고'&&n!=='사고').join('·');
+  const finalNote = [accidentVal, noteWithoutAcc].filter(Boolean).join('·');
+  const data={name,year:yearRaw,yearNum,color:document.getElementById('eC').value.trim(),km:kmRaw,kmNum,price,priceNum,phone:document.getElementById('ePh').value.trim(),dealer:document.getElementById('eDealer').value.trim()||'나이스모터스',notes:finalNote,carType:document.getElementById('eType').value,photos:finalPhotos,extra};
   if(editingId){
     const idx=cars.findIndex(x=>x.id===editingId);
     if(idx>=0){cars[idx]={...cars[idx],...data};await saveCar(cars[idx]);}
