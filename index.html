@@ -1969,11 +1969,10 @@ function closePhotoModal(){document.getElementById('photoModal').classList.remov
 
 /* ━━━ 연락 ━━━ */
 function kakaoContact(phone,name,price){
-  const msg=`차량 문의드립니다!\n\n차량: ${name}\n가격: ${price}\n\n나이스모터스에 문의합니다.`;
-  if(settings.kakao){window.open(settings.kakao,'_blank');return;}
-  const tel=phone||settings.phone;
-  if(tel)alert('카카오톡 문의\n\n'+msg+'\n\n📞 '+tel+'\n위 번호로 카카오 친구추가 후 문의해주세요!');
-  else alert('카카오톡 문의\n\n'+msg);
+  const msg=`안녕하세요! 나이스모터스 차량 문의드립니다 🚗\n\n차량: ${name}\n가격: ${price}\n\n자세한 상담 부탁드립니다!`;
+  const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
+  navigator.clipboard.writeText(msg).catch(()=>{});
+  showSendModal(kakaoUrl);
 }
 function callContact(phone){
   const tel=phone||settings.phone;
@@ -2470,18 +2469,59 @@ window.parsePaste = async function() {
   }
   if (!parsed.length) { err.textContent = '인식된 매물이 없어요.'; return; }
 
-  err.textContent = '저장 중...';
-  for (const car of parsed) {
-    const ok = await saveCarToDB(car);
-    if (ok) { cars.unshift(car); todayCount++; }
-  }
-  localStorage.setItem('nm_today_'+todayKey, todayCount);
-  save();
-  document.getElementById('pasteInput').value = '';
-  document.getElementById('pastePanel').classList.add('hidden');
-  err.textContent = '';
-  updateTypeFilter(); renderCars(); updateStats();
+  // 미리보기 모달 표시
+  showPastePreview(parsed, err);
 };
+
+function showPastePreview(parsed, err) {
+  const existing = document.getElementById('pastePreviewModal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'pastePreviewModal';
+  Object.assign(overlay.style, {position:'fixed',inset:'0',background:'rgba(0,0,0,0.6)',zIndex:'99999',display:'flex',alignItems:'center',justifyContent:'center',padding:'16px'});
+
+  const rows = parsed.map((c,i) => `
+    <div style="background:#f8f8f8;border-radius:8px;padding:12px;margin-bottom:8px;font-size:13px;">
+      <div style="font-weight:700;margin-bottom:4px;color:#111;">${i+1}. ${c.name||'차량명 미인식'}</div>
+      <div style="color:#555;display:flex;flex-wrap:wrap;gap:6px;">
+        ${c.year?`<span>📅 ${c.year}</span>`:''}
+        ${c.km?`<span>📍 ${c.km}</span>`:''}
+        ${c.price?`<span>💰 ${c.price}</span>`:''}
+        ${c.color?`<span>🎨 ${c.color}</span>`:''}
+        ${c.phone?`<span>📞 ${c.phone}</span>`:''}
+      </div>
+    </div>`).join('');
+
+  overlay.innerHTML = `
+    <div style="background:#fff;border-radius:16px;padding:24px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;">
+      <div style="font-size:16px;font-weight:900;margin-bottom:4px;">파싱 결과 확인</div>
+      <div style="font-size:13px;color:#888;margin-bottom:16px;">총 ${parsed.length}건 인식됐어요. 확인 후 등록하세요.</div>
+      ${rows}
+      <div style="display:flex;gap:8px;margin-top:16px;">
+        <button id="pasteConfirmBtn" style="flex:1;padding:13px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">✅ ${parsed.length}건 등록하기</button>
+        <button onclick="document.getElementById('pastePreviewModal').remove();" style="flex:1;padding:13px;background:#f4f4f2;color:#555;border:none;border-radius:10px;font-size:14px;cursor:pointer;">취소</button>
+      </div>
+    </div>`;
+
+  document.body.appendChild(overlay);
+
+  document.getElementById('pasteConfirmBtn').onclick = async () => {
+    document.getElementById('pasteConfirmBtn').textContent = '저장 중...';
+    document.getElementById('pasteConfirmBtn').disabled = true;
+    for (const car of parsed) {
+      const ok = await saveCarToDB(car);
+      if (ok) { cars.unshift(car); todayCount++; }
+    }
+    localStorage.setItem('nm_today_'+todayKey, todayCount);
+    save();
+    document.getElementById('pasteInput').value = '';
+    document.getElementById('pastePanel').classList.add('hidden');
+    if (err) err.textContent = '';
+    overlay.remove();
+    updateTypeFilter(); renderCars(); updateStats();
+  };
+}
 
 // 페이지 로드 시 캐시를 먼저 보여주고, DB 최신 데이터로 교체
 document.addEventListener('DOMContentLoaded', () => {
