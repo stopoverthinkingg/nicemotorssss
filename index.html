@@ -2115,9 +2115,14 @@ function submitRecommend(){
   const must=document.getElementById('recMust').value.trim();
   const never=document.getElementById('recNever').value.trim();
   const msg=`[맞춤 차량 컨설팅 요청]\n\n💰 총 예산: ${budgetMin||'?'}~${budgetMax||'?'}만원\n🚗 차종: ${carTypes||'미선택'}\n📅 연식: ${years||'미선택'}\n📍 주행거리: ${km||'미선택'}\n🎯 주요 용도: ${usage||'미입력'}\n⭐ 중요사항: ${priority||'미선택'}\n✅ 필수 조건: ${must||'없음'}\n❌ 기피 조건: ${never||'없음'}\n📝 추가 요청: ${memo||'없음'}\n📞 연락처: ${phone||'미입력'}`;
-  if(settings.kakao){window.open(settings.kakao,'_blank');alert('카카오톡 채널이 열렸어요!\n아래 내용을 복사해서 보내주세요:\n\n'+msg);}
-  else if(settings.phone){alert('카카오톡에서 '+settings.phone+' 으로 친구추가 후 아래 내용을 보내주세요!\n\n'+msg);}
-  else{alert('아래 내용을 카카오톡으로 보내주세요!\n\n'+msg);}
+  const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
+  navigator.clipboard.writeText(msg).catch(()=>{});
+  const toast = document.createElement('div');
+  toast.textContent = '✅ 조건이 클립보드에 복사됐어요! 카카오톡에서 붙여넣기(길게 누르기)해서 보내주세요.';
+  Object.assign(toast.style, {position:'fixed',bottom:'80px',left:'50%',transform:'translateX(-50%)',background:'#1D9E75',color:'#fff',padding:'14px 20px',borderRadius:'12px',fontSize:'13px',zIndex:'99999',maxWidth:'90vw',textAlign:'center',lineHeight:'1.5',boxShadow:'0 4px 16px rgba(0,0,0,0.2)'});
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(), 4000);
+  setTimeout(()=>window.open(kakaoUrl,'_blank'), 300);
 }
 
 /* ━━━ 매입 폼 ━━━ */
@@ -2133,9 +2138,14 @@ function submitBuy(){
   const hopePrice=document.getElementById('buyHopePrice').value.trim();
   const memo=document.getElementById('buyMemo').value.trim();
   const msg=`[매입 신청]\n\n🚗 차량: ${name}\n📅 연식: ${year||'미입력'}\n📍 주행거리: ${km||'미입력'}\n🎨 색상: ${color||'미입력'}\n🔧 사고이력: ${accident}\n💰 희망가격: ${hopePrice?hopePrice+'만원':'협의'}\n📝 메모: ${memo||'없음'}\n📞 연락처: ${phone}`;
-  if(settings.kakao){window.open(settings.kakao,'_blank');alert('카카오톡 채널이 열렸어요!\n아래 내용을 복사해서 보내주세요:\n\n'+msg);}
-  else if(settings.phone){alert('카카오톡에서 '+settings.phone+' 으로 친구추가 후 아래 내용을 보내주세요!\n\n'+msg);}
-  else{alert('아래 내용을 카카오톡으로 보내주세요!\n\n'+msg);}
+  const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
+  navigator.clipboard.writeText(msg).catch(()=>{});
+  const toast = document.createElement('div');
+  toast.textContent = '✅ 내용이 클립보드에 복사됐어요! 카카오톡에서 붙여넣기(길게 누르기)해서 보내주세요.';
+  Object.assign(toast.style, {position:'fixed',bottom:'80px',left:'50%',transform:'translateX(-50%)',background:'#1D9E75',color:'#fff',padding:'14px 20px',borderRadius:'12px',fontSize:'13px',zIndex:'99999',maxWidth:'90vw',textAlign:'center',lineHeight:'1.5',boxShadow:'0 4px 16px rgba(0,0,0,0.2)'});
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(), 4000);
+  setTimeout(()=>window.open(kakaoUrl,'_blank'), 300);
 }
 
 /* ━━━ 초기화 ━━━ */
