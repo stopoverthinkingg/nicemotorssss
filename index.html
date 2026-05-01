@@ -1,237 +1,2444 @@
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>나이스모터스 - 청주 중고차 전문 딜러</title>
+<meta name="description" content="청주 엑스포매매단지 나이스모터스 - 충북 최고의 중고차 전문 딜러. 직거래·알선·매입 전문"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <style>
-#nm-wrap *{box-sizing:border-box;margin:0;padding:0;}
-#nm-wrap{font-family:'Noto Sans KR',sans-serif;width:100%;background:#111;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans KR',sans-serif;background:#f4f4f2;color:#1a1a1a;font-size:14px;}
 
-#nm-hdr{
-  position:fixed;top:0;left:0;right:0;z-index:9999;
-  background:#1a1a1a;
-  padding:0 24px;height:52px;
-  display:flex;align-items:center;justify-content:space-between;
+/* ━━━ 헤더 ━━━ */
+.hdr{background:#fff;border-bottom:2px solid #e8e8e0;position:sticky;top:0;z-index:200;}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;gap:12px;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo-mark{width:38px;height:38px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-mark svg{width:22px;height:22px;fill:#fff;}
+.logo-text{font-size:16px;font-weight:900;color:#1a1a1a;line-height:1.2;}
+.logo-text span{color:#1D9E75;}
+.logo-sub{font-size:11px;color:#999;font-weight:400;}
+.search-wrap{flex:1;max-width:420px;}
+.search-box{display:flex;border:2px solid #1D9E75;border-radius:8px;overflow:hidden;}
+.search-box input{flex:1;padding:9px 14px;font-size:13px;border:none;outline:none;font-family:inherit;}
+.search-box button{padding:0 14px;background:#1D9E75;border:none;cursor:pointer;color:#fff;font-size:13px;font-family:inherit;font-weight:700;}
+.hdr-nav{display:flex;gap:4px;}
+.nav-btn{padding:7px 12px;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;transition:all 0.15s;}
+.nav-kakao{background:#FEE500;color:#391B1B;}
+.nav-kakao:hover{background:#f5db00;}
+.nav-add{background:#1D9E75;color:#fff;}
+.nav-add:hover{background:#0F6E56;}
+.nav-paste{background:#fff;border:1px solid #ddd!important;color:#444;border:none;}
+.nav-paste:hover{background:#f4f4f2;}
+.stats-bar{display:flex;gap:1px;background:#e8e8e0;}
+.stat{background:#fff;padding:8px 0;flex:1;text-align:center;}
+.stat-n{font-size:17px;font-weight:700;color:#1D9E75;}
+.stat-l{font-size:10px;color:#999;margin-top:1px;}
+
+
+/* ━━━ 랜딩 페이지 (토스 스타일) ━━━ */
+#landing-page{display:block;}
+#main-app{display:none;}
+
+/* 스냅 스크롤 컨테이너 */
+.landing-wrap{
+  height:100vh;
+  overflow-y:scroll;
+  scroll-snap-type:y mandatory;
+  scroll-behavior:smooth;
 }
-.nm-logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.nm-mark{width:30px;height:30px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;}
-.nm-mark svg{width:17px;height:17px;fill:#fff;}
-.nm-brand{font-size:15px;font-weight:900;color:#fff;}
-.nm-brand span{color:#4ade80;}
-.nm-hbtn{padding:8px 16px;background:#1D9E75;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-decoration:none;white-space:nowrap;}
 
-.nm-ls{
-  width:100%;min-height:100vh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:90px 7% 80px;
-  position:relative;overflow:hidden;
+/* 각 섹션 = 화면 한 장 */
+.ls{
+  scroll-snap-align:start;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:60px 24px;
+  position:relative;
+  overflow:hidden;
 }
-.nm-ls-bg{background-size:cover;background-position:center;}
-.nm-ls-bg::before{content:'';position:absolute;inset:0;z-index:0;}
-.nm-ls-bg > *{position:relative;z-index:1;}
 
-.nm-s1{background:#111;color:#fff;}
-.nm-s2{background:#f0f5f0;color:#1a1a1a;}
-.nm-s3{color:#1a1a1a;background-image:url('https://images.unsplash.com/photo-1604156425963-9be03f86a428?w=1400&q=80');background-size:cover;background-position:center;}
-.nm-s3::before{background:rgba(215,232,215,0.84);content:'';position:absolute;inset:0;z-index:0;}
-.nm-s3>*{position:relative;z-index:1;}
-.nm-s4{background:#1a1a1a;color:#fff;}
-.nm-s5{color:#fff;background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1400&q=80');background-size:cover;background-position:center;}
-.nm-s5::before{background:rgba(10,10,10,0.78);content:'';position:absolute;inset:0;z-index:0;}
-.nm-s5>*{position:relative;z-index:1;}
-.nm-s6{background:#f8f8f4;color:#1a1a1a;}
-.nm-s7{color:#1a1a1a;background-image:url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1400&q=80');background-size:cover;background-position:center;}
-.nm-s7::before{background:rgba(228,238,228,0.86);content:'';position:absolute;inset:0;z-index:0;}
-.nm-s7>*{position:relative;z-index:1;}
-.nm-s8{color:#fff;background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1400&q=80');background-size:cover;background-position:center;}
-.nm-s8::before{background:rgba(8,100,65,0.84);content:'';position:absolute;inset:0;z-index:0;}
-.nm-s8>*{position:relative;z-index:1;}
+/* 섹션 색상 테마 */
+.ls-dark{background:#0a0a0a;color:#fff;}
+.ls-green{background:#0F6E56;color:#fff;}
+.ls-light{background:#f8f8f4;color:#1a1a1a;}
+.ls-white{background:#fff;color:#1a1a1a;}
+.ls-teal{background:#1D9E75;color:#fff;}
+.ls-yellow{background:#FFFBEB;color:#1a1a1a;}
 
-.nm-eyebrow{display:inline-block;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:20px;}
-.nm-s1 .nm-eyebrow{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);}
-.nm-s2 .nm-eyebrow{background:#d1fae5;color:#065f46;}
-.nm-s3 .nm-eyebrow{background:rgba(255,255,255,0.65);color:#1a4a1a;}
-.nm-s4 .nm-eyebrow{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.6);}
-.nm-s5 .nm-eyebrow{background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);}
-.nm-s6 .nm-eyebrow{background:#d1fae5;color:#065f46;}
-.nm-s7 .nm-eyebrow{background:rgba(255,255,255,0.65);color:#1a3a1a;}
-.nm-s8 .nm-eyebrow{background:rgba(255,255,255,0.15);color:#fff;}
+/* 텍스트 스타일 */
+.ls-eyebrow{
+  font-size:13px;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  opacity:0.55;margin-bottom:20px;
+}
+.ls-heading{
+  font-size:clamp(28px,5vw,52px);
+  font-weight:900;
+  line-height:1.2;
+  margin-bottom:20px;
+  word-break:keep-all;
+}
+.ls-heading em{font-style:normal;color:#1D9E75;}
+.ls-dark .ls-heading em{color:#4ade80;}
+.ls-green .ls-heading em{color:#FEE500;}
+.ls-teal .ls-heading em{color:#FEE500;}
+.ls-body{
+  font-size:clamp(15px,2vw,18px);
+  line-height:1.9;
+  opacity:0.75;
+  max-width:600px;
+  word-break:keep-all;
+}
+.ls-body strong{opacity:1;font-weight:700;}
+.ls-body em{font-style:italic;opacity:0.85;}
 
-.nm-h{font-size:clamp(30px,5.5vw,60px);font-weight:900;line-height:1.18;margin-bottom:20px;word-break:keep-all;max-width:640px;}
-.nm-s1 .nm-h{color:#fff;}
-.nm-s1 .nm-h em{font-style:normal;color:#1D9E75;}
-.nm-s2 .nm-h{color:#111;}
-.nm-s3 .nm-h{color:#111;}
-.nm-s3 .nm-h em{font-style:normal;color:#0F6E56;}
-.nm-s4 .nm-h{color:#fff;}
-.nm-s4 .nm-h em{font-style:normal;color:#1D9E75;}
-.nm-s5 .nm-h{color:#fff;}
-.nm-s5 .nm-h em{font-style:normal;color:#4ade80;}
-.nm-s6 .nm-h{color:#111;}
-.nm-s6 .nm-h em{font-style:normal;color:#1D9E75;}
-.nm-s7 .nm-h{color:#111;}
-.nm-s7 .nm-h em{font-style:normal;color:#0F6E56;}
-.nm-s8 .nm-h{color:#fff;}
-.nm-s8 .nm-h em{font-style:normal;color:#FEE500;}
+/* 인용 강조 */
+.ls-quote{
+  font-size:clamp(18px,3vw,28px);
+  font-weight:900;
+  line-height:1.4;
+  padding:24px 28px;
+  border-left:4px solid currentColor;
+  opacity:0.95;
+  margin:24px 0;
+  word-break:keep-all;
+}
+.ls-dark .ls-quote{border-color:#4ade80;color:#4ade80;}
+.ls-green .ls-quote{border-color:#FEE500;color:#FEE500;}
+.ls-light .ls-quote{border-color:#1D9E75;color:#1D9E75;}
+.ls-white .ls-quote{border-color:#1D9E75;color:#1D9E75;}
 
-.nm-b{font-size:clamp(15px,2vw,18px);line-height:1.9;max-width:580px;word-break:keep-all;margin-bottom:10px;}
-.nm-s1 .nm-b{color:rgba(255,255,255,0.72);}
-.nm-s2 .nm-b{color:#333;}
-.nm-s3 .nm-b{color:#222;}
-.nm-s4 .nm-b{color:rgba(255,255,255,0.72);}
-.nm-s5 .nm-b{color:rgba(255,255,255,0.8);}
-.nm-s6 .nm-b{color:#333;}
-.nm-s7 .nm-b{color:#222;}
-.nm-s8 .nm-b{color:rgba(255,255,255,0.88);}
-.nm-b strong{font-weight:700;}
-.nm-s1 .nm-b strong,.nm-s4 .nm-b strong,.nm-s5 .nm-b strong{color:#fff;}
-.nm-s2 .nm-b strong,.nm-s3 .nm-b strong,.nm-s6 .nm-b strong,.nm-s7 .nm-b strong{color:#0F6E56;}
+/* 하이라이트 칩 */
+.ls-chip{
+  display:inline-block;
+  padding:6px 14px;
+  border-radius:20px;
+  font-size:13px;font-weight:700;
+  margin-bottom:16px;
+}
+.ls-dark .ls-chip{background:rgba(255,255,255,0.12);color:#fff;}
+.ls-green .ls-chip{background:rgba(255,255,255,0.18);color:#fff;}
+.ls-light .ls-chip{background:#E1F5EE;color:#0F6E56;}
+.ls-white .ls-chip{background:#E1F5EE;color:#0F6E56;}
+.ls-teal .ls-chip{background:rgba(255,255,255,0.18);color:#fff;}
+.ls-yellow .ls-chip{background:#fde68a;color:#92400e;}
 
-.nm-quote{font-size:clamp(20px,3vw,30px);font-weight:900;line-height:1.4;padding:0 0 0 22px;border-left:4px solid #1D9E75;color:#1D9E75;margin:8px 0 24px;max-width:640px;word-break:keep-all;}
+/* CTA 버튼 */
+.ls-btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px;}
+.ls-btn-main{
+  padding:16px 32px;background:#FEE500;color:#391B1B;
+  border:none;border-radius:12px;font-size:16px;font-weight:900;
+  cursor:pointer;font-family:inherit;transition:transform 0.15s;
+}
+.ls-btn-main:hover{transform:translateY(-2px);}
+.ls-btn-sub{
+  padding:15px 28px;background:rgba(255,255,255,0.15);color:#fff;
+  border:2px solid rgba(255,255,255,0.4);border-radius:12px;
+  font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.15s;
+}
+.ls-btn-sub:hover{background:rgba(255,255,255,0.25);}
+.ls-btn-dark{
+  padding:15px 28px;background:#1D9E75;color:#fff;
+  border:none;border-radius:12px;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:transform 0.15s;
+}
+.ls-btn-dark:hover{transform:translateY(-2px);}
+.ls-btn-ghost{
+  padding:15px 28px;background:#fff;color:#1D9E75;
+  border:2px solid #1D9E75;border-radius:12px;
+  font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;
+}
 
-.nm-div{width:36px;height:3px;margin:18px 0;border-radius:2px;}
-.nm-s1 .nm-div,.nm-s4 .nm-div,.nm-s5 .nm-div,.nm-s8 .nm-div{background:rgba(255,255,255,0.2);}
-.nm-s2 .nm-div,.nm-s3 .nm-div,.nm-s6 .nm-div,.nm-s7 .nm-div{background:#1D9E75;opacity:0.4;}
+/* 네비 도트 */
+.ls-dots{
+  position:fixed;right:20px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:8px;z-index:999;
+}
+.ls-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(0,0,0,0.2);cursor:pointer;transition:all 0.2s;border:2px solid transparent;
+}
+.ls-dot.on{background:#1D9E75;transform:scale(1.3);}
 
-.nm-arrow{margin-top:40px;display:flex;animation:nm-bounce 2s infinite;}
-@keyframes nm-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
-.nm-arrow svg{width:22px;height:22px;}
-.nm-s1 .nm-arrow svg,.nm-s4 .nm-arrow svg,.nm-s5 .nm-arrow svg,.nm-s8 .nm-arrow svg{stroke:#fff;opacity:0.3;}
-.nm-s2 .nm-arrow svg,.nm-s3 .nm-arrow svg,.nm-s6 .nm-arrow svg,.nm-s7 .nm-arrow svg{stroke:#1D9E75;opacity:0.5;}
+/* 페이드인 애니메이션 */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
 
-.nm-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:520px;margin-top:32px;}
-.nm-btn{padding:16px 18px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;text-decoration:none;display:flex;align-items:center;gap:8px;border:none;transition:transform 0.15s;word-break:keep-all;}
-.nm-btn:hover{transform:translateY(-2px);}
-.nm-yellow{background:#FEE500;color:#391B1B;}
-.nm-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.45);}
-.nm-outline:hover{background:rgba(255,255,255,0.1);}
+/* 스크롤 힌트 화살표 */
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  opacity:0.4;animation:bounce 2s infinite;
+}
+.scroll-hint svg{width:20px;height:20px;}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
 
-.nm-dots{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:9998;}
-.nm-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.25);cursor:pointer;transition:all 0.25s;border:none;padding:0;}
-.nm-dot.on{background:#1D9E75;transform:scale(1.5);}
+/* 헤더 고정 */
+.landing-fixed-hdr{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);
+  padding:12px 24px;display:flex;align-items:center;justify-content:space-between;
+}
+.landing-fixed-hdr .lh-logo{display:flex;align-items:center;gap:8px;}
+.landing-fixed-hdr .lh-mark{width:32px;height:32px;background:#1D9E75;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.landing-fixed-hdr .lh-mark svg{width:18px;height:18px;fill:#fff;}
+.landing-fixed-hdr .lh-name{font-size:14px;font-weight:900;color:#fff;}
+.landing-fixed-hdr .lh-name span{color:#4ade80;}
+.lh-skip{padding:7px 16px;background:#1D9E75;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 
+/* 구분선 */
+.ls-divider{width:40px;height:3px;background:currentColor;opacity:0.3;margin:20px 0;}
+
+/* 숫자 강조 */
+.ls-num{font-size:clamp(48px,8vw,80px);font-weight:900;line-height:1;margin-bottom:8px;}
+.ls-num-label{font-size:14px;opacity:0.6;margin-bottom:32px;}
+
+/* 반응형 */
 @media(max-width:600px){
-  .nm-ls{padding:80px 6% 60px;}
-  .nm-btns{grid-template-columns:1fr;}
-  .nm-dots{display:none;}
-  .nm-hbtn{font-size:11px;padding:7px 10px;}
+  .ls{padding:80px 22px 60px;}
+  .ls-btn-main,.ls-btn-sub,.ls-btn-dark,.ls-btn-ghost{width:100%;text-align:center;}
+  .ls-btns{flex-direction:column;}
+  .ls-dots{display:none;}
 }
+
+/* ━━━ 히어로 배너 ━━━ */
+.hero{background:linear-gradient(135deg,#0F6E56 0%,#1D9E75 50%,#2ecc9a 100%);padding:32px 24px;color:#fff;text-align:center;}
+.hero h1{font-size:22px;font-weight:900;margin-bottom:6px;}
+.hero p{font-size:13px;opacity:0.85;margin-bottom:18px;}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.hero-btn{padding:11px 22px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;transition:all 0.15s;}
+.hero-btn-kakao{background:#FEE500;color:#391B1B;}
+.hero-btn-kakao:hover{background:#f5db00;transform:translateY(-1px);}
+.hero-btn-white{background:rgba(255,255,255,0.15);color:#fff;border:2px solid rgba(255,255,255,0.5);}
+.hero-btn-white:hover{background:rgba(255,255,255,0.25);}
+
+/* ━━━ 딜러 프로필 카드 ━━━ */
+.dealer-profile{background:#fff;border-bottom:1px solid #e8e8e0;padding:16px 24px;}
+.dp-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.dp-avatar{width:64px;height:64px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;flex-shrink:0;}
+.dp-info{flex:1;}
+.dp-name{font-size:18px;font-weight:900;color:#1a1a1a;}
+.dp-name span{color:#1D9E75;}
+.dp-title{font-size:12px;color:#888;margin-top:2px;}
+.dp-badges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.dp-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700;}
+.dp-badge-green{background:#E1F5EE;color:#0F6E56;}
+.dp-badge-blue{background:#EFF6FF;color:#1d6fd8;}
+.dp-badge-yellow{background:#FFFBEB;color:#92400e;}
+.dp-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.dp-action-btn{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.dp-kakao{background:#FEE500;color:#391B1B;}
+.dp-kakao:hover{background:#f5db00;}
+.dp-call{background:#1D9E75;color:#fff;}
+.dp-call:hover{background:#0F6E56;}
+
+/* ━━━ 탭 네비 ━━━ */
+.tab-nav{background:#fff;border-bottom:2px solid #e8e8e0;position:sticky;top:72px;z-index:100;}
+.tab-nav-inner{max-width:1280px;margin:0 auto;display:flex;padding:0 16px;}
+.tab-item{padding:13px 18px;font-size:13px;font-weight:700;color:#888;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;}
+.tab-item.active{color:#1D9E75;border-bottom-color:#1D9E75;}
+.tab-item:hover{color:#1D9E75;}
+
+/* ━━━ 섹션 ━━━ */
+.section{display:none;}
+.section.active{display:block;}
+
+/* ━━━ 레이아웃 (매물) ━━━ */
+.layout{display:flex;max-width:1280px;margin:0 auto;padding:16px;}
+
+/* ━━━ 사이드바 ━━━ */
+.sidebar{width:196px;flex-shrink:0;margin-right:14px;}
+.filter-card{background:#fff;border:1px solid #e8e8e0;border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.filter-head{padding:11px 13px;border-bottom:1px solid #f0f0ea;display:flex;align-items:center;justify-content:space-between;}
+.filter-head h3{font-size:12px;font-weight:700;color:#1a1a1a;}
+.filter-reset{font-size:11px;color:#1D9E75;cursor:pointer;background:none;border:none;font-family:inherit;}
+.filter-section{padding:11px 13px;border-bottom:1px solid #f8f8f4;}
+.filter-section:last-child{border-bottom:none;}
+.filter-label{font-size:10px;font-weight:700;color:#aaa;margin-bottom:7px;letter-spacing:0.5px;}
+.check-item{display:flex;align-items:center;gap:6px;margin-bottom:5px;cursor:pointer;}
+.check-item input{width:13px;height:13px;accent-color:#1D9E75;cursor:pointer;}
+.check-item span{font-size:12px;color:#333;}
+.price-inputs{display:flex;align-items:center;gap:5px;}
+.price-inputs input{flex:1;padding:6px 7px;font-size:12px;border:1px solid #ddd;border-radius:6px;text-align:center;font-family:inherit;min-width:0;}
+.price-inputs span{font-size:11px;color:#aaa;flex-shrink:0;}
+select.filter-select{width:100%;padding:6px 9px;font-size:12px;border:1px solid #ddd;border-radius:6px;font-family:inherit;background:#fff;color:#1a1a1a;}
+
+/* ━━━ 메인 ━━━ */
+.main{flex:1;min-width:0;}
+.paste-panel{background:#fff;border:1px solid #e8e8e0;border-radius:10px;padding:13px;margin-bottom:13px;}
+.paste-panel.hidden{display:none;}
+.paste-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.paste-title{font-size:13px;font-weight:700;}
+textarea{width:100%;min-height:72px;resize:vertical;font-size:13px;padding:9px 11px;border:1px solid #ddd;border-radius:7px;background:#fafaf8;color:#1a1a1a;font-family:inherit;line-height:1.6;}
+textarea:focus{outline:none;border-color:#1D9E75;background:#fff;}
+.err{font-size:11px;color:#c0392b;margin-top:4px;}
+.btn-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;}
+.btn-teal{padding:8px 15px;background:#1D9E75;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-teal:hover{background:#0F6E56;}
+.btn-ghost{padding:7px 12px;background:#fff;border:1px solid #ddd;border-radius:7px;font-size:12px;color:#666;cursor:pointer;font-family:inherit;}
+.btn-ghost:hover{background:#f4f4f2;}
+.result-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.result-count{font-size:13px;color:#555;}
+.result-count strong{color:#1D9E75;font-size:15px;}
+.sort-btns{display:flex;gap:5px;}
+.sort-btn{padding:5px 9px;font-size:11px;border:1px solid #ddd;border-radius:5px;background:#fff;cursor:pointer;color:#666;font-family:inherit;}
+.sort-btn.active{border-color:#1D9E75;color:#1D9E75;font-weight:700;}
+
+/* ━━━ 카드 그리드 ━━━ */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;}
+@media(max-width:960px){.cards{grid-template-columns:repeat(2,1fr);}}
+.card{background:#fff;border:1px solid #e8e8e0;border-radius:10px;overflow:hidden;transition:box-shadow 0.15s,transform 0.15s;cursor:pointer;}
+.card:hover{box-shadow:0 4px 18px rgba(0,0,0,0.1);transform:translateY(-2px);}
+.card-img-wrap{position:relative;width:100%;height:155px;background:#f0f0ea;overflow:hidden;cursor:pointer;}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+.card:hover .card-img-wrap img{transform:scale(1.04);}
+.no-img{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#ccc;}
+.no-img svg{width:32px;height:32px;opacity:0.35;}
+.no-img span{font-size:11px;}
+.img-hover-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.38);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.15s;}
+.card-img-wrap:hover .img-hover-overlay{opacity:1;}
+.img-hover-overlay span{color:#fff;font-size:12px;font-weight:700;}
+.photo-cnt-badge{position:absolute;bottom:7px;right:7px;background:rgba(0,0,0,0.55);color:#fff;font-size:10px;padding:2px 7px;border-radius:20px;}
+.badge-new{position:absolute;top:7px;left:7px;background:#e74c3c;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.badge-safe{position:absolute;top:7px;left:7px;background:#1D9E75;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.badge-own{position:absolute;top:7px;left:7px;background:#7c3aed;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.badge-alson{position:absolute;top:7px;left:7px;background:#f59e0b;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
+.wish-btn{position:absolute;top:6px;right:6px;width:28px;height:28px;background:rgba(255,255,255,0.9);border:none;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.wish-btn.on{color:#e74c3c;}
+.card-body{padding:10px 11px;}
+.dealer-nm{font-size:10px;color:#1D9E75;font-weight:700;margin-bottom:3px;}
+.car-nm{font-size:14px;font-weight:700;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;}
+.car-spec{font-size:11px;color:#999;margin-bottom:6px;}
+.car-price{font-size:17px;font-weight:900;color:#1D9E75;margin-bottom:7px;}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px;}
+.tag{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;}
+.tag-green{background:#E1F5EE;color:#0F6E56;}
+.tag-blue{background:#EFF6FF;color:#1d6fd8;}
+.tag-gray{background:#f0f0ea;color:#666;}
+.tag-purple{background:#f3f0ff;color:#6d28d9;}
+.tag-orange{background:#fff7ed;color:#c2410c;}
+.car-extra{font-size:10px;color:#aaa;line-height:1.5;border-top:1px solid #f4f4f2;padding-top:6px;margin-bottom:7px;}
+.car-info-mini{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px;}
+.mini-pill{font-size:10px;padding:2px 6px;border-radius:999px;background:#f8f8f4;color:#555;border:1px solid #eee;font-weight:700;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.car-insight{font-size:11px;color:#0F6E56;background:#E1F5EE;border-radius:7px;padding:7px 8px;line-height:1.45;margin-bottom:7px;font-weight:700;word-break:keep-all;}
+.car-insight span{opacity:.72;font-weight:500;}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.act-btn{padding:7px 4px;font-size:11px;font-weight:700;border-radius:7px;cursor:pointer;font-family:inherit;text-align:center;border:none;}
+.act-kakao{background:#FEE500;color:#391B1B;grid-column:1/-1;}
+.act-kakao:hover{background:#f5db00;}
+.act-call{background:#1D9E75;color:#fff;}
+.act-call:hover{background:#0F6E56;}
+.act-edit{background:#fff;border:1px solid #ddd!important;color:#555;border:none;}
+.act-edit:hover{background:#f4f4f2;}
+.act-del{background:#fff;border:1px solid #fcc!important;color:#c0392b;border:none;}
+.act-del:hover{background:#fff5f5;}
+
+
+.load-more-wrap{grid-column:1/-1;text-align:center;padding:16px 0 6px;}
+.load-more-btn{padding:11px 22px;border:none;border-radius:10px;background:#1D9E75;color:#fff;font-size:13px;font-weight:900;cursor:pointer;font-family:inherit;}
+.load-more-btn:hover{background:#0F6E56;}
+.load-more-btn:disabled{background:#ccc;cursor:not-allowed;}
+.load-more-info{font-size:11px;color:#999;margin-top:7px;}
+
+/* ━━━ 빈 상태 ━━━ */
+.empty-state{text-align:center;padding:50px 20px;color:#ccc;grid-column:1/-1;}
+.empty-state svg{width:52px;height:52px;margin:0 auto 12px;display:block;opacity:0.22;}
+
+/* ━━━ 차량 추천 섹션 ━━━ */
+.recommend-wrap{max-width:700px;margin:24px auto;padding:0 16px;}
+.rec-hero{background:linear-gradient(135deg,#1D9E75,#0F6E56);border-radius:14px;padding:28px 24px;color:#fff;text-align:center;margin-bottom:20px;}
+.rec-hero h2{font-size:20px;font-weight:900;margin-bottom:6px;}
+.rec-hero p{font-size:13px;opacity:0.85;}
+.rec-card{background:#fff;border:1px solid #e8e8e0;border-radius:14px;padding:24px;}
+.rec-title{font-size:15px;font-weight:700;margin-bottom:18px;color:#1a1a1a;}
+.rec-form-row{margin-bottom:14px;}
+.rec-label{font-size:12px;font-weight:700;color:#555;margin-bottom:7px;display:block;}
+.rec-options{display:flex;gap:7px;flex-wrap:wrap;}
+.rec-opt{padding:8px 14px;border:1.5px solid #e8e8e0;border-radius:20px;font-size:13px;cursor:pointer;font-family:inherit;background:#fff;color:#555;transition:all 0.12s;font-weight:500;}
+.rec-opt:hover{border-color:#1D9E75;color:#1D9E75;}
+.rec-opt.sel{background:#1D9E75;border-color:#1D9E75;color:#fff;font-weight:700;}
+.rec-range{display:flex;align-items:center;gap:8px;}
+.rec-range input{flex:1;padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a1a1a;min-width:0;}
+.rec-range input:focus{outline:none;border-color:#1D9E75;}
+.rec-range span{color:#aaa;font-size:13px;flex-shrink:0;}
+.rec-textarea{width:100%;min-height:80px;resize:vertical;padding:10px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a1a1a;line-height:1.6;}
+.rec-textarea:focus{outline:none;border-color:#1D9E75;}
+.rec-submit{width:100%;padding:14px;background:#FEE500;border:none;border-radius:10px;font-size:15px;font-weight:900;color:#391B1B;cursor:pointer;font-family:inherit;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.rec-submit:hover{background:#f5db00;}
+.rec-notice{font-size:11px;color:#aaa;text-align:center;margin-top:10px;line-height:1.6;}
+
+/* ━━━ 매입문의 섹션 ━━━ */
+.buy-wrap{max-width:700px;margin:24px auto;padding:0 16px;}
+.buy-hero{background:linear-gradient(135deg,#1a1a1a,#333);border-radius:14px;padding:28px 24px;color:#fff;text-align:center;margin-bottom:20px;}
+.buy-hero h2{font-size:20px;font-weight:900;margin-bottom:6px;}
+.buy-hero p{font-size:13px;opacity:0.75;}
+.buy-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+.buy-step{background:#fff;border:1px solid #e8e8e0;border-radius:12px;padding:16px 12px;text-align:center;}
+.buy-step-num{width:32px;height:32px;background:#1D9E75;border-radius:50%;color:#fff;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;}
+.buy-step h4{font-size:13px;font-weight:700;margin-bottom:4px;}
+.buy-step p{font-size:11px;color:#888;line-height:1.5;}
+.buy-card{background:#fff;border:1px solid #e8e8e0;border-radius:14px;padding:24px;}
+.buy-form-row{margin-bottom:12px;}
+.buy-label{font-size:12px;font-weight:700;color:#555;margin-bottom:6px;display:block;}
+.buy-input{width:100%;padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;font-family:inherit;color:#1a1a1a;}
+.buy-input:focus{outline:none;border-color:#1D9E75;}
+.buy-submit{width:100%;padding:13px;background:#1D9E75;border:none;border-radius:10px;font-size:15px;font-weight:900;color:#fff;cursor:pointer;font-family:inherit;margin-top:8px;}
+.buy-submit:hover{background:#0F6E56;}
+
+/* ━━━ 딜러 소개 섹션 ━━━ */
+.about-wrap{max-width:700px;margin:24px auto;padding:0 16px;}
+.about-card{background:#fff;border:1px solid #e8e8e0;border-radius:14px;padding:28px 24px;margin-bottom:14px;}
+.about-avatar{width:80px;height:80px;border-radius:50%;background:#1D9E75;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;margin:0 auto 14px;}
+.about-name{text-align:center;font-size:22px;font-weight:900;margin-bottom:4px;}
+.about-name span{color:#1D9E75;}
+.about-sub{text-align:center;font-size:13px;color:#888;margin-bottom:16px;}
+.about-divider{height:1px;background:#f0f0ea;margin:16px 0;}
+.about-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f8f8f4;}
+.about-row:last-child{border-bottom:none;}
+.about-row-icon{width:32px;height:32px;border-radius:8px;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.about-row-icon svg{width:16px;height:16px;fill:#1D9E75;}
+.about-row-label{font-size:11px;color:#aaa;margin-bottom:1px;}
+.about-row-val{font-size:13px;font-weight:700;color:#1a1a1a;}
+.about-btns{display:flex;gap:10px;margin-top:18px;}
+.about-btns button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+.about-kakao{background:#FEE500;color:#391B1B;}
+.about-kakao:hover{background:#f5db00;}
+.about-call{background:#1D9E75;color:#fff;}
+.about-call:hover{background:#0F6E56;}
+.strength-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+.strength-item{background:#f8f8f4;border-radius:10px;padding:14px;}
+.strength-item h4{font-size:13px;font-weight:700;margin-bottom:4px;color:#1a1a1a;}
+.strength-item p{font-size:11px;color:#888;line-height:1.5;}
+
+/* ━━━ 모달 ━━━ */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;align-items:center;justify-content:center;padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:22px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;}
+.modal-title{font-size:15px;font-weight:700;margin-bottom:14px;}
+.form-row{margin-bottom:10px;}
+.form-label{font-size:11px;font-weight:700;color:#666;margin-bottom:4px;display:block;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+input[type=text]{width:100%;padding:9px 11px;font-size:13px;border:1px solid #ddd;border-radius:7px;background:#fafaf8;color:#1a1a1a;font-family:inherit;}
+input[type=text]:focus{outline:none;border-color:#1D9E75;background:#fff;}
+.form-select{width:100%;padding:9px 11px;font-size:13px;border:1px solid #ddd;border-radius:7px;background:#fafaf8;color:#1a1a1a;font-family:inherit;}
+.photo-drop{border:2px dashed #ddd;border-radius:8px;padding:14px;text-align:center;cursor:pointer;color:#aaa;font-size:12px;}
+.photo-drop:hover{border-color:#1D9E75;color:#1D9E75;}
+.photo-preview{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.thumb{position:relative;width:66px;height:66px;}
+.thumb img{width:66px;height:66px;object-fit:cover;border-radius:7px;border:1px solid #e8e8e0;}
+.thumb-del{position:absolute;top:-5px;right:-5px;width:17px;height:17px;background:#c0392b;color:#fff;border:none;border-radius:50%;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.photo-loading{font-size:12px;color:#1D9E75;margin-top:6px;min-height:18px;}
+.detail-main-img{background:#f0f0ea;}
+.modal-btns{display:flex;gap:8px;margin-top:14px;}
+.modal-btns .btn-teal{flex:1;padding:11px;}
+
+/* ━━━ 사진 확대 ━━━ */
+#photoModal{cursor:zoom-out;}
+#photoModal img{max-width:92vw;max-height:86vh;border-radius:10px;object-fit:contain;}
+/* ━━━ 매물 상세 미니 모달 ━━━ */
+.detail-modal{
+  background:#fff;border-radius:18px;width:100%;max-width:860px;max-height:92vh;
+  overflow:hidden;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
+  box-shadow:0 18px 60px rgba(0,0,0,0.28);
+}
+.detail-gallery{background:#111;min-height:420px;position:relative;display:flex;align-items:center;justify-content:center;}
+.detail-gallery img{width:100%;height:100%;max-height:74vh;object-fit:contain;}
+.detail-no-img{color:#777;display:flex;flex-direction:column;align-items:center;gap:10px;font-size:13px;}
+.detail-no-img svg{width:54px;height:54px;opacity:.35;}
+.detail-arrow{position:absolute;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:rgba(255,255,255,.88);font-size:24px;cursor:pointer;}
+.detail-arrow:hover{background:#fff;}
+.detail-prev{left:12px}.detail-next{right:12px}
+.detail-photo-count{position:absolute;bottom:14px;right:14px;background:rgba(0,0,0,.62);color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;}
+.detail-info{padding:24px;overflow-y:auto;}
+.detail-close{float:right;width:32px;height:32px;border:none;border-radius:50%;background:#f4f4f2;color:#666;font-size:18px;cursor:pointer;}
+.detail-close:hover{background:#e8e8e0;}
+.detail-badge{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;background:#E1F5EE;color:#0F6E56;font-size:12px;font-weight:900;margin-bottom:10px;}
+.detail-title{font-size:22px;font-weight:900;line-height:1.25;margin:4px 0 5px;word-break:keep-all;}
+.detail-spec{font-size:13px;color:#888;margin-bottom:12px;}
+.detail-price{font-size:26px;font-weight:900;color:#1D9E75;margin-bottom:14px;}
+.detail-insight{background:#f8f8f4;border-left:4px solid #1D9E75;border-radius:10px;padding:13px 14px;font-size:13px;line-height:1.7;color:#333;margin-bottom:14px;}
+.detail-insight strong{display:block;color:#0F6E56;font-size:12px;margin-bottom:3px;}
+.detail-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+.detail-option-box{background:#fbfbf8;border:1px solid #f0f0ea;border-radius:12px;padding:12px 13px;margin:4px 0 12px;}
+.detail-option-title{font-size:12px;font-weight:900;color:#0F6E56;margin-bottom:7px;}
+.detail-option-list{display:flex;gap:6px;flex-wrap:wrap;}
+.detail-option-chip{font-size:11px;font-weight:700;background:#fff;border:1px solid #e8e8e0;border-radius:999px;padding:4px 8px;color:#444;}
+.detail-row{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid #f0f0ea;font-size:13px;}
+.detail-row span:first-child{color:#999;flex-shrink:0}.detail-row span:last-child{font-weight:700;text-align:right;}
+.detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px;}
+.detail-actions .act-kakao{grid-column:1/-1;padding:13px;font-size:14px;border-radius:10px;}
+.detail-actions .act-call,.detail-actions .act-edit{padding:12px;font-size:13px;border-radius:10px;}
+.detail-help{font-size:11px;color:#aaa;line-height:1.6;margin-top:10px;text-align:center;}
+@media(max-width:760px){
+  .detail-modal{grid-template-columns:1fr;max-height:94vh;}
+  .detail-gallery{min-height:300px;}
+  .detail-gallery img{max-height:48vh;}
+  .detail-info{padding:18px;}
+  .detail-title{font-size:19px}.detail-price{font-size:22px;}
+}
+
+
+/* ━━━ 푸터 ━━━ */
+footer{background:#1a1a1a;color:#aaa;padding:24px;text-align:center;font-size:12px;margin-top:20px;line-height:1.8;}
+footer strong{color:#fff;}
+
+
+/* ━━━ 관리자 로그인 ━━━ */
+.admin-lock{display:none;}
+.admin-only{display:none!important;}
+.admin-active .admin-only{display:flex!important;}
+.admin-active .admin-lock{display:block;}
+
+.admin-login-wrap{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);
+  z-index:9999;display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(6px);
+}
+.admin-login-box{
+  background:#fff;border-radius:16px;padding:32px 28px;
+  width:100%;max-width:360px;text-align:center;
+}
+.admin-login-box h2{font-size:18px;font-weight:900;margin-bottom:6px;}
+.admin-login-box p{font-size:13px;color:#aaa;margin-bottom:22px;}
+.admin-login-box input{
+  width:100%;padding:12px 14px;font-size:15px;
+  border:1.5px solid #e8e8e0;border-radius:9px;
+  font-family:inherit;text-align:center;letter-spacing:3px;
+  margin-bottom:10px;
+}
+.admin-login-box input:focus{outline:none;border-color:#1D9E75;}
+.admin-login-btn{
+  width:100%;padding:12px;background:#1D9E75;color:#fff;
+  border:none;border-radius:9px;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:inherit;
+}
+.admin-login-btn:hover{background:#0F6E56;}
+.admin-err{font-size:12px;color:#e74c3c;margin-top:6px;min-height:18px;}
+.admin-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 12px;background:#E1F5EE;border-radius:20px;
+  font-size:12px;font-weight:700;color:#0F6E56;cursor:pointer;
+}
+.admin-badge:hover{background:#c8edd8;}
+
+/* ━━━ 반응형 ━━━ */
+@media(max-width:800px){
+  .layout{padding:10px;}
+  .sidebar{display:none;}
+  .cards{grid-template-columns:1fr 1fr;gap:8px;}
+  .hdr-top{padding:9px 12px;}
+  .search-wrap{display:none;}
+  .buy-steps{grid-template-columns:1fr;}
+  .strength-grid{grid-template-columns:1fr;}
+  .dp-inner{gap:12px;}
+}
+@media(max-width:480px){
+  .cards{grid-template-columns:1fr 1fr;}
+  .card-actions{grid-template-columns:1fr 1fr;}
+}
+/* ━━━ 모바일 상세 모달 가독성 개선 ━━━ */
+@media(max-width:760px){
+  #detailModal{align-items:flex-start;padding:0;background:rgba(0,0,0,.68);}
+  .detail-modal{
+    width:100vw;max-width:none;height:100dvh;max-height:100dvh;border-radius:0;
+    display:flex;flex-direction:column;overflow-y:auto;overscroll-behavior:contain;
+  }
+  .detail-gallery{
+    min-height:220px;height:40vh;max-height:330px;flex:0 0 auto;position:sticky;top:0;z-index:2;
+  }
+  .detail-gallery img{height:100%;max-height:none;}
+  .detail-info{padding:16px 16px 22px;overflow:visible;flex:0 0 auto;background:#fff;}
+  .detail-close{position:fixed;right:12px;top:12px;z-index:6;background:rgba(255,255,255,.92);box-shadow:0 2px 12px rgba(0,0,0,.18);}
+  .detail-badge{margin-top:2px;font-size:11px;}
+  .detail-title{font-size:20px;line-height:1.35;margin-top:6px;white-space:normal;}
+  .detail-spec{font-size:13px;line-height:1.5;margin-bottom:9px;color:#666;}
+  .detail-price{font-size:24px;margin-bottom:12px;}
+  .detail-insight{font-size:13px;padding:12px;margin-bottom:12px;}
+  .detail-tags{margin-bottom:10px;}
+  .detail-option-box{padding:12px;margin:8px 0 10px;background:#f8f8f4;}
+  .detail-option-title{font-size:13px;}
+  .detail-option-chip{font-size:11px;padding:5px 9px;}
+  .detail-row{
+    display:grid;grid-template-columns:82px 1fr;align-items:start;gap:10px;
+    padding:11px 0;font-size:13px;line-height:1.55;
+  }
+  .detail-row span:first-child{font-size:12px;color:#888;}
+  .detail-row span:last-child{text-align:left;font-weight:800;word-break:keep-all;color:#222;}
+  .detail-actions{position:sticky;bottom:0;background:#fff;padding:10px 0 0;margin-top:14px;box-shadow:0 -8px 18px rgba(255,255,255,.88);}
+  .detail-actions .act-kakao{font-size:14px;padding:14px;}
+  .detail-help{padding-bottom:8px;}
+}
+
+@media(max-width:380px){
+  .detail-gallery{height:36vh;min-height:200px;}
+  .detail-row{grid-template-columns:74px 1fr;font-size:12px;}
+  .detail-title{font-size:18px;}
+}
+
 </style>
+</head>
+<body>
 
-<div id="nm-wrap">
+<!-- ━━━ 관리자 로그인 모달 ━━━ -->
+<div class="admin-login-wrap" id="adminLoginWrap" style="display:none;">
+  <div class="admin-login-box">
+    <h2>🔐 관리자 로그인</h2>
+    <p>나이스모터스 딜러 전용<br/>이메일과 비밀번호를 입력해주세요</p>
+    <input type="email" id="adminEmailInput" placeholder="admin@nicemotors.com" autocomplete="username"/>
+    <input type="password" id="adminPwInput" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')checkAdminPw()"/>
+    <button class="admin-login-btn" onclick="checkAdminPw()">로그인</button>
+    <div class="admin-err" id="adminErr"></div>
+    <button onclick="closeAdminLogin()" style="margin-top:12px;background:none;border:none;font-size:12px;color:#aaa;cursor:pointer;font-family:inherit;">취소</button>
+  </div>
+</div>
 
-  <!-- 헤더 -->
-  <header id="nm-hdr">
-    <a href="#" class="nm-logo">
-      <div class="nm-mark">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L20 9v7l-8 4-8-4V9l8-4.5z" opacity=".4"/><path d="M12 6l-6 3v6l6 3 6-3V9l-6-3z"/></svg>
+
+<!-- ━━━ 랜딩 페이지 (토스 스타일) ━━━ -->
+<div id="landing-page">
+
+  <!-- 고정 헤더 -->
+  <div class="landing-fixed-hdr">
+    <div class="lh-logo">
+      <div class="lh-mark">
+        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
       </div>
-      <div class="nm-brand">나이스<span>모터스</span></div>
-    </a>
-    <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-hbtn">허위매물 걱정 없이 매물보기 →</a>
-  </header>
-
-  <!-- 도트 -->
-  <nav class="nm-dots" id="nm-dots"></nav>
-
-  <!-- S1: 히어로 -->
-  <section class="nm-ls nm-s1" id="nm0">
-    <div class="nm-eyebrow">청주 나이스모터스 · 손영준 딜러</div>
-    <h1 class="nm-h">"세상에<br><em>싸고 좋은 차</em>는<br>없습니다."</h1>
-    <p class="nm-b">그래도 <strong>합리적이고 안전한 차</strong>는 분명히 있습니다.<br>제가 직접 찾아드릴게요.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S2: 저의 이야기 -->
-  <section class="nm-ls nm-s2" id="nm1">
-    <div class="nm-eyebrow">저의 이야기</div>
-    <h2 class="nm-h">저는 평생<br>가성비만 좇았습니다.</h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">똑같은 물건 하나를 사더라도 남들보다 더 싸게 사보겠다고 온갖 정보와 데이터를 뒤지고 비교하며 한두 달씩 시간을 쏟아붓곤 했죠.</p>
-    <p class="nm-b" style="margin-top:16px;">그런데 어느 날 친구를 보며 생각했습니다.<br><strong>"내가 시간과 에너지를 쏟아가며 아낀 돈이 과연 그만한 가치가 있었을까?"</strong></p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S3: 뼈아픈 경험 -->
-  <section class="nm-ls nm-s3 nm-ls-bg" id="nm2">
-    <div class="nm-eyebrow">뼈아픈 경험</div>
-    <h2 class="nm-h">싸게 샀다가<br><em>두 배로 썼습니다.</em></h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">저렴한 가격에 혹해 사기를 당하거나, 싼 맛에 샀다가 고장이 나서 결국 돈이 이중으로 들어가는 <strong>'중복투자'</strong>의 뼈아픈 경험을 수차례 겪었습니다.</p>
-    <p class="nm-b" style="margin-top:16px;">이제는 무조건적인 가성비만 좇기보다,<br><strong>'안전'과 '확실성'</strong>이라는 가치와 적당히 타협하며 살아가려 합니다.<br>이 깨달음은 자동차 시장에서도 똑같이 적용됩니다.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S4: 중고차 시장의 진실 -->
-  <section class="nm-ls nm-s4" id="nm3">
-    <div class="nm-eyebrow">중고차 시장의 진실</div>
-    <div class="nm-quote">"가격은 절대<br>거짓말을 하지 않습니다."</div>
-    <p class="nm-b">상태가 좋고 누구에게나 자신 있게 내놓을 수 있는 물건을<br>굳이 시세보다 싸게 팔 판매자는 세상에 없습니다.</p>
-    <p class="nm-b" style="margin-top:16px;">현장에서 큰 피해를 입으시는 사례들을 보면<br>대부분 <strong>유독 저렴한 차를 좇으시다가</strong> 발생합니다.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S5: 새 차도 예외 아님 -->
-  <section class="nm-ls nm-s5 nm-ls-bg" id="nm4">
-    <div class="nm-eyebrow">새 차도 예외는 아닙니다</div>
-    <h2 class="nm-h">저희 가족<br><em>GV80 신차가</em><br>터널에서 멈췄습니다.</h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">출고 1년도 안 되어 터널 한가운데서 멈춰 선 아찔한 경험.<br>자동차는 수만 개의 부품이 맞물려 돌아가는 기계이기에,<br><strong>새 차라고 해서 완벽을 보장할 수는 없습니다.</strong></p>
-    <p class="nm-b" style="margin-top:12px;">중고차라고 해서 무조건 문제가 생기는 것도 아닙니다.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S6: 최선은? -->
-  <section class="nm-ls nm-s6" id="nm5">
-    <div class="nm-eyebrow">그렇다면 최선은?</div>
-    <h2 class="nm-h">리스크를<br><em>최소화하는 것.</em></h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">현재까지 <strong>'알려진 정보'</strong>들을 투명하게 확인하고,<br><strong>'적정한 가격'</strong> 안에서<br>앞으로 <strong>'문제가 될 만한 요소'</strong>들을 최대한 꼼꼼하게 배제하며 차를 골라내는 것.</p>
-    <p class="nm-b" style="margin-top:16px;">100% 완벽한 차가 아니라, <strong>가장 합리적이고 안전한 선택지</strong>를 찾는 것입니다.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S7: 솔직하게 -->
-  <section class="nm-ls nm-s7 nm-ls-bg" id="nm6">
-    <div class="nm-eyebrow">솔직하게 말씀드리면</div>
-    <h2 class="nm-h">아직 저를<br>먼저 찾아주시는 분이<br><em>많지 않습니다.</em></h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">그래서 저를 믿고 연락해 주시는 한 분 한 분이 제게는 더욱 소중하고 간절합니다.</p>
-    <p class="nm-b" style="margin-top:16px;"><strong>정직하게 제 몫을 벌면서, 고객님께 좋은 차를 찾아드릴 수 있다면</strong> 얼마나 좋을까 늘 생각하며 일하고 있습니다.</p>
-    <div class="nm-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></div>
-  </section>
-
-  <!-- S8: CTA -->
-  <section class="nm-ls nm-s8 nm-ls-bg" id="nm7">
-    <div class="nm-eyebrow">함께 고민해요</div>
-    <h2 class="nm-h">제가 겪었던<br>실패를 고객님은<br><em>겪지 않도록.</em></h2>
-    <div class="nm-div"></div>
-    <p class="nm-b">단순히 차를 파는 사람이 아니라,<br>안전하고 합리적인 선택을 돕는 <strong>든든한 파트너</strong>가 되겠습니다.</p>
-    <p class="nm-b" style="margin-top:8px;">싸게 사는 게 아니라, <strong>후회하지 않는 선택</strong>을 도와드립니다.</p>
-    <div class="nm-btns">
-      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-yellow">🚗 이 가격에 괜찮은 차 있는지 물어보기</a>
-      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-outline">실매물 먼저 둘러보기</a>
-      <a href="http://pf.kakao.com/_YtXCX/chat" target="_blank" class="nm-btn nm-yellow">허위매물인지 체크받기</a>
-      <a href="tel:01045619599" class="nm-btn nm-outline">이 차 사도 되는지 전화상담</a>
+      <div class="lh-name">나이스<span>모터스</span></div>
     </div>
-  </section>
+    <button class="lh-skip" onclick="enterSite('cars')">허위매물 걱정 없이 매물보기 →</button>
+  </div>
 
+  <!-- 네비 도트 -->
+  <div class="ls-dots" id="lsDots"></div>
+
+  <div class="landing-wrap" id="landingWrap">
+
+    <!-- 섹션 1: 임팩트 오프닝 -->
+    <div class="ls ls-dark" id="ls0" style="background-image:url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-eyebrow">청주 나이스모터스 · 손영준 딜러</div>
+        <div class="ls-heading">"세상에<br/><em>싸고 좋은 차</em>는<br/>없습니다."</div>
+        <div class="ls-body">그래도 <strong>합리적이고 안전한 차</strong>는 분명히 있습니다.<br/>제가 직접 찾아드릴게요.</div>
+      </div>
+      <div class="scroll-hint" style="position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 2: 개인 스토리 -->
+    <div class="ls ls-white" id="ls1" style="background-image:url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">저의 이야기</div>
+        <div class="ls-heading">저는 평생<br/><em>가성비만</em> 좇았습니다.</div>
+        <div class="ls-body">
+          똑같은 물건 하나를 사더라도 남들보다 더 싸게 사보겠다고 온갖 정보와 데이터를 뒤지고 비교하며 한두 달씩 시간을 쏟아붓곤 했죠.<br/><br/>
+          그런데 어느 날 친구를 보며 생각했습니다.<br/>
+          <em>"내가 시간과 에너지를 쏟아가며 아낀 돈이 과연 그만한 가치가 있었을까?"</em>
+        </div>
+      </div>
+      <div class="scroll-hint" style="color:#1a1a1a;position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 3: 중복투자 경험 -->
+    <div class="ls ls-light" id="ls2" style="background-image:url('https://images.unsplash.com/photo-1580048915913-4f8f5cb481c4?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(248,248,244,0.88) 0%, rgba(248,248,244,0.75) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">뼈아픈 경험</div>
+        <div class="ls-heading">싸게 샀다가<br/><em>두 배로 썼습니다.</em></div>
+        <div class="ls-body">
+          저렴한 가격에 혹해 사기를 당하거나, 싼 맛에 샀다가 고장이 나서 결국 돈이 이중으로 들어가는 <strong>'중복투자'</strong>의 뼈아픈 경험을 수차례 겪었습니다.<br/><br/>
+          이제는 무조건적인 가성비만 좇기보다,<br/><strong>'안전'과 '확실성'</strong>이라는 가치와 적당히 타협하며 살아가려 합니다.
+        </div>
+        <div class="ls-divider"></div>
+        <div class="ls-body" style="font-size:15px;opacity:0.55;">이 깨달음은 자동차 시장에서도 똑같이 적용됩니다.</div>
+      </div>
+      <div class="scroll-hint" style="color:#1a1a1a;position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 4: 가격은 거짓말을 안 한다 -->
+    <div class="ls ls-green" id="ls3" style="background-image:url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,110,86,0.82) 0%, rgba(15,110,86,0.65) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">중고차 시장의 진실</div>
+        <div class="ls-quote">"가격은 절대<br/>거짓말을 하지 않습니다."</div>
+        <div class="ls-body">
+          상태가 좋고 누구에게나 자신 있게 내놓을 수 있는 물건을<br/>굳이 시세보다 싸게 팔 판매자는 세상에 없습니다.<br/><br/>
+          현장에서 큰 피해를 입으시는 사례들을 보면<br/>대부분 <strong>유독 저렴한 차를 좇으시다가</strong> 발생합니다.
+        </div>
+      </div>
+      <div class="scroll-hint" style="position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 5: 새 차도 멈춘다 -->
+    <div class="ls ls-dark" id="ls4" style="
+      background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=75&fit=crop')
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-color: #0a0a0a;
+    ">
+      <!-- 왼쪽 그라데이션 오버레이 -->
+      <div style="
+        position:absolute;inset:0;
+        background:linear-gradient(
+          to right,
+          rgba(10,10,10,0.97) 0%,
+          rgba(10,10,10,0.90) 40%,
+          rgba(10,10,10,0.45) 70%,
+          rgba(10,10,10,0.15) 100%
+        );
+      "></div>
+      <div class="fade-up" style="position:relative;z-index:1;max-width:520px;">
+        <div class="ls-chip">새 차도 예외는 아닙니다</div>
+        <div class="ls-heading">저희 가족<br/><em>GV80 신차</em>가<br/>터널에서 멈췄습니다.</div>
+        <div class="ls-body">
+          출고 1년도 안 되어 터널 한가운데서 멈춰 선 아찔한 경험.<br/>
+          자동차는 수만 개의 부품이 맞물려 돌아가는 기계이기에,<br/><strong>새 차라고 해서 완벽을 보장할 수는 없습니다.</strong><br/><br/>
+          중고차라고 해서 무조건 문제가 생기는 것도 아닙니다.
+        </div>
+      </div>
+      <div class="scroll-hint" style="position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 6: 최선의 방법 -->
+    <div class="ls ls-white" id="ls5" style="background-image:url('https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">그렇다면 최선은?</div>
+        <div class="ls-heading">리스크를<br/><em>최소화</em>하는 것.</div>
+        <div class="ls-body">
+          현재까지 <strong>'알려진 정보'</strong>들을 투명하게 확인하고,<br/>
+          <strong>'적정한 가격'</strong> 안에서<br/>
+          앞으로 <strong>'문제가 될 만한 요소'</strong>들을 최대한 꼼꼼하게 배제하며 차를 골라내는 것.<br/><br/>
+          100% 완벽한 차가 아니라, <strong>가장 합리적이고 안전한 선택지</strong>를 찾는 것입니다.
+        </div>
+      </div>
+      <div class="scroll-hint" style="color:#1a1a1a;position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 7: 솔직한 고백 -->
+    <div class="ls ls-yellow" id="ls6" style="background-image:url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,251,235,0.88) 0%, rgba(255,251,235,0.75) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">솔직하게 말씀드리면</div>
+        <div class="ls-heading">아직 저를<br/>먼저 찾아주시는 분이<br/><em>많지 않습니다.</em></div>
+        <div class="ls-body">
+          그래서 저를 믿고 연락해 주시는 한 분 한 분이 제게는 더욱 소중하고 간절합니다.<br/><br/>
+          정직하게 제 몫을 벌면서, 고객님께 좋은 차를 찾아드릴 수 있다면 얼마나 좋을까 늘 생각하며 일하고 있습니다.
+        </div>
+      </div>
+      <div class="scroll-hint" style="color:#92400e;position:relative;z-index:1;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>
+    </div>
+
+    <!-- 섹션 8: CTA -->
+    <div class="ls ls-teal" id="ls7" style="background-image:url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(29,158,117,0.88) 0%, rgba(15,110,86,0.80) 100%);z-index:0;"></div>
+      <div class="fade-up" style="position:relative;z-index:1;">
+        <div class="ls-chip">함께 고민해요</div>
+        <div class="ls-heading">제가 겪었던<br/>실패를 고객님은<br/><em>겪지 않도록.</em></div>
+        <div class="ls-body">
+          단순히 차를 파는 사람이 아니라,<br/>안전하고 합리적인 선택을 돕는 <strong>든든한 파트너</strong>가 되겠습니다.<br/><br/>
+          <strong>싸게 사는 게 아니라, 후회하지 않는 선택을 도와드립니다.</strong>
+        </div>
+        <div class="ls-btns">
+          <button class="ls-btn-main" onclick="enterSite('recommend')">🚗 이 가격에 괜찮은 차 있는지 물어보기</button>
+          <button class="ls-btn-sub" onclick="enterSite('cars')">실매물 먼저 둘러보기</button>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+          <button class="ls-btn-sub" style="background:#FEE500;border-color:#FEE500;color:#391B1B;font-weight:900;" onclick="goKakao()">허위매물인지 체크받기</button>
+          <button class="ls-btn-sub" onclick="callDealer()">이 차 사도 되는지 전화상담</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /landing-wrap -->
+</div>
+
+<!-- ━━━ 메인 앱 ━━━ -->
+<div id="main-app">
+
+<!-- ━━━ 헤더 ━━━ -->
+<header class="hdr">
+  <div class="hdr-top">
+    <a class="logo" href="#" onclick="showTab('cars')">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">나이스<span>모터스</span></div>
+        <div class="logo-sub">청주 엑스포매매단지 · 충북 중고차 전문</div>
+      </div>
+    </a>
+    <div class="search-wrap">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="차종 검색 (아반떼, K5, 싼타페...)" onkeyup="renderCars()"/>
+        <button onclick="renderCars()">검색</button>
+      </div>
+    </div>
+    <div class="hdr-nav">
+      <span id="adminBadge" class="admin-badge" onclick="logoutAdmin()" style="display:none;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="#0F6E56"><path d="M12 2C9.24 2 7 4.24 7 7s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 12c-5.33 0-8 2.67-8 4v2h16v-2c0-1.33-2.67-4-8-4z"/></svg>
+        관리자 모드
+      </span>
+      <button class="nav-btn nav-paste admin-only" onclick="togglePaste()">글 붙여넣기</button>
+      <button class="nav-btn nav-add admin-only" onclick="openAddModal()">+ 매물 등록</button>
+      <button class="nav-btn nav-paste" id="adminLoginBtn" onclick="openAdminLogin()" style="border:1px solid #ddd;">🔐 관리자</button>
+      <button class="nav-btn nav-kakao" onclick="goKakao()">허위매물 체크</button>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-n" id="statTotal">0</div><div class="stat-l">전체 매물</div></div>
+    <div class="stat"><div class="stat-n" id="statOwn">0</div><div class="stat-l">직접 매입</div></div>
+    <div class="stat"><div class="stat-n" id="statAlson">0</div><div class="stat-l">알선 매물</div></div>
+    <div class="stat"><div class="stat-n" id="statWish">0</div><div class="stat-l">관심 차량</div></div>
+  </div>
+</header>
+
+<!-- ━━━ 딜러 프로필 ━━━ -->
+<div class="dealer-profile">
+  <div class="dp-inner">
+    <div class="dp-avatar">N</div>
+    <div class="dp-info">
+      <div class="dp-name">나이스<span>모터스</span></div>
+      <div class="dp-title">청주 엑스포매매단지 · 충북 중고차 전문 딜러</div>
+      <div class="dp-badges">
+        <span class="dp-badge dp-badge-green">충북 딜러 네트워크</span>
+        <span class="dp-badge dp-badge-blue">직거래 전문</span>
+        <span class="dp-badge dp-badge-yellow">허위매물 ZERO</span>
+      </div>
+    </div>
+    <div class="dp-actions">
+      <button class="dp-action-btn dp-kakao" onclick="goKakao()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.507 5.088 3.81 6.574L4.74 21l4.276-2.278A11.3 11.3 0 0012 18.6c5.523 0 10-3.477 10-7.8S17.523 3 12 3z"/></svg>
+        카카오톡 상담
+      </button>
+      <button class="dp-action-btn dp-call" onclick="callDealer()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        전화 상담
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━ 탭 네비 ━━━ -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <div class="tab-item active" id="tab-cars" onclick="showTab('cars')">전체 매물</div>
+    <div class="tab-item" id="tab-recommend" onclick="showTab('recommend')">차량 추천 받기</div>
+    <div class="tab-item" id="tab-buy" onclick="showTab('buy')">내 차 팔기 (매입)</div>
+    <div class="tab-item" id="tab-about" onclick="showTab('about')">딜러 소개</div>
+  </div>
+</nav>
+
+<!-- ━━━ 섹션: 매물 ━━━ -->
+<div class="section active" id="sec-cars">
+  <div class="layout">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <div class="filter-card">
+        <div class="filter-head"><h3>필터</h3><button class="filter-reset" onclick="resetFilters()">초기화</button></div>
+        <div class="filter-section">
+          <div class="filter-label">매물 구분</div>
+          <label class="check-item"><input type="checkbox" id="fOwn" onchange="renderCars()"/><span>직접 매입 차량</span></label>
+          <label class="check-item"><input type="checkbox" id="fAlson" onchange="renderCars()"/><span>알선 매물</span></label>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">가격대 (만원)</div>
+          <div class="price-inputs">
+            <input type="text" id="priceMin" placeholder="최소" oninput="renderCars()"/>
+            <span>~</span>
+            <input type="text" id="priceMax" placeholder="최대" oninput="renderCars()"/>
+          </div>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">연식</div>
+          <select class="filter-select" id="fYear" onchange="renderCars()">
+            <option value="">전체</option>
+            <option value="2024">2024~</option>
+            <option value="2023">2023~</option>
+            <option value="2022">2022~</option>
+            <option value="2021">2021~</option>
+            <option value="2019">2019~</option>
+          </select>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">차종</div>
+          <select class="filter-select" id="fType" onchange="renderCars()"><option value="">전체</option></select>
+        </div>
+        <div class="filter-section">
+          <div class="filter-label">조건</div>
+          <label class="check-item"><input type="checkbox" id="fNoAcc" onchange="renderCars()"/><span>무사고만</span></label>
+          <label class="check-item"><input type="checkbox" id="fHasPhoto" onchange="renderCars()"/><span>사진 있음</span></label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 메인 -->
+    <main class="main">
+      <!-- 붙여넣기 -->
+      <div class="paste-panel hidden admin-only" id="pastePanel">
+        <div class="paste-header">
+          <span class="paste-title">밴드 게시글 붙여넣기</span>
+          <button class="btn-ghost" style="padding:4px 9px;font-size:11px;" onclick="togglePaste()">닫기</button>
+        </div>
+        <textarea id="pasteInput" placeholder="밴드 게시글을 그대로 붙여넣으세요. 여러 건 한번에 가능&#10;★차량종류:싼타페TM 또는 22년식 아반떼 흰색 3만km 1350만 010-0000-0000 형식 모두 인식"></textarea>
+        <div class="err" id="parseErr"></div>
+        <div class="btn-row">
+          <button class="btn-teal" onclick="parsePaste()">자동 등록</button>
+          <button class="btn-ghost" onclick="loadBandSample()">밴드형식 샘플</button>
+          <button class="btn-ghost" onclick="loadSimpleSample()">일반형식 샘플</button>
+        </div>
+      </div>
+
+      <!-- 결과바 -->
+      <div class="result-bar">
+        <div class="result-count">총 <strong id="countNum">0</strong>대</div>
+        <div class="sort-btns">
+          <button class="sort-btn active" id="sortNew" onclick="setSort('new')">최신순</button>
+          <button class="sort-btn" id="sortPrice" onclick="setSort('price')">낮은가격</button>
+          <button class="sort-btn" id="sortKm" onclick="setSort('km')">주행거리</button>
+        </div>
+      </div>
+
+      <!-- 카드 -->
+      <div class="cards" id="cardsWrap">
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
+          <p style="font-size:13px;margin-bottom:4px;">등록된 매물이 없어요</p>
+          <small>매물을 등록하거나 샘플을 불러오세요</small>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ━━━ 섹션: 차량 추천 ━━━ -->
+<div class="section" id="sec-recommend">
+  <div class="recommend-wrap">
+    <div class="rec-hero">
+      <h2>🚗 내 조건에 맞는 차 찾기</h2>
+      <p>원하는 조건을 알려주시면 나이스모터스가 직접 맞춤 차량을 골라드려요</p>
+    </div>
+    <div class="rec-card">
+      <div class="rec-title">어떤 차를 찾고 계신가요?</div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">예산이 얼마나 되세요?</label>
+        <div class="rec-range">
+          <input type="text" id="recBudgetMin" placeholder="최소 (예: 500)"/>
+          <span>~</span>
+          <input type="text" id="recBudgetMax" placeholder="최대 (예: 2000)"/>
+          <span>만원</span>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">차종 (복수 선택 가능)</label>
+        <div class="rec-options" id="recCarTypes">
+          <button class="rec-opt" onclick="toggleOpt(this)">세단</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">SUV</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">미니밴</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">트럭/승합</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">상관없음</button>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">연식은요?</label>
+        <div class="rec-options" id="recYears">
+          <button class="rec-opt" onclick="toggleOpt(this)">5년 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">7년 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">10년 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">상관없음</button>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">주행거리는요?</label>
+        <div class="rec-options" id="recKm">
+          <button class="rec-opt" onclick="toggleOpt(this)">5만km 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">10만km 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">15만km 이내</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">상관없음</button>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">중요하게 보시는 것은?</label>
+        <div class="rec-options" id="recPriority">
+          <button class="rec-opt" onclick="toggleOpt(this)">무사고</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">연비</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">공간 넓음</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">가성비</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">외관 깨끗</button>
+          <button class="rec-opt" onclick="toggleOpt(this)">저렴한 보험료</button>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">연락처 (카카오톡으로 추천 차량 안내)</label>
+        <input type="text" id="recPhone" class="rec-range" style="padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;width:100%;" placeholder="010-0000-0000"/>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">주요 용도</label>
+        <input type="text" id="recUsage" class="rec-range" style="padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;width:100%;" placeholder="예) 왕복 50km 출퇴근용, 주말 가족 캠핑용 등"/>
+      </div>
+      <div class="rec-form-row">
+        <label class="rec-label">이것만은 꼭! (필수 조건)</label>
+        <input type="text" id="recMust" class="rec-range" style="padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;width:100%;" placeholder="예) 통풍 시트 필수, 어두운 색상 선호 등"/>
+      </div>
+      <div class="rec-form-row">
+        <label class="rec-label">이것만은 절대! (기피 조건)</label>
+        <input type="text" id="recNever" class="rec-range" style="padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;width:100%;" placeholder="예) 렌트 이력 있는 차는 싫어요, 흰색 피해주세요 등"/>
+      </div>
+      <div class="rec-form-row">
+        <label class="rec-label">추가로 원하는 조건이나 궁금한 점</label>
+        <textarea class="rec-textarea" id="recMemo" placeholder="어떤 사소한 고민이라도 좋습니다. 남겨주신 정보를 바탕으로 가장 합리적인 매물을 찾아보겠습니다."></textarea>
+      </div>
+
+      <button class="rec-submit" onclick="submitRecommend()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.507 5.088 3.81 6.574L4.74 21l4.276-2.278A11.3 11.3 0 0012 18.6c5.523 0 10-3.477 10-7.8S17.523 3 12 3z"/></svg>
+        내 예산에 맞는 차 찾아달라고 요청하기
+      </button>
+      <div class="rec-notice">입력하신 조건을 카카오톡 메시지로 전달해드려요<br/>나이스모터스가 직접 확인 후 맞춤 차량을 연락드립니다</div>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━ 섹션: 매입 ━━━ -->
+<div class="section" id="sec-buy">
+  <div class="buy-wrap">
+    <div class="buy-hero">
+      <h2>💰 내 차 제값 받고 팔기</h2>
+      <p>복잡한 절차 없이 간편하게 — 나이스모터스가 직접 매입합니다</p>
+    </div>
+    <div class="buy-steps">
+      <div class="buy-step">
+        <div class="buy-step-num">1</div>
+        <h4>정보 입력</h4>
+        <p>차량 정보와 연락처를 남겨주세요</p>
+      </div>
+      <div class="buy-step">
+        <div class="buy-step-num">2</div>
+        <h4>딜러 연락</h4>
+        <p>카카오 또는 전화로 빠르게 연락드려요</p>
+      </div>
+      <div class="buy-step">
+        <div class="buy-step-num">3</div>
+        <h4>현장 확인</h4>
+        <p>차량 확인 후 즉시 견적 안내</p>
+      </div>
+    </div>
+    <div class="buy-card">
+      <div class="rec-title">매입 신청서</div>
+      <div class="form-grid" style="margin-bottom:10px;">
+        <div class="buy-form-row"><label class="buy-label">차종명 *</label><input type="text" class="buy-input" id="buyCarName" placeholder="예) 아반떼, 싼타페"/></div>
+        <div class="buy-form-row"><label class="buy-label">연식</label><input type="text" class="buy-input" id="buyYear" placeholder="예) 2020년식"/></div>
+        <div class="buy-form-row"><label class="buy-label">주행거리</label><input type="text" class="buy-input" id="buyKm" placeholder="예) 7만km"/></div>
+        <div class="buy-form-row"><label class="buy-label">색상</label><input type="text" class="buy-input" id="buyColor" placeholder="예) 흰색"/></div>
+      </div>
+      <div class="buy-form-row"><label class="buy-label">사고 이력</label>
+        <select class="form-select" id="buyAccident" style="border:1.5px solid #e8e8e0;border-radius:8px;padding:9px 12px;width:100%;font-family:inherit;font-size:13px;color:#1a1a1a;">
+          <option value="무사고">무사고</option>
+          <option value="단순교환">단순교환</option>
+          <option value="사고있음">사고있음</option>
+          <option value="모름">잘 모름</option>
+        </select>
+      </div>
+      <div class="buy-form-row"><label class="buy-label">희망 매각가 (만원, 없으면 비워두세요)</label><input type="text" class="buy-input" id="buyHopePrice" placeholder="예) 1200"/></div>
+      <div class="buy-form-row"><label class="buy-label">연락처 *</label><input type="text" class="buy-input" id="buyPhone" placeholder="010-0000-0000"/></div>
+      <div class="buy-form-row"><label class="buy-label">추가 메모</label><textarea style="width:100%;min-height:70px;padding:9px 12px;border:1.5px solid #e8e8e0;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;" id="buyMemo" placeholder="차량 상태나 특이사항을 자유롭게 적어주세요"></textarea></div>
+      <button class="buy-submit" onclick="submitBuy()">내 차 시세 확인하고 매입 상담하기</button>
+      <p style="font-size:11px;color:#aaa;text-align:center;margin-top:10px;">빠른 응대를 위해 카카오톡으로 연결됩니다</p>
+    </div>
+  </div>
+</div>
+
+<!-- ━━━ 섹션: 딜러 소개 ━━━ -->
+<div class="section" id="sec-about">
+  <div class="about-wrap">
+    <!-- 프로필 카드 -->
+    <div class="about-card">
+      <div class="about-avatar">N</div>
+      <div class="about-name">나이스<span>모터스</span></div>
+      <div class="about-sub">청주 엑스포매매단지 · 충북 중고차 전문 딜러 손영준</div>
+      <div class="about-divider"></div>
+      <div class="about-row">
+        <div class="about-row-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+        <div><div class="about-row-label">위치</div><div class="about-row-val">충청북도 청주시 엑스포매매단지 나이스모터스</div></div>
+      </div>
+      <div class="about-row">
+        <div class="about-row-icon"><svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div>
+        <div><div class="about-row-label">전화</div><div class="about-row-val" id="aboutPhone">번호를 설정해주세요</div></div>
+      </div>
+      <div class="about-row">
+        <div class="about-row-icon"><svg viewBox="0 0 24 24"><path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.507 5.088 3.81 6.574L4.74 21l4.276-2.278A11.3 11.3 0 0012 18.6c5.523 0 10-3.477 10-7.8S17.523 3 12 3z"/></svg></div>
+        <div><div class="about-row-label">카카오톡</div><div class="about-row-val">카카오 채널 또는 전화번호로 친구추가</div></div>
+      </div>
+      <div class="about-btns">
+        <button class="about-kakao" onclick="goKakao()">카카오톡 상담</button>
+        <button class="about-call" onclick="callDealer()">전화 상담</button>
+      </div>
+    </div>
+
+    <!-- 소개글 카드 -->
+    <div class="about-card" style="line-height:1.95;color:#333;">
+      <div style="font-size:13px;font-weight:700;color:#1D9E75;margin-bottom:16px;display:flex;align-items:center;gap:6px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1D9E75"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        나이스모터스 손영준 딜러의 이야기
+      </div>
+
+      <p style="font-size:14px;margin-bottom:14px;color:#1a1a1a;">안녕하세요, 청주 나이스모터스 중고차 딜러 손영준입니다.<br/>오늘은 제가 차를 바라보고, 또 고객님들께 차를 소개해 드리는 저만의 기준에 대해 조금은 부끄럽지만 솔직한 제 이야기를 먼저 꺼내보려 합니다.</p>
+
+      <p style="font-size:13px;color:#444;margin-bottom:12px;">사실 저는 평생을 '싸고 좋은 것'만 찾으며 가성비를 최우선으로 추구하며 살아왔습니다. 똑같은 물건 하나를 사더라도 남들보다 조금이라도 더 싸게 사보겠다고 온갖 정보와 데이터를 뒤지고 비교하며 한두 달씩 시간을 쏟아붓곤 했죠.</p>
+
+      <p style="font-size:13px;color:#444;margin-bottom:12px;">그런데 제 친구는 조금 더 비싼 값을 치르더라도 백화점이나 정식 유통 경로에서 마음 편히 구매하고, 스트레스 없이 만족하며 잘 사용하는 모습을 보았습니다. 그때 참 많은 생각이 들었습니다. <em style="color:#555;">'내가 시간과 에너지를 쏟아가며 아낀 돈이 과연 그만한 가치가 있었을까? 어쩌면 삶을 참 피곤하게 만드는 부질없는 짓이었구나'</em> 하고요.</p>
+
+      <p style="font-size:13px;color:#444;margin-bottom:16px;">운 좋게 값싸게 구매해서 만족한 적도 있지만, 저렴한 가격에 혹해 사기를 당하거나 싼 맛에 샀다가 고장이 나서 결국 돈이 이중으로 들어가는 '중복투자'의 뼈아픈 경험도 수차례 겪었습니다. 이제는 무조건적인 가성비만 좇기보다, <strong>'안전'과 '확실성'</strong>이라는 가치와 적당히 타협하며 지혜롭게 살아가려 합니다.</p>
+
+      <div style="background:#f8f8f4;border-left:3px solid #1D9E75;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:14px;">
+        <p style="font-size:14px;font-weight:700;color:#1D9E75;margin-bottom:6px;">"세상에 싸고 좋은 차는 없습니다."</p>
+        <p style="font-size:13px;color:#555;">중고차 시장에서 이 말은 절대적인 진리입니다. 상태가 좋고 누구에게나 자신 있게 내놓을 수 있는 물건을 굳이 시세보다 싸게 팔 판매자는 세상에 없습니다. 눈에 띄게 저렴하다면 거기에는 반드시 그만한 이유가 숨어있습니다.<br/><br/>조금 조심스러운 이야기지만, 현장에서 허위매물 등 큰 피해를 입으시는 사례들을 보면 대부분 시세보다 유독 저렴한 차를 좇으시다가 발생하는 경우가 많습니다. 제 과거의 중복투자 경험처럼, <strong>중고차 시장에서도 가격은 절대 거짓말을 하지 않습니다.</strong></p>
+      </div>
+
+      <div style="background:#f8f8f4;border-left:3px solid #1D9E75;border-radius:0 8px 8px 0;padding:14px 16px;margin-bottom:14px;">
+        <p style="font-size:14px;font-weight:700;color:#1D9E75;margin-bottom:6px;">"하지만, 중고차라고 해서 무조건 문제가 생기는 것도 아닙니다."</p>
+        <p style="font-size:13px;color:#555;">자동차는 수만 개의 부품이 맞물려 돌아가는 기계이기에, 새 차라고 해서 완벽을 보장할 수는 없습니다. 저희 가족 역시 큰마음 먹고 뽑은 GV80 신차가 출고 1년도 안 되어 터널 한가운데서 멈춰 선 아찔한 경험을 한 적이 있습니다. 새 차도 언제든 문제가 생길 수 있다는 걸 크게 느꼈던 순간이었습니다.</p>
+      </div>
+
+      <div style="background:#E1F5EE;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+        <p style="font-size:13px;font-weight:700;color:#0F6E56;margin-bottom:7px;">그렇다면 우리가 할 수 있는 최선은 무엇일까요?</p>
+        <p style="font-size:13px;color:#1a1a1a;">결국 정답은 하나입니다. 현재까지 <strong>'알려진 정보'</strong>들을 투명하게 확인하고, <strong>'적정한 가격'</strong> 안에서 앞으로 <strong>'문제가 될 만한 요소'</strong>들을 최대한 꼼꼼하게 배제하며 차를 골라내는 것입니다.</p>
+      </div>
+
+      <p style="font-size:13px;color:#444;margin-bottom:12px;">이런 숱한 시행착오와 경험을 토대로, 차를 찾으시는 분들께 진짜 실질적인 도움을 드리고 싶습니다. 물론 저도 자선사업가가 아니기에 수익을 내며 일하는 딜러입니다. <strong>정직하게 제 몫을 벌면서, 고객님들께 좋은 차를 찾아드릴 수 있다면</strong> 얼마나 좋을까 늘 생각하며 일하고 있습니다.</p>
+
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+        <p style="font-size:13px;color:#92400e;">솔직히 말씀드리면, 아직 저를 먼저 찾아주시는 분들이 그리 많지는 않습니다. 그래서 저를 믿고 연락해 주시는 한 분 한 분이 제게는 더욱 소중하고 간절합니다.</p>
+      </div>
+
+      <p style="font-size:13px;color:#444;margin-bottom:18px;">단순히 차를 파는 사람이 아니라, 제가 겪었던 뼈아픈 실패를 고객님은 겪지 않도록 돕는 든든한 파트너가 되겠습니다. <strong>싸게 사는 것보다 중요한 건, 사고 나서 후회하지 않는 선택입니다. 100% 완벽한 차를 찾기보다, 리스크를 최소화한 가장 합리적인 선택을 저와 함께 고민해 보시지 않겠습니까?</strong></p>
+
+      <div style="background:#1D9E75;border-radius:10px;padding:18px;color:#fff;margin-bottom:0;">
+        <p style="font-size:14px;font-weight:700;margin-bottom:4px;">저와 함께 '나에게 딱 맞는 합리적인 차'를 찾고 싶으시다면</p>
+        <p style="font-size:12px;opacity:0.85;margin-bottom:14px;">아래 버튼을 눌러 조건을 남겨주세요. 꼼꼼하게 분석해서 최적의 선택지를 제안해 드리겠습니다.</p>
+        <button onclick="showTab('recommend')" style="background:#fff;color:#1D9E75;border:none;border-radius:8px;padding:11px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">후회 없는 차량 추천 받기 →</button>
+      </div>
+    </div>
+
+    <!-- 강점 카드 -->
+    <div class="about-card">
+      <div class="rec-title">왜 나이스모터스인가요?</div>
+      <div class="strength-grid">
+        <div class="strength-item">
+          <h4>충북 딜러 네트워크</h4>
+          <p>충북 딜러 밴드를 통해 단지 내 수백 대 매물을 한번에 알선해드려요</p>
+        </div>
+        <div class="strength-item">
+          <h4>허위매물 없음</h4>
+          <p>직접 확인한 매물만 올려요. 사진과 실차가 다른 경우 절대 없어요</p>
+        </div>
+        <div class="strength-item">
+          <h4>빠른 응대</h4>
+          <p>카카오 상담 문의 시 최대한 빠르게 답변드립니다</p>
+        </div>
+        <div class="strength-item">
+          <h4>맞춤 차량 추천</h4>
+          <p>조건만 알려주시면 딜러가 직접 맞는 차를 찾아드려요</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 설정: 전화번호 / 카카오 채널 -->
+    <div class="about-card">
+      <div class="rec-title">⚙️ 딜러 설정 (본인만 수정)</div>
+      <div class="buy-form-row" style="margin-bottom:10px;"><label class="buy-label">내 전화번호</label><input type="text" class="buy-input" id="settingPhone" placeholder="010-0000-0000" oninput="saveSettings()"/></div>
+      <div class="buy-form-row"><label class="buy-label">카카오톡 채널 URL (없으면 전화번호로 대체)</label><input type="text" class="buy-input" id="settingKakao" placeholder="https://open.kakao.com/o/xxxxxxxx" oninput="saveSettings()"/></div>
+      <p style="font-size:11px;color:#aaa;margin-top:8px;">입력한 번호/채널이 카카오 상담 버튼과 전화 버튼에 자동 반영됩니다</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>나이스모터스</strong> · 청주 엑스포매매단지<br/>
+  충북 딜러 직거래 & 알선 전문 플랫폼 · 허위매물 없는 정직한 거래
+</footer>
+
+<!-- 매물 등록/수정 모달 -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">새 매물 등록</div>
+    <input type="hidden" id="editId"/>
+    <div class="form-row">
+      <label class="form-label">매물 구분</label>
+      <select class="form-select" id="eType">
+        <option value="own">직접 매입 차량 (내 차)</option>
+        <option value="alson">알선 매물 (충북 딜러 네트워크)</option>
+      </select>
+    </div>
+    <div class="form-grid">
+      <div class="form-row"><label class="form-label">차종명 *</label><input type="text" id="eN" placeholder="싼타페, 아반떼..."/></div>
+      <div class="form-row"><label class="form-label">연식</label><input type="text" id="eY" placeholder="2022년식"/></div>
+      <div class="form-row"><label class="form-label">색상</label><input type="text" id="eC" placeholder="흰색"/></div>
+      <div class="form-row"><label class="form-label">주행거리</label><input type="text" id="eK" placeholder="3만km"/></div>
+      <div class="form-row"><label class="form-label">가격 (만원) *</label><input type="text" id="eP" placeholder="1350"/></div>
+      <div class="form-row"><label class="form-label">연락처</label><input type="text" id="ePh" placeholder="010-0000-0000"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">딜러/단지명</label><input type="text" id="eDealer" placeholder="나이스모터스"/></div>
+    <div class="form-grid">
+      <div class="form-row"><label class="form-label">등급/트림</label><input type="text" id="eGrade" placeholder="프레스티지, 인스퍼레이션"/></div>
+      <div class="form-row"><label class="form-label">연료</label><input type="text" id="eFuel" placeholder="가솔린, 디젤, 하이브리드"/></div>
+      <div class="form-row"><label class="form-label">미션</label><input type="text" id="eMission" placeholder="오토"/></div>
+      <div class="form-row"><label class="form-label">구동</label><input type="text" id="eDrive" placeholder="2WD, 4WD"/></div>
+    </div>
+    <div class="form-row"><label class="form-label">주요 옵션</label><input type="text" id="eOptions" placeholder="썬루프, 통풍시트, HUD, 어라운드뷰"/></div>
+    <div class="form-row"><label class="form-label">용도/사고 이력</label><input type="text" id="eHistory" placeholder="렌트이력 없음 / 무사고 / 단순교환"/></div>
+    <div class="form-row"><label class="form-label">특이사항</label><input type="text" id="eNote" placeholder="무사고, 단순교환, 법인차 등"/></div>
+    <div class="form-row">
+      <label class="form-label">차량 사진</label>
+      <div class="photo-drop" onclick="document.getElementById('photoInput').click()">클릭하여 사진 추가 (여러 장 가능)</div>
+      <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotos(event)"/>
+      <div class="photo-loading" id="photoLoading"></div>
+      <div class="photo-preview" id="photoPreview"></div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-teal" onclick="saveEdit()">저장</button>
+      <button class="btn-ghost" onclick="closeModal()">취소</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- 매물 상세 미니 모달 -->
+<div class="modal-overlay" id="detailModal" onclick="closeDetailModal()">
+  <div class="detail-modal" onclick="event.stopPropagation()">
+    <div class="detail-gallery" id="detailGallery">
+      <button class="detail-arrow detail-prev" id="detailPrev" onclick="moveDetailPhoto(-1)">‹</button>
+      <img id="detailImg" alt="차량 사진"/>
+      <div class="detail-no-img" id="detailNoImg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>등록된 사진이 없습니다</span>
+      </div>
+      <div class="detail-photo-count" id="detailPhotoCount">1 / 1</div>
+      <button class="detail-arrow detail-next" id="detailNext" onclick="moveDetailPhoto(1)">›</button>
+    </div>
+    <div class="detail-info">
+      <button class="detail-close" onclick="closeDetailModal()">×</button>
+      <div class="detail-badge" id="detailBadge">직접매입</div>
+      <div class="detail-title" id="detailTitle"></div>
+      <div class="detail-spec" id="detailSpec"></div>
+      <div class="detail-price" id="detailPrice"></div>
+      <div class="detail-insight" id="detailInsight"></div>
+      <div class="detail-tags" id="detailTags"></div>
+      <div id="detailRows"></div>
+      <div class="detail-actions">
+        <button class="act-btn act-kakao" id="detailKakaoBtn">이 차 사도 되는지 바로 상담</button>
+        <button class="act-btn act-call" id="detailCallBtn">📞 전화하기</button>
+        <button class="act-btn act-edit admin-only" id="detailEditBtn">수정하기</button>
+      </div>
+      <div class="detail-help">상세페이지로 이동하지 않고 사진과 핵심정보만 빠르게 확인할 수 있습니다.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 사진 확대 모달 -->
+<div class="modal-overlay" id="photoModal" onclick="closePhotoModal()">
+  <img id="photoModalImg" style="max-width:92vw;max-height:86vh;border-radius:10px;object-fit:contain;"/>
 </div>
 
 <script>
-(function(){
-  var secs = document.querySelectorAll('.nm-ls[id]');
-  var nav = document.getElementById('nm-dots');
-  secs.forEach(function(s, i){
-    var d = document.createElement('button');
-    d.className = 'nm-dot' + (i===0?' on':'');
-    d.onclick = function(){ s.scrollIntoView({behavior:'smooth'}); };
-    nav.appendChild(d);
+
+/* ━━━ 랜딩 페이지 ━━━ */
+function enterSite(tab){
+  document.getElementById('landing-page').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  showTab(tab||'cars');
+  window.scrollTo(0,0);
+}
+
+// 도트 네비 초기화
+function initLanding(){
+  const wrap = document.getElementById('landingWrap');
+  const sections = wrap.querySelectorAll('.ls');
+  const dotsEl = document.getElementById('lsDots');
+
+  // 도트 생성
+  sections.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'ls-dot' + (i===0?' on':'');
+    d.onclick = ()=> {
+      sections[i].scrollIntoView({behavior:'smooth'});
+    };
+    dotsEl.appendChild(d);
   });
-  var obs = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        var idx = Array.from(secs).indexOf(e.target);
-        document.querySelectorAll('.nm-dot').forEach(function(d,i){ d.classList.toggle('on', i===idx); });
+
+  // 스크롤 시 도트 + 페이드인 업데이트
+  const dots = dotsEl.querySelectorAll('.ls-dot');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const idx = Array.from(sections).indexOf(entry.target);
+        dots.forEach((d,i)=> d.classList.toggle('on', i===idx));
+        // 페이드인
+        entry.target.querySelectorAll('.fade-up').forEach(el=>{
+          el.classList.add('visible');
+        });
       }
     });
-  },{threshold:0.5});
-  secs.forEach(function(s){ obs.observe(s); });
+  },{threshold:0.5, root:wrap});
+
+  sections.forEach(s => observer.observe(s));
+
+  // 키보드 스크롤
+  wrap.addEventListener('keydown', e=>{
+    if(e.key==='ArrowDown'||e.key==='PageDown'){
+      e.preventDefault();
+      const cur = Array.from(sections).findIndex(s=>{
+        const r=s.getBoundingClientRect();
+        return r.top >= -10;
+      });
+      if(cur < sections.length-1) sections[cur+1].scrollIntoView({behavior:'smooth'});
+    }
+    if(e.key==='ArrowUp'||e.key==='PageUp'){
+      e.preventDefault();
+      const cur = Array.from(sections).findIndex(s=>{
+        const r=s.getBoundingClientRect();
+        return r.top >= -10;
+      });
+      if(cur > 0) sections[cur-1].scrollIntoView({behavior:'smooth'});
+    }
+  });
+  wrap.setAttribute('tabindex','0');
+}
+
+// DOM 로드 후 초기화
+document.addEventListener('DOMContentLoaded', initLanding);
+
+
+/* ━━━ 관리자 권한 ━━━ */
+// 관리자 인증은 Supabase Auth 이메일/비밀번호 로그인을 사용합니다.
+// 주의: 프론트 화면 숨김만으로는 보안이 완성되지 않으니 Supabase RLS 정책도 반드시 켜야 합니다.
+function isAdmin(){
+  return sessionStorage.getItem('nm_admin') === 'yes';
+}
+
+function applyAdminState(){
+  const body=document.body;
+  if(isAdmin()){
+    body.classList.add('admin-active');
+    document.getElementById('adminBadge').style.display='inline-flex';
+    document.getElementById('adminLoginBtn').style.display='none';
+  } else {
+    body.classList.remove('admin-active');
+    document.getElementById('adminBadge').style.display='none';
+    document.getElementById('adminLoginBtn').style.display='';
+  }
+}
+
+function openAdminLogin(){
+  document.getElementById('adminLoginWrap').style.display='flex';
+  setTimeout(()=>document.getElementById('adminEmailInput').focus(),100);
+}
+
+function closeAdminLogin(){
+  document.getElementById('adminLoginWrap').style.display='none';
+  document.getElementById('adminEmailInput').value='';
+  document.getElementById('adminPwInput').value='';
+  document.getElementById('adminErr').textContent='';
+}
+
+async function checkAdminPw(){
+  const email = document.getElementById('adminEmailInput').value.trim();
+  const password = document.getElementById('adminPwInput').value;
+  const errBox = document.getElementById('adminErr');
+
+  if(!email || !password){
+    errBox.textContent='이메일과 비밀번호를 모두 입력해주세요.';
+    return;
+  }
+
+  errBox.textContent='로그인 확인 중입니다...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+  if(error || !data?.session){
+    errBox.textContent='이메일 또는 비밀번호가 올바르지 않습니다.';
+    document.getElementById('adminPwInput').value='';
+    document.getElementById('adminPwInput').focus();
+    return;
+  }
+
+  sessionStorage.setItem('nm_admin','yes');
+  closeAdminLogin();
+  applyAdminState();
+}
+
+async function restoreAdminSession(){
+  const { data } = await sb.auth.getSession();
+  if(data?.session){
+    sessionStorage.setItem('nm_admin','yes');
+  } else {
+    sessionStorage.removeItem('nm_admin');
+  }
+  applyAdminState();
+}
+
+async function logoutAdmin(){
+  if(!confirm('관리자 모드를 종료할까요?')) return;
+  await sb.auth.signOut();
+  sessionStorage.removeItem('nm_admin');
+  applyAdminState();
+}
+
+// 페이지 로드 시 관리자 상태 복원
+document.addEventListener('DOMContentLoaded', applyAdminState);
+
+/* ━━━ Supabase 초기화 ━━━ */
+const SUPABASE_URL = 'https://ormjkxizgqyusdfkzibb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ybWpreGl6Z3F5dXNkZmt6aWJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1NzQ0ODMsImV4cCI6MjA5MjE1MDQ4M30.cYmPGPJuIaXeDlyx57ZN6OTGhGqB4zPXKpdOr9y8IZs';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ━━━ 상태 ━━━ */
+let cars=[], wishes=new Set(), currentSort='new', editingId=null, editPhotos=[];
+let editingOriginalPhotosKey='[]';
+const todayKey=new Date().toDateString();
+let settings={phone:'',kakao:'http://pf.kakao.com/_YtXCX/chat'};
+let todayCount=parseInt(localStorage.getItem('nm_today_'+todayKey)||'0');
+
+try{wishes=new Set(JSON.parse(localStorage.getItem('nm_wishes')||'[]'));}catch(e){}
+
+const CAR_NAMES=['아반떼','쏘나타','소나타','그랜저','싼타페','투싼','스포티지','코나','카니발','스타리아','팰리세이드','K3','K5','K7','K8','K9','스팅어','모하비','쏘렌토','레이','모닝','스파크','트레일블레이저','이쿼녹스','G80','GV80','G70','GV70','GV90','볼트','봉고','포터','렉스턴','티볼리','코란도','토레스','벤츠','BMW','아우디','볼보','포르쉐','제네시스'];
+const COLORS=['흰색','검정','은색','회색','빨강','파랑','블루','갈색','베이지','노랑','초록','연두','보라','주황','골드'];
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function save(){
+  // wishes는 로컬에 유지 (개인 설정)
+  try{localStorage.setItem('nm_wishes',JSON.stringify([...wishes]));}catch(e){}
+}
+
+// Supabase에서 매물 불러오기
+async function loadCars(){
+  const {data, error} = await sb.from('cars').select('*').order('regts', {ascending: false});
+  if(error){console.error('loadCars error:', error);return;}
+  cars = (data || []).map(r => ({
+    id: r.id, carType: r.cartype, name: r.name, year: r.year,
+    yearNum: r.yearnum, km: r.km, kmNum: r.kmnum, color: r.color,
+    price: r.price, priceNum: r.pricenum, phone: r.phone,
+    notes: r.notes || '', dealer: r.dealer, extra: r.extra || '',
+    photos: r.photos || [], regDate: r.regdate, regTs: r.regts
+  }));
+  updateTypeFilter(); renderCars(); updateStats();
+}
+
+// Supabase에 매물 저장
+async function saveCar(car){
+  const row = {
+    id: car.id, cartype: car.carType, name: car.name, year: car.year,
+    yearnum: car.yearNum, km: car.km, kmnum: car.kmNum, color: car.color,
+    price: car.price, pricenum: car.priceNum, phone: car.phone,
+    notes: car.notes, dealer: car.dealer, extra: car.extra,
+    photos: car.photos, regdate: car.regDate, regts: car.regTs
+  };
+  const {error} = await sb.from('cars').upsert(row);
+  if(error) console.error('saveCar error:', error);
+}
+
+// Supabase에서 매물 삭제
+async function deletCarDB(id){
+  const {error} = await sb.from('cars').delete().eq('id', id);
+  if(error) console.error('deleteCar error:', error);
+}
+
+// 설정 불러오기
+async function loadSettings(){
+  const {data} = await sb.from('settings').select('*');
+  if(data) data.forEach(row => { settings[row.key] = row.value; });
+  document.getElementById('settingPhone').value = settings.phone || '';
+  document.getElementById('settingKakao').value = settings.kakao || '';
+  document.getElementById('aboutPhone').textContent = settings.phone || '번호를 설정해주세요';
+}
+
+// 설정 저장
+async function saveSettingsDB(){
+  const phone = document.getElementById('settingPhone').value.trim();
+  const kakao = document.getElementById('settingKakao').value.trim();
+  settings.phone = phone; settings.kakao = kakao;
+  await sb.from('settings').upsert([{key:'phone', value:phone},{key:'kakao', value:kakao}]);
+  document.getElementById('aboutPhone').textContent = phone || '번호를 설정해주세요';
+}
+function saveSettings(){ saveSettingsDB(); }
+
+/* ━━━ 탭 ━━━ */
+function showTab(tab){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.remove('active'));
+  document.getElementById('sec-'+tab).classList.add('active');
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+
+/* ━━━ 연락 ━━━ */
+function goKakao(){
+  window.open('http://pf.kakao.com/_YtXCX/chat','_blank');
+}
+function callDealer(){
+  if(settings.phone){if(confirm('📞 '+settings.phone+'\n전화를 거시겠어요?'))location.href='tel:'+settings.phone.replace(/-/g,'');}
+  else alert('딜러 소개 탭에서 전화번호를 먼저 설정해주세요.');
+}
+
+/* ━━━ 파서 ━━━ */
+function getField(text,keys){
+  for(const key of keys){
+    const patterns=[
+      new RegExp('[★☆🔴❎#]\\s*'+key+'\\s*[:\\：]\\s*([^★☆🔴❎#\\n]+)','i'),
+      new RegExp(key+'\\s*[:\\：]\\s*([^★☆🔴❎#\\n]+)','i'),
+    ];
+    for(const p of patterns){const m=text.match(p);if(m&&m[1].trim())return m[1].trim();}
+  }
+  return '';
+}
+function isStructured(t){return /[★☆🔴❎]/.test(t)||(/(차량종류|등록일|광고금액|입금금액|사고유무)\s*[:\：]/).test(t);}
+
+function parseStructured(text){
+  const cl=t=>t.replace(/[★☆🔴❎#\s]+$/,'').trim();
+  let name=cl(getField(text,['차량종류','차종','모델']));
+  let yearRaw=cl(getField(text,['등록일','연식','년식']));
+  let priceRaw=cl(getField(text,['광고금액','판매금액','가격']))||cl(getField(text,['입금금액']));
+  let kmRaw=cl(getField(text,['Km','KM','km','주행거리']));
+  let colorRaw=cl(getField(text,['색상','컬러']));
+  let accidentRaw=cl(getField(text,['사고유무','사고']));
+  let fuelRaw=cl(getField(text,['연료']));
+  let missionRaw=cl(getField(text,['밋션','미션','변속기']));
+  let driveRaw=cl(getField(text,['구동방식']));
+  let optionRaw=cl(getField(text,['옵션']));
+  let phoneRaw=(text.match(/01[016789]-?\d{3,4}-?\d{4}/)||[''])[0];
+  let gradeRaw=cl(getField(text,['등급','트림']));
+  let carNumRaw=cl(getField(text,['차량번호']));
+  let noteRaw=cl(getField(text,['특이사항','비고']));
+  let historyRaw=cl(getField(text,['용도이력','이력']));
+  let newPrice=cl(getField(text,['신차가격']));
+  if(!name&&!priceRaw)return null;
+  const yearM=yearRaw.match(/(\d{2,4})년/);
+  let yearNum=0,year='';
+  if(yearM){yearNum=yearM[1].length===4?parseInt(yearM[1]):parseInt((parseInt(yearM[1])>50?'19':'20')+yearM[1]);year=yearNum+'년식';}
+  const priceNum=parseInt((priceRaw.match(/\d+/)||[0])[0])||0;
+  const price=priceNum?priceNum+'만원':'';
+  const kmM=kmRaw.match(/(\d+\.?\d*)/);
+  const kmNum=kmM?parseFloat(kmM[1]):0;
+  const km=kmNum?kmNum+'만km':'';
+  let color='';for(const c of COLORS){if(colorRaw.includes(c)||text.includes(c)){color=c;break;}}
+  const notes=[];
+  if(historyRaw.includes('무')||accidentRaw.includes('무사고'))notes.push('무사고');
+  if(accidentRaw&&!accidentRaw.includes('무사고')&&accidentRaw.trim()!=='무')notes.push(accidentRaw.length<20?accidentRaw:'사고이력');
+  if(text.includes('단순'))notes.push('단순손상');
+  if(missionRaw)notes.push(missionRaw.replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,5));
+  if(fuelRaw)notes.push(fuelRaw.split(/[\s\/]/)[0].slice(0,6));
+  if(driveRaw)notes.push(driveRaw.slice(0,5));
+  const extra=[];
+  if(gradeRaw)extra.push('등급:'+gradeRaw);
+  if(fuelRaw)extra.push('연료:'+fuelRaw);
+  if(missionRaw)extra.push('미션:'+missionRaw);
+  if(driveRaw)extra.push('구동:'+driveRaw);
+  if(optionRaw)extra.push('옵션:'+optionRaw.slice(0,80));
+  if(newPrice)extra.push('신차가:'+newPrice+'만');
+  if(carNumRaw)extra.push('차번:'+carNumRaw);
+  if(historyRaw)extra.push('용도이력:'+historyRaw);
+  if(accidentRaw)extra.push('사고:'+accidentRaw);
+  if(noteRaw)extra.push(noteRaw.slice(0,40));
+  return{id:uid(),carType:'alson',name:name||'차량명확인',year,yearNum,km,kmNum,color,price,priceNum,phone:phoneRaw,notes:notes.filter(Boolean).join('·'),dealer:'나이스모터스',extra:extra.join(' / '),photos:[],regDate:todayKey,regTs:Date.now()};
+}
+
+function parseLine(line){
+  line=line.trim();if(!line)return null;
+  const phone=(line.match(/01[016789]-?\d{3,4}-?\d{4}/)||[''])[0];
+  const yearM=line.match(/(\d{2})년(식)?/);
+  const year=yearM?(parseInt(yearM[1])>50?'19':'20')+yearM[1]+'년식':'';
+  const yearNum=yearM?parseInt((parseInt(yearM[1])>50?'19':'20')+yearM[1]):0;
+  const kmM=line.match(/(\d+\.?\d*)\s*만\s*km/i);
+  const km=kmM?kmM[1]+'만km':'';
+  const kmNum=kmM?parseFloat(kmM[1]):0;
+  const prices=(line.match(/\d+만/g)||[]).map(p=>parseInt(p)).filter(n=>n>=300&&n<=9999);
+  const price=prices.length?prices[0]+'만원':'';
+  let name='';for(const n of CAR_NAMES){if(line.includes(n)){name=n;break;}}
+  let color='';for(const c of COLORS){if(line.includes(c)){color=c;break;}}
+  const notes=[];
+  if(line.includes('무사고'))notes.push('무사고');
+  if(line.includes('단순'))notes.push('단순손상');
+  if(line.includes('법인'))notes.push('법인차');
+  if(!name&&!price)return null;
+  return{id:uid(),carType:'alson',name:name||'차량명확인',year,yearNum,km,kmNum,color,price,priceNum:prices[0]||0,phone,notes:notes.join('·'),extra:'',dealer:'나이스모터스',photos:[],regDate:todayKey,regTs:Date.now()};
+}
+
+async function parsePaste(){
+  const txt=document.getElementById('pasteInput').value;
+  const err=document.getElementById('parseErr');
+  if(!txt.trim()){err.textContent='텍스트를 붙여넣어 주세요.';return;}
+  err.textContent='';
+  let parsed=[];
+  if(isStructured(txt)){
+    const blocks=txt.split(/(?=★\s*차량종류)/);
+    const results=blocks.map(b=>b.trim()).filter(Boolean).map(b=>isStructured(b)?parseStructured(b):parseLine(b)).filter(Boolean);
+    parsed=results.length?results:[];
+    if(!parsed.length){const s=isStructured(txt)?parseStructured(txt):parseLine(txt);if(s)parsed=[s];}
+    if(!parsed.length)parsed=txt.split('\n').map(parseLine).filter(Boolean);
+  } else {
+    parsed=txt.split('\n').map(parseLine).filter(Boolean);
+  }
+  if(!parsed.length){err.textContent='인식된 매물이 없어요. 연식·가격 정보가 있는지 확인해주세요.';return;}
+  for(const car of parsed){cars.push(car);todayCount++;await saveCar(car);}
+  localStorage.setItem('nm_today_'+todayKey,todayCount);
+  save();
+  document.getElementById('pasteInput').value='';
+  document.getElementById('pastePanel').classList.add('hidden');
+  updateTypeFilter();renderCars();updateStats();
+}
+
+function loadBandSample(){
+  document.getElementById('pasteInput').value=`★차량종류: 싼타페TM 인스퍼레이션 7인승\n★등록일: 19년 7월\n🔴광고금액: 2450\n★Km:6만\n☆밋션:오토\n☆구동방식:2wd\n☆연료:가솔린 휘발유\n★옵션:썬루프빠진 풀옵션,크렐,서라운드뷰\n❎용도이력:무\n★등급:인스퍼레이션\n★색상:회색\n☆차량번호:06두6240\n☆특이사항:옵션 상태 최상\n❎사고유무:단순(문1)`;
+  parsePaste();
+}
+function loadSimpleSample(){
+  document.getElementById('pasteInput').value=`22년식 아반떼 CN7 흰색 3만km 1350만 무사고 010-1234-5678\n21년 싼타페 TM 검정 6만km 2800만 010-9876-5432\n23년 카니발 KA4 흰색 2만km 3600만 무사고 법인 010-3333-2222\n19년 그랜저 IG 검정 12만km 1900만 010-7777-8888`;
+  parsePaste();
+}
+
+/* ━━━ 렌더 ━━━ */
+function togglePaste(){document.getElementById('pastePanel').classList.toggle('hidden');}
+function setSort(s){
+  currentSort=s;
+  document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sort'+s.charAt(0).toUpperCase()+s.slice(1)).classList.add('active');
+  renderCars();
+}
+
+function updateStats(){
+  document.getElementById('statTotal').textContent=cars.length;
+  document.getElementById('statOwn').textContent=cars.filter(c=>c.carType==='own').length;
+  document.getElementById('statAlson').textContent=cars.filter(c=>c.carType==='alson').length;
+  document.getElementById('statWish').textContent=wishes.size;
+}
+
+function updateTypeFilter(){
+  const sel=document.getElementById('fType');
+  const cur=sel.value;
+  const names=[...new Set(cars.map(c=>c.name))].sort();
+  sel.innerHTML='<option value="">전체</option>';
+  names.forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n;if(n===cur)o.selected=true;sel.appendChild(o);});
+}
+
+function resetFilters(){
+  ['fType','fYear'].forEach(id=>document.getElementById(id).value='');
+  ['priceMin','priceMax','searchInput'].forEach(id=>document.getElementById(id).value='');
+  ['fNoAcc','fHasPhoto','fOwn','fAlson'].forEach(id=>document.getElementById(id).checked=false);
+  renderCars();
+}
+
+
+
+function parseExtraInfo(extra){
+  const info={grade:'',fuel:'',mission:'',drive:'',options:'',newPrice:'',carNum:'',usage:'',accident:'',memo:''};
+  (extra||'').split('/').map(x=>x.trim()).filter(Boolean).forEach(part=>{
+    const idx=part.indexOf(':');
+    if(idx<0){ info.memo = info.memo ? info.memo+' / '+part : part; return; }
+    const key=part.slice(0,idx).trim();
+    const val=part.slice(idx+1).trim();
+    if(/등급|트림/.test(key)) info.grade=val;
+    else if(/연료/.test(key)) info.fuel=val;
+    else if(/미션|밋션|변속/.test(key)) info.mission=val;
+    else if(/구동/.test(key)) info.drive=val;
+    else if(/옵션/.test(key)) info.options=val;
+    else if(/신차/.test(key)) info.newPrice=val;
+    else if(/차번|차량번호/.test(key)) info.carNum=val;
+    else if(/용도|이력/.test(key)) info.usage=val;
+    else if(/사고/.test(key)) info.accident=val;
+    else info.memo = info.memo ? info.memo+' / '+part : part;
+  });
+  return info;
+}
+function buildExtraInfo(info){
+  const rows=[];
+  if(info.grade)rows.push('등급:'+info.grade);
+  if(info.fuel)rows.push('연료:'+info.fuel);
+  if(info.mission)rows.push('미션:'+info.mission);
+  if(info.drive)rows.push('구동:'+info.drive);
+  if(info.options)rows.push('옵션:'+info.options);
+  if(info.newPrice)rows.push('신차가:'+info.newPrice.replace(/만원$/,''));
+  if(info.carNum)rows.push('차번:'+info.carNum);
+  if(info.usage)rows.push('용도이력:'+info.usage);
+  if(info.accident)rows.push('사고:'+info.accident);
+  if(info.memo)rows.push(info.memo);
+  return rows.join(' / ');
+}
+function miniInfoHtml(c){
+  const info=parseExtraInfo(c.extra||'');
+  const pills=[];
+  if(info.grade)pills.push('등급 '+info.grade);
+  if(info.fuel)pills.push(info.fuel);
+  if(info.mission)pills.push(info.mission);
+  if(info.drive)pills.push(info.drive);
+  if(info.options)pills.push(info.options.split(/[,，·\/]/)[0].trim());
+  return pills.slice(0,4).map(x=>`<span class="mini-pill">${x}</span>`).join('');
+}
+function optionChipsHtml(options){
+  return (options||'').split(/[,，·\/]/).map(x=>x.trim()).filter(Boolean).slice(0,12).map(x=>`<span class="detail-option-chip">${x}</span>`).join('');
+}
+
+function dealerInsight(c){
+  const notes=c.notes||'';
+  const km=c.kmNum||0;
+  const price=c.price||'가격문의';
+  if(notes.includes('무사고') && km && km<=4) return `딜러 한 줄 평가: <span>무사고에 주행거리 짧아 첫 차·출퇴근용으로 보기 좋은 매물</span>`;
+  if(notes.includes('무사고')) return `딜러 한 줄 평가: <span>무사고 이력 중심으로 리스크를 낮춰볼 만한 매물</span>`;
+  if(km && km>=10) return `딜러 한 줄 평가: <span>주행거리는 있는 편이라 가격·정비내역 확인 후 접근 추천</span>`;
+  if((c.carType||'')==='own') return `딜러 한 줄 평가: <span>직접매입 차량으로 상태 설명과 상담이 빠른 매물</span>`;
+  return `딜러 한 줄 평가: <span>${price} 기준으로 실차 상태와 옵션을 함께 확인해볼 매물</span>`;
+}
+
+function renderCars(){
+  const tf=document.getElementById('fType').value;
+  const yf=parseInt(document.getElementById('fYear').value)||0;
+  const pMin=parseInt(document.getElementById('priceMin').value)||0;
+  const pMax=parseInt(document.getElementById('priceMax').value)||0;
+  const noAcc=document.getElementById('fNoAcc').checked;
+  const hasPhoto=document.getElementById('fHasPhoto').checked;
+  const fOwn=document.getElementById('fOwn').checked;
+  const fAlson=document.getElementById('fAlson').checked;
+  const q=(document.getElementById('searchInput').value||'').trim().toLowerCase();
+
+  let list=cars.filter(c=>{
+    if(tf&&c.name!==tf)return false;
+    if(yf&&c.yearNum&&c.yearNum<yf)return false;
+    if(pMin&&c.priceNum<pMin)return false;
+    if(pMax&&c.priceNum>pMax)return false;
+    if(noAcc&&!c.notes.includes('무사고'))return false;
+    if(hasPhoto&&(!c.photos||!c.photos.length))return false;
+    if(fOwn&&!fAlson&&c.carType!=='own')return false;
+    if(fAlson&&!fOwn&&c.carType!=='alson')return false;
+    if(q&&!(c.name+c.year+c.color+c.km+c.price+c.notes).toLowerCase().includes(q))return false;
+    return true;
+  });
+
+  if(currentSort==='price')list.sort((a,b)=>(a.priceNum||9999)-(b.priceNum||9999));
+  else if(currentSort==='km')list.sort((a,b)=>(a.kmNum||999)-(b.kmNum||999));
+  else list.sort((a,b)=>b.regTs-a.regTs);
+
+  document.getElementById('countNum').textContent=list.length;
+  const wrap=document.getElementById('cardsWrap');
+  if(!list.length){
+    wrap.innerHTML='<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg><p style="font-size:13px;margin-bottom:4px;">조건에 맞는 매물이 없어요</p><small>필터를 변경해보세요</small></div>';
+    return;
+  }
+
+  wrap.innerHTML=list.map(c=>{
+    const isNew=c.regDate===todayKey;
+    const isSafe=c.notes.includes('무사고');
+    const isOwn=c.carType==='own';
+    const isWished=wishes.has(c.id);
+    const hasImg=c.photos&&c.photos.length>0;
+    const noteArr=c.notes?c.notes.split('·').filter(Boolean):[];
+    const tagHtml=noteArr.map(n=>`<span class="tag ${n==='무사고'?'tag-green':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
+    const typeBadge=isOwn?'<div class="badge-own">직접매입</div>':'<div class="badge-alson">알선</div>';
+
+    return `<div class="card" onclick="openDetailModal('${c.id}')">
+      <div class="card-img-wrap">
+        ${hasImg
+          ?`<img src="${c.photos[0]}" alt="${c.name}" loading="lazy" decoding="async" onclick="event.stopPropagation();openDetailModal('${c.id}')" onerror="this.parentNode.innerHTML='<div class=no-img><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'1.2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/></svg><span style=\\'font-size:11px\\'>사진없음</span></div>'"/>`
+          :`<div class="no-img"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span>사진 추가</span></div>`
+        }
+        ${typeBadge}
+        ${hasImg&&c.photos.length>1?`<div class="photo-cnt-badge">${c.photos.length}장</div>`:''}
+        <div class="img-hover-overlay"><span>${hasImg?'자세히 보기':'상세 보기'}</span></div>
+        <button class="wish-btn ${isWished?'on':''}" onclick="event.stopPropagation();toggleWish('${c.id}')">${isWished?'♥':'♡'}</button>
+        <input type="file" id="qi_${c.id}" accept="image/*" multiple style="display:none" onchange="quickPhoto(event,'${c.id}')"/>
+      </div>
+      <div class="card-body">
+        <div class="dealer-nm">${c.dealer||'나이스모터스'} ${isOwn?'· 직접매입':'· 알선'}</div>
+        <div class="car-nm">${c.name}${c.color?' '+c.color:''}</div>
+        <div class="car-spec">${c.year||'연식미상'}${c.km?' · '+c.km:''}</div>
+        <div class="car-price">${c.price||'가격문의'}</div>
+        ${miniInfoHtml(c)?`<div class="car-info-mini">${miniInfoHtml(c)}</div>`:''}
+        ${tagHtml?`<div class="card-tags">${tagHtml}</div>`:''}
+        <div class="car-insight">${dealerInsight(c)}</div>
+        ${c.extra?`<div class="car-extra">${c.extra}</div>`:''}
+        <div class="card-actions">
+          <button class="act-btn act-kakao" onclick="event.stopPropagation();kakaoContact('${c.phone||''}','${c.name}','${c.price||''}')">이 차 사도 되는지 상담</button>
+          <button class="act-btn act-call" onclick="event.stopPropagation();callContact('${c.phone||''}')">📞 전화</button>
+          <button class="act-btn act-edit admin-only" onclick="event.stopPropagation();openEditModal('${c.id}')">수정</button>
+          <button class="act-btn act-del admin-only" onclick="event.stopPropagation();deleteCar('${c.id}')">삭제</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+
+/* ━━━ 매물 상세 미니 모달 ━━━ */
+let detailCar=null, detailPhotoIndex=0;
+function stripDealerInsight(html){
+  const box=document.createElement('div');
+  box.innerHTML=html||'';
+  return box.textContent.replace('딜러 한 줄 평가:','').trim();
+}
+function openDetailModal(id){
+  const c=cars.find(x=>x.id===id);
+  if(!c)return;
+  detailCar=c; detailPhotoIndex=0;
+  const title=(c.name||'차량명 미상')+(c.color?' '+c.color:'');
+  document.getElementById('detailBadge').textContent=(c.carType==='own')?'직접매입':'알선매물';
+  document.getElementById('detailTitle').textContent=title;
+  document.getElementById('detailSpec').textContent=[c.year||'연식미상',c.km||'주행거리 확인'].filter(Boolean).join(' · ');
+  document.getElementById('detailPrice').textContent=c.price||'가격문의';
+  document.getElementById('detailInsight').innerHTML='<strong>딜러 한 줄 평가</strong>'+stripDealerInsight(dealerInsight(c));
+  const noteArr=c.notes?c.notes.split('·').filter(Boolean):[];
+  document.getElementById('detailTags').innerHTML=noteArr.map(n=>`<span class="tag ${n==='무사고'?'tag-green':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
+  const info=parseExtraInfo(c.extra||'');
+  const optChips=optionChipsHtml(info.options);
+  document.getElementById('detailRows').innerHTML=`
+    ${optChips?`<div class="detail-option-box"><div class="detail-option-title">주요 옵션</div><div class="detail-option-list">${optChips}</div></div>`:''}
+    <div class="detail-row"><span>딜러/단지</span><span>${c.dealer||'나이스모터스'}</span></div>
+    <div class="detail-row"><span>매물 구분</span><span>${c.carType==='own'?'직접 매입 차량':'충북 딜러 네트워크 알선'}</span></div>
+    <div class="detail-row"><span>등급/트림</span><span>${info.grade||'확인 필요'}</span></div>
+    <div class="detail-row"><span>연료/미션</span><span>${[info.fuel,info.mission].filter(Boolean).join(' · ')||'확인 필요'}</span></div>
+    <div class="detail-row"><span>구동방식</span><span>${info.drive||'확인 필요'}</span></div>
+    <div class="detail-row"><span>색상</span><span>${c.color||'확인 필요'}</span></div>
+    <div class="detail-row"><span>용도/사고</span><span>${info.usage||info.accident||c.notes||'상담 시 안내'}</span></div>
+    <div class="detail-row"><span>특이사항</span><span>${c.notes||info.memo||'상담 시 안내'}</span></div>
+  `;
+  document.getElementById('detailKakaoBtn').onclick=()=>kakaoContact(c.phone||'',c.name||'',c.price||'');
+  document.getElementById('detailCallBtn').onclick=()=>callContact(c.phone||'');
+  document.getElementById('detailEditBtn').onclick=()=>{closeDetailModal();openEditModal(c.id);};
+  renderDetailPhoto();
+  document.getElementById('detailModal').classList.add('open');
+}
+function renderDetailPhoto(){
+  if(!detailCar)return;
+  const photos=detailCar.photos||[];
+  const img=document.getElementById('detailImg');
+  const noImg=document.getElementById('detailNoImg');
+  const count=document.getElementById('detailPhotoCount');
+  const prev=document.getElementById('detailPrev');
+  const next=document.getElementById('detailNext');
+  if(!photos.length){
+    img.style.display='none'; noImg.style.display='flex'; count.style.display='none'; prev.style.display='none'; next.style.display='none'; return;
+  }
+  detailPhotoIndex=(detailPhotoIndex+photos.length)%photos.length;
+  img.src=photos[detailPhotoIndex];
+  img.style.display='block'; noImg.style.display='none'; count.style.display='block';
+  count.textContent=`${detailPhotoIndex+1} / ${photos.length}`;
+  prev.style.display=next.style.display=photos.length>1?'block':'none';
+}
+function moveDetailPhoto(dir){ detailPhotoIndex+=dir; renderDetailPhoto(); }
+function closeDetailModal(){document.getElementById('detailModal').classList.remove('open');}
+document.addEventListener('keydown',e=>{
+  const modal=document.getElementById('detailModal');
+  if(!modal||!modal.classList.contains('open'))return;
+  if(e.key==='Escape')closeDetailModal();
+  if(e.key==='ArrowLeft')moveDetailPhoto(-1);
+  if(e.key==='ArrowRight')moveDetailPhoto(1);
+});
+
+/* ━━━ 이미지 자동 압축/리사이즈 ━━━ */
+const IMG_MAX_WIDTH = 1280;
+const IMG_MAX_HEIGHT = 1280;
+const IMG_QUALITY = 0.72;
+
+function setPhotoLoading(text){
+  const el=document.getElementById('photoLoading');
+  if(el) el.textContent=text||'';
+}
+
+function dataUrlToFileSizeKB(dataUrl){
+  if(!dataUrl) return 0;
+  const base64=(dataUrl.split(',')[1]||'');
+  return Math.round((base64.length*0.75)/1024);
+}
+
+function compressImageFile(file){
+  return new Promise((resolve,reject)=>{
+    if(!file.type || !file.type.startsWith('image/')){resolve(null);return;}
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error('사진을 읽지 못했어요.'));
+    reader.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error('사진을 불러오지 못했어요.'));
+      img.onload=()=>{
+        let {width,height}=img;
+        const ratio=Math.min(IMG_MAX_WIDTH/width, IMG_MAX_HEIGHT/height, 1);
+        width=Math.round(width*ratio);
+        height=Math.round(height*ratio);
+        const canvas=document.createElement('canvas');
+        canvas.width=width; canvas.height=height;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,width,height);
+        // JPEG로 변환해서 용량을 줄임. 투명 PNG도 차량 사진에서는 문제 없음.
+        const dataUrl=canvas.toDataURL('image/jpeg', IMG_QUALITY);
+        resolve(dataUrl);
+      };
+      img.src=reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function compressImageFiles(files){
+  const arr=Array.from(files||[]);
+  const results=[];
+  let before=0, after=0;
+  for(let i=0;i<arr.length;i++){
+    const f=arr[i];
+    before+=Math.round((f.size||0)/1024);
+    setPhotoLoading(`사진 압축 중... ${i+1}/${arr.length}`);
+    const compressed=await compressImageFile(f);
+    if(compressed){
+      after+=dataUrlToFileSizeKB(compressed);
+      results.push(compressed);
+    }
+  }
+  setPhotoLoading(results.length?`압축 완료: 약 ${before}KB → ${after}KB`:'');
+  setTimeout(()=>setPhotoLoading(''),1800);
+  return results;
+}
+
+/* ━━━ 사진 ━━━ */
+/* ━━━ Supabase Storage 사진 업로드 ━━━ */
+async function uploadPhotoToStorage(dataUrl, carId) {
+  try {
+    const res = await fetch(dataUrl);
+    const blob = await res.blob();
+    const ext = blob.type === 'image/jpeg' ? 'jpg' : 'png';
+    const filename = `${carId}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const { data, error } = await supa.storage
+      .from('car-photos')
+      .upload(filename, blob, { contentType: blob.type, upsert: false });
+    if (error) { console.error('Storage 업로드 실패:', error); return null; }
+    const { data: urlData } = supa.storage.from('car-photos').getPublicUrl(filename);
+    return urlData.publicUrl;
+  } catch(e) { console.error('업로드 오류:', e); return null; }
+}
+async function uploadPhotosToStorage(dataUrls, carId) {
+  setPhotoLoading('사진 업로드 중...');
+  const urls = [];
+  for (let i = 0; i < dataUrls.length; i++) {
+    setPhotoLoading(`사진 업로드 중... ${i+1}/${dataUrls.length}`);
+    const url = await uploadPhotoToStorage(dataUrls[i], carId);
+    if (url) urls.push(url);
+  }
+  setPhotoLoading(urls.length ? `업로드 완료 (${urls.length}장)` : '업로드 실패');
+  setTimeout(() => setPhotoLoading(''), 2000);
+  return urls;
+}
+
+function quickPhotoClick(id){document.getElementById('qi_'+id).click();}
+async function quickPhoto(e,id){
+  const files=Array.from(e.target.files||[]); if(!files.length)return;
+  const car=cars.find(c=>c.id===id); if(!car)return;
+  const compressed=await compressImageFiles(files);
+  if(!compressed.length)return;
+  const urls=await uploadPhotosToStorage(compressed, id);
+  if(!urls.length){alert('사진 업로드에 실패했어요. 다시 시도해주세요.');return;}
+  car.photos=[...(car.photos||[]),...urls];
+  if(typeof saveCarToDB==='function') await saveCarToDB(car); else await saveCar(car);
+  save(); renderCars(); e.target.value='';
+}
+
+function toggleWish(id){
+  if(wishes.has(id))wishes.delete(id);else wishes.add(id);
+  save();updateStats();renderCars();
+}
+function openPhotoModal(src){document.getElementById('photoModalImg').src=src;document.getElementById('photoModal').classList.add('open');}
+function closePhotoModal(){document.getElementById('photoModal').classList.remove('open');}
+
+/* ━━━ 연락 ━━━ */
+function kakaoContact(phone,name,price){
+  const msg=`차량 문의드립니다!\n\n차량: ${name}\n가격: ${price}\n\n나이스모터스에 문의합니다.`;
+  if(settings.kakao){window.open(settings.kakao,'_blank');return;}
+  const tel=phone||settings.phone;
+  if(tel)alert('카카오톡 문의\n\n'+msg+'\n\n📞 '+tel+'\n위 번호로 카카오 친구추가 후 문의해주세요!');
+  else alert('카카오톡 문의\n\n'+msg);
+}
+function callContact(phone){
+  const tel=phone||settings.phone;
+  if(!tel){alert('연락처가 없어요.');return;}
+  if(confirm('📞 '+tel+'\n전화를 거시겠어요?'))location.href='tel:'+tel.replace(/-/g,'');
+}
+
+/* ━━━ 모달 ━━━ */
+function openAddModal(){
+  editingId=null;editPhotos=[];editingOriginalPhotosKey='[]';
+  document.getElementById('modalTitle').textContent='새 매물 등록';
+  ['eN','eY','eC','eK','eP','ePh','eDealer','eGrade','eFuel','eMission','eDrive','eOptions','eHistory','eNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eDealer').value='나이스모터스';
+  document.getElementById('eType').value='own';
+  document.getElementById('photoPreview').innerHTML='';
+  document.getElementById('editModal').classList.add('open');
+}
+function openEditModal(id){
+  const c=cars.find(x=>x.id===id);if(!c)return;
+  editingId=id;editPhotos=[...(c.photos||[])];editingOriginalPhotosKey=JSON.stringify(editPhotos);
+  document.getElementById('modalTitle').textContent='매물 수정';
+  document.getElementById('eN').value=c.name||'';
+  document.getElementById('eY').value=c.year||'';
+  document.getElementById('eC').value=c.color||'';
+  document.getElementById('eK').value=c.km||'';
+  document.getElementById('eP').value=c.priceNum||'';
+  document.getElementById('ePh').value=c.phone||'';
+  document.getElementById('eDealer').value=c.dealer||'나이스모터스';
+  const info=parseExtraInfo(c.extra||'');
+  document.getElementById('eGrade').value=info.grade||'';
+  document.getElementById('eFuel').value=info.fuel||'';
+  document.getElementById('eMission').value=info.mission||'';
+  document.getElementById('eDrive').value=info.drive||'';
+  document.getElementById('eOptions').value=info.options||'';
+  document.getElementById('eHistory').value=info.usage||info.accident||info.memo||'';
+  document.getElementById('eNote').value=c.notes||'';
+  document.getElementById('eType').value=c.carType||'alson';
+  renderPhotoPreview();
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal(){document.getElementById('editModal').classList.remove('open');}
+function renderPhotoPreview(){
+  document.getElementById('photoPreview').innerHTML=editPhotos.map((p,i)=>`<div class="thumb"><img src="${p}"/><button class="thumb-del" onclick="removePhoto(${i})">×</button></div>`).join('');
+}
+function removePhoto(i){editPhotos.splice(i,1);renderPhotoPreview();}
+async function handlePhotos(e){
+  const results=await compressImageFiles(e.target.files);
+  if(results.length){
+    editPhotos=[...editPhotos,...results];
+    renderPhotoPreview();
+  }
+  document.getElementById('photoInput').value='';
+}
+
+async function saveEdit(){
+  const name=document.getElementById('eN').value.trim();
+  if(!name){alert('차종명을 입력해주세요.');return;}
+  const priceRaw=document.getElementById('eP').value.trim();
+  const priceNum=parseInt((priceRaw.match(/\d+/)||[0])[0])||0;
+  const price=priceNum?priceNum+'만원':'';
+  const yearRaw=document.getElementById('eY').value.trim();
+  const yearNumM=yearRaw.match(/(\d{4})/);
+  const yearNum=yearNumM?parseInt(yearNumM[1]):0;
+  const kmRaw=document.getElementById('eK').value.trim();
+  const kmNumM=kmRaw.match(/(\d+\.?\d*)/);
+  const kmNum=kmNumM?parseFloat(kmNumM[1]):0;
+  const extra=buildExtraInfo({
+    grade:document.getElementById('eGrade').value.trim(),
+    fuel:document.getElementById('eFuel').value.trim(),
+    mission:document.getElementById('eMission').value.trim(),
+    drive:document.getElementById('eDrive').value.trim(),
+    options:document.getElementById('eOptions').value.trim(),
+    usage:document.getElementById('eHistory').value.trim()
+  });
+  // base64 사진은 Storage에 업로드 후 URL로 교체
+  const carId = editingId || uid();
+  const base64Photos = editPhotos.filter(p => p.startsWith('data:'));
+  const existingUrls = editPhotos.filter(p => !p.startsWith('data:'));
+  let uploadedUrls = [];
+  if(base64Photos.length > 0){
+    uploadedUrls = await uploadPhotosToStorage(base64Photos, carId);
+  }
+  const finalPhotos = [...existingUrls, ...uploadedUrls];
+
+  const data={name,year:yearRaw,yearNum,color:document.getElementById('eC').value.trim(),km:kmRaw,kmNum,price,priceNum,phone:document.getElementById('ePh').value.trim(),dealer:document.getElementById('eDealer').value.trim()||'나이스모터스',notes:document.getElementById('eNote').value.trim(),carType:document.getElementById('eType').value,photos:finalPhotos,extra};
+  if(editingId){
+    const idx=cars.findIndex(x=>x.id===editingId);
+    if(idx>=0){cars[idx]={...cars[idx],...data};await saveCar(cars[idx]);}
+  } else {
+    const nc={...data,id:carId,regDate:todayKey,regTs:Date.now()};
+    cars.push(nc);await saveCar(nc);
+    todayCount++;localStorage.setItem('nm_today_'+todayKey,todayCount);
+  }
+  save();closeModal();updateTypeFilter();renderCars();updateStats();
+}
+function deleteCar(id){
+  if(!confirm('이 매물을 삭제할까요?'))return;
+  cars=cars.filter(c=>c.id!==id);wishes.delete(id);
+  deletCarDB(id);
+  save();updateTypeFilter();renderCars();updateStats();
+}
+
+/* ━━━ 추천 폼 ━━━ */
+function toggleOpt(btn){btn.classList.toggle('sel');}
+function submitRecommend(){
+  const budgetMin=document.getElementById('recBudgetMin').value.trim();
+  const budgetMax=document.getElementById('recBudgetMax').value.trim();
+  const phone=document.getElementById('recPhone').value.trim();
+  const memo=document.getElementById('recMemo').value.trim();
+  const carTypes=[...document.getElementById('recCarTypes').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
+  const years=[...document.getElementById('recYears').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
+  const km=[...document.getElementById('recKm').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
+  const priority=[...document.getElementById('recPriority').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
+  const usage=document.getElementById('recUsage').value.trim();
+  const must=document.getElementById('recMust').value.trim();
+  const never=document.getElementById('recNever').value.trim();
+  const msg=`[맞춤 차량 컨설팅 요청]\n\n💰 총 예산: ${budgetMin||'?'}~${budgetMax||'?'}만원\n🚗 차종: ${carTypes||'미선택'}\n📅 연식: ${years||'미선택'}\n📍 주행거리: ${km||'미선택'}\n🎯 주요 용도: ${usage||'미입력'}\n⭐ 중요사항: ${priority||'미선택'}\n✅ 필수 조건: ${must||'없음'}\n❌ 기피 조건: ${never||'없음'}\n📝 추가 요청: ${memo||'없음'}\n📞 연락처: ${phone||'미입력'}`;
+  if(settings.kakao){window.open(settings.kakao,'_blank');alert('카카오톡 채널이 열렸어요!\n아래 내용을 복사해서 보내주세요:\n\n'+msg);}
+  else if(settings.phone){alert('카카오톡에서 '+settings.phone+' 으로 친구추가 후 아래 내용을 보내주세요!\n\n'+msg);}
+  else{alert('아래 내용을 카카오톡으로 보내주세요!\n\n'+msg);}
+}
+
+/* ━━━ 매입 폼 ━━━ */
+function submitBuy(){
+  const name=document.getElementById('buyCarName').value.trim();
+  const phone=document.getElementById('buyPhone').value.trim();
+  if(!name){alert('차종명을 입력해주세요.');return;}
+  if(!phone){alert('연락처를 입력해주세요.');return;}
+  const year=document.getElementById('buyYear').value.trim();
+  const km=document.getElementById('buyKm').value.trim();
+  const color=document.getElementById('buyColor').value.trim();
+  const accident=document.getElementById('buyAccident').value;
+  const hopePrice=document.getElementById('buyHopePrice').value.trim();
+  const memo=document.getElementById('buyMemo').value.trim();
+  const msg=`[매입 신청]\n\n🚗 차량: ${name}\n📅 연식: ${year||'미입력'}\n📍 주행거리: ${km||'미입력'}\n🎨 색상: ${color||'미입력'}\n🔧 사고이력: ${accident}\n💰 희망가격: ${hopePrice?hopePrice+'만원':'협의'}\n📝 메모: ${memo||'없음'}\n📞 연락처: ${phone}`;
+  if(settings.kakao){window.open(settings.kakao,'_blank');alert('카카오톡 채널이 열렸어요!\n아래 내용을 복사해서 보내주세요:\n\n'+msg);}
+  else if(settings.phone){alert('카카오톡에서 '+settings.phone+' 으로 친구추가 후 아래 내용을 보내주세요!\n\n'+msg);}
+  else{alert('아래 내용을 카카오톡으로 보내주세요!\n\n'+msg);}
+}
+
+/* ━━━ 초기화 ━━━ */
+document.getElementById('settingPhone').value=settings.phone;
+document.getElementById('settingKakao').value=settings.kakao||'http://pf.kakao.com/_YtXCX/chat';
+document.getElementById('aboutPhone').textContent=settings.phone||'번호를 설정해주세요';
+// Supabase에서 데이터 로드
+(async()=>{
+  await restoreAdminSession();
+  await loadSettings();
+  // 매물은 아래 최적화 로더에서 캐시 우선 + 20대씩 불러옵니다.
+  applyAdminState();
 })();
 </script>
+</div><!-- /main-app -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ━━━ Supabase 연결 ━━━ */
+const SUPA_URL = 'https://ormjkxizgqyusdfkzibb.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ybWpreGl6Z3F5dXNkZmt6aWJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY1NzQ0ODMsImV4cCI6MjA5MjE1MDQ4M30.cYmPGPJuIaXeDlyx57ZN6OTGhGqB4zPXKpdOr9y8IZs';
+const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+/* ━━━ DB에서 매물 불러오기: 속도 최적화 + 캐시 우선 + 20대씩 로딩 ━━━ */
+const CAR_PAGE_SIZE = 20;
+let carsLoadedCount = 0;
+let carsHasMore = true;
+let carsLoadingNow = false;
+
+function mapCarRow(r) {
+  return {
+    id: r.id, carType: r.cartype || r.carType || 'alson', name: r.name || '',
+    year: r.year || '', yearNum: r.yearnum || r.yearNum || 0,
+    km: r.km || '', kmNum: r.kmnum || r.kmNum || 0,
+    color: r.color || '', price: r.price || '', priceNum: r.pricenum || r.priceNum || 0,
+    phone: r.phone || '', notes: r.notes || '',
+    dealer: r.dealer || '나이스모터스',
+    extra: r.extra || '', photos: Array.isArray(r.photos) ? r.photos : [],
+    regDate: r.regdate || r.regDate || '', regTs: r.regts || r.regTs || 0
+  };
+}
+
+function showCarsLoading(message) {
+  const wrap = document.getElementById('cardsWrap');
+  const count = document.getElementById('countNum');
+  if (count) count.textContent = cars.length || 0;
+  if (wrap && !cars.length) {
+    wrap.innerHTML = `<div class="empty-state"><p style="font-size:13px;margin-bottom:4px;">${message || '매물을 불러오는 중입니다...'}</p><small>처음에는 최신 매물 20대만 빠르게 불러옵니다.</small></div>`;
+  }
+}
+
+function renderCachedCarsFirst() {
+  try {
+    const cached = JSON.parse(localStorage.getItem('nm_cars') || '[]');
+    if (Array.isArray(cached) && cached.length) {
+      cars = cached.map(mapCarRow).sort((a,b)=>(b.regTs||0)-(a.regTs||0));
+      carsLoadedCount = cars.length;
+      carsHasMore = true;
+      updateTypeFilter(); renderCars(); updateStats(); renderLoadMoreButton();
+      console.log('캐시 매물 먼저 표시:', cars.length, '대');
+      return true;
+    }
+  } catch(e) { console.warn('캐시 로딩 실패:', e); }
+  return false;
+}
+
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('network timeout')), ms))
+  ]);
+}
+
+function dedupeCars(list) {
+  const seen = new Set();
+  return list.filter(c => {
+    if (!c || !c.id || seen.has(c.id)) return false;
+    seen.add(c.id);
+    return true;
+  });
+}
+
+function renderLoadMoreButton() {
+  const wrap = document.getElementById('cardsWrap');
+  if (!wrap) return;
+  const old = document.getElementById('loadMoreWrap');
+  if (old) old.remove();
+  if (!carsHasMore || !cars.length) return;
+  const box = document.createElement('div');
+  box.className = 'load-more-wrap';
+  box.id = 'loadMoreWrap';
+  box.innerHTML = `<button class="load-more-btn" onclick="loadMoreCars()">매물 더보기</button><div class="load-more-info">현재 ${cars.length}대 표시 중 · 처음 화면은 속도를 위해 최신 ${CAR_PAGE_SIZE}대부터 보여줍니다.</div>`;
+  wrap.appendChild(box);
+}
+
+const _speedOrigRenderCars = renderCars;
+window.renderCars = function() {
+  _speedOrigRenderCars();
+  renderLoadMoreButton();
+};
+
+async function loadCarsPage({ reset = false, retryCount = 1 } = {}) {
+  if (carsLoadingNow) return;
+  carsLoadingNow = true;
+  const start = reset ? 0 : cars.length;
+  const end = start + CAR_PAGE_SIZE - 1;
+  showCarsLoading(reset ? '최신 매물을 빠르게 불러오는 중입니다...' : '추가 매물을 불러오는 중입니다...');
+
+  const btn = document.querySelector('#loadMoreWrap .load-more-btn');
+  const oldBtnText = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
+
+  try {
+    const result = await withTimeout(
+      supa.from('cars')
+        .select('id,cartype,name,year,yearnum,km,kmnum,color,price,pricenum,phone,notes,dealer,extra,photos,regdate,regts')
+        .order('regts', { ascending: false })
+        .range(start, end),
+      10000
+    );
+    const { data, error } = result;
+    if (error) throw error;
+
+    const page = (data || []).map(mapCarRow);
+    carsHasMore = page.length === CAR_PAGE_SIZE;
+    cars = reset ? page : dedupeCars([...cars, ...page]);
+    carsLoadedCount = cars.length;
+    try { localStorage.setItem('nm_cars', JSON.stringify(cars)); } catch(e) {}
+    updateTypeFilter(); renderCars(); updateStats();
+    console.log(reset ? '최신 매물 로딩 완료:' : '추가 매물 로딩 완료:', page.length, '대 / 총', cars.length, '대');
+  } catch (error) {
+    console.error('매물 로딩 실패:', error);
+    const hadCache = cars.length || renderCachedCarsFirst();
+    if (!hadCache) showCarsLoading('매물 로딩이 지연되고 있습니다. 새로고침하거나 네트워크를 확인해주세요.');
+    if (retryCount > 0) setTimeout(() => loadCarsPage({ reset, retryCount: retryCount - 1 }), 1800);
+  } finally {
+    carsLoadingNow = false;
+    if (btn) { btn.disabled = false; btn.textContent = oldBtnText || '매물 더보기'; }
+    renderLoadMoreButton();
+  }
+}
+
+function loadCarsFromDB(retryCount = 1) {
+  return loadCarsPage({ reset: true, retryCount });
+}
+
+function loadMoreCars() {
+  return loadCarsPage({ reset: false, retryCount: 1 });
+}
+
+/* ━━━ DB에 매물 저장 ━━━ */
+function carToDBRow(car, includePhotos = true) {
+  const row = {
+    id: car.id, cartype: car.carType||'alson',
+    name: car.name, year: car.year, yearnum: car.yearNum||0,
+    km: car.km, kmnum: car.kmNum||0, color: car.color,
+    price: car.price, pricenum: car.priceNum||0,
+    phone: car.phone, notes: car.notes,
+    dealer: car.dealer||'나이스모터스',
+    extra: car.extra||'',
+    regdate: car.regDate, regts: car.regTs||Date.now()
+  };
+  if (includePhotos) row.photos = car.photos||[];
+  return row;
+}
+
+/*
+  중요: 사진을 base64로 DB에 넣는 구조에서는 데이터가 커질 수 있습니다.
+  그래서 기존 매물의 텍스트/옵션만 수정할 때는 photos 컬럼을 다시 보내지 않습니다.
+  사진을 추가/삭제한 경우에만 photos를 업데이트합니다.
+*/
+async function saveCarToDB(car, options = {}) {
+  const includePhotos = options.includePhotos !== false;
+  const isUpdateOnly = !!options.updateOnly;
+  const row = carToDBRow(car, includePhotos);
+
+  const query = isUpdateOnly
+    ? supa.from('cars').update(row).eq('id', car.id)
+    : supa.from('cars').upsert(row);
+
+  const { error } = await query;
+  if (error) { console.error('저장 실패:', error); alert('저장 실패: ' + error.message); return false; }
+  return true;
+}
+
+/* ━━━ DB에서 매물 삭제 ━━━ */
+async function deleteCarFromDB(id) {
+  const { error } = await supa.from('cars').delete().eq('id', id);
+  if (error) { console.error('삭제 실패:', error); return false; }
+  return true;
+}
+
+/* ━━━ 기존 함수 오버라이드 ━━━ */
+// 저장 함수 - localStorage 대신 DB 사용
+const _origSave = save;
+function save() {
+  // localStorage는 백업용으로만 유지
+  try { localStorage.setItem('nm_cars', JSON.stringify(cars)); } catch(e) {}
+}
+
+// saveEdit 오버라이드
+// 상세 정보(등급/연료/미션/구동/옵션/용도이력)까지 extra에 묶어서 저장
+const _origSaveEdit = saveEdit;
+window.saveEdit = async function() {
+  const btn = document.querySelector('#editModal .modal-btns .btn-teal');
+  const oldBtnText = btn ? btn.textContent : '';
+  try {
+    if (btn) { btn.disabled = true; btn.textContent = '저장 중...'; }
+
+    const name = document.getElementById('eN').value.trim();
+    if (!name) { alert('차종명을 입력해주세요.'); return; }
+
+    const priceRaw = document.getElementById('eP').value.trim();
+    const priceNum = parseInt((priceRaw.match(/\d+/)||[0])[0])||0;
+    const price = priceNum ? priceNum+'만원' : '';
+
+    const yearRaw = document.getElementById('eY').value.trim();
+    const yearNumM = yearRaw.match(/(\d{4})/);
+    const yearNum = yearNumM ? parseInt(yearNumM[1]) : 0;
+
+    const kmRaw = document.getElementById('eK').value.trim();
+    const kmNumM = kmRaw.match(/(\d+\.?\d*)/);
+    const kmNum = kmNumM ? parseFloat(kmNumM[1]) : 0;
+
+    const oldCar = editingId ? (cars.find(x => x.id === editingId) || {}) : {};
+    const extra = buildExtraInfo({
+      grade: document.getElementById('eGrade')?.value.trim() || '',
+      fuel: document.getElementById('eFuel')?.value.trim() || '',
+      mission: document.getElementById('eMission')?.value.trim() || '',
+      drive: document.getElementById('eDrive')?.value.trim() || '',
+      options: document.getElementById('eOptions')?.value.trim() || '',
+      usage: document.getElementById('eHistory')?.value.trim() || ''
+    });
+
+    const data = {
+      ...oldCar,
+      id: editingId || uid(),
+      carType: document.getElementById('eType').value,
+      name,
+      year: yearRaw,
+      yearNum,
+      color: document.getElementById('eC').value.trim(),
+      km: kmRaw,
+      kmNum,
+      price,
+      priceNum,
+      phone: document.getElementById('ePh').value.trim(),
+      dealer: document.getElementById('eDealer').value.trim() || '나이스모터스',
+      notes: document.getElementById('eNote').value.trim(),
+      photos: editPhotos,
+      extra,
+      regDate: oldCar.regDate || todayKey,
+      regTs: oldCar.regTs || Date.now()
+    };
+
+    const photosChanged = !editingId || JSON.stringify(editPhotos) !== editingOriginalPhotosKey;
+    const ok = await saveCarToDB(data, { updateOnly: !!editingId, includePhotos: photosChanged });
+    if (!ok) return;
+
+    if (editingId) {
+      const idx = cars.findIndex(x => x.id === editingId);
+      if (idx >= 0) cars[idx] = data;
+    } else {
+      cars.unshift(data);
+      todayCount++;
+      localStorage.setItem('nm_today_'+todayKey, todayCount);
+    }
+
+    save(); closeModal(); updateTypeFilter(); renderCars(); updateStats();
+    editingOriginalPhotosKey = JSON.stringify(editPhotos);
+    alert('저장되었습니다.');
+  } catch (err) {
+    console.error('saveEdit 오류:', err);
+    alert('저장 중 오류가 발생했어요. 콘솔(F12)을 확인해주세요.\n' + (err.message || err));
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = oldBtnText || '저장'; }
+  }
+};
+
+// deleteCar 오버라이드
+window.deleteCar = async function(id) {
+  if (!confirm('이 매물을 삭제할까요?')) return;
+  const ok = await deleteCarFromDB(id);
+  if (!ok) return;
+  cars = cars.filter(c => c.id !== id);
+  wishes.delete(id);
+  save(); updateTypeFilter(); renderCars(); updateStats();
+};
+
+// parsePaste 후 DB 저장 오버라이드
+const _origParsePaste = window.parsePaste;
+window.parsePaste = async function() {
+  const txt = document.getElementById('pasteInput').value;
+  const err = document.getElementById('parseErr');
+  if (!txt.trim()) { err.textContent = '텍스트를 붙여넣어 주세요.'; return; }
+  err.textContent = '';
+  let parsed = [];
+  if (isStructured(txt)) {
+    const blocks = txt.split(/(?=★\s*차량종류)/);
+    const results = blocks.map(b=>b.trim()).filter(Boolean)
+      .map(b=>isStructured(b)?parseStructured(b):parseLine(b)).filter(Boolean);
+    parsed = results.length ? results : [];
+    if (!parsed.length) { const s = isStructured(txt)?parseStructured(txt):parseLine(txt); if(s) parsed=[s]; }
+    if (!parsed.length) parsed = txt.split('\n').map(parseLine).filter(Boolean);
+  } else {
+    parsed = txt.split('\n').map(parseLine).filter(Boolean);
+  }
+  if (!parsed.length) { err.textContent = '인식된 매물이 없어요.'; return; }
+
+  err.textContent = '저장 중...';
+  for (const car of parsed) {
+    const ok = await saveCarToDB(car);
+    if (ok) { cars.unshift(car); todayCount++; }
+  }
+  localStorage.setItem('nm_today_'+todayKey, todayCount);
+  save();
+  document.getElementById('pasteInput').value = '';
+  document.getElementById('pastePanel').classList.add('hidden');
+  err.textContent = '';
+  updateTypeFilter(); renderCars(); updateStats();
+};
+
+// 페이지 로드 시 캐시를 먼저 보여주고, DB 최신 데이터로 교체
+document.addEventListener('DOMContentLoaded', () => {
+  renderCachedCarsFirst();
+  setTimeout(() => loadCarsFromDB(1), 80);
+});
+</script>
+
+</body>
+</html>
