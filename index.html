@@ -1216,7 +1216,7 @@ footer strong{color:#fff;}
     <div class="form-row"><label class="form-label">특이사항</label><input type="text" id="eNote" placeholder="무사고, 단순교환, 법인차 등"/></div>
     <div class="form-row">
       <label class="form-label">차량 사진</label>
-      <div class="photo-drop" onclick="document.getElementById('photoInput').click()">클릭하여 사진 추가 (여러 장 가능)</div>
+      <div class="photo-drop" id="photoDrop" onclick="document.getElementById('photoInput').click()">클릭하여 사진 추가 · 또는 밴드 사진 복사 후 Ctrl+V (여러 장 가능)</div>
       <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="handlePhotos(event)"/>
       <div class="photo-loading" id="photoLoading"></div>
       <div class="photo-preview" id="photoPreview"></div>
@@ -2026,6 +2026,30 @@ async function handlePhotos(e){
   }
   document.getElementById('photoInput').value='';
 }
+
+document.addEventListener('paste',async function(e){
+  const modal=document.getElementById('addModal');
+  if(!modal||modal.style.display==='none')return;
+  const items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  const files=[];
+  for(let i=0;i<items.length;i++){
+    if(items[i].type.startsWith('image/')){
+      const f=items[i].getAsFile();
+      if(f)files.push(f);
+    }
+  }
+  if(!files.length)return;
+  e.preventDefault();
+  const drop=document.getElementById('photoDrop');
+  if(drop){drop.textContent='사진 붙여넣는 중...';}
+  const results=await compressImageFiles(files);
+  if(results.length){
+    editPhotos=[...editPhotos,...results];
+    renderPhotoPreview();
+  }
+  if(drop){drop.textContent='클릭하여 사진 추가 · 또는 밴드 사진 복사 후 Ctrl+V (여러 장 가능)';}
+});
 
 async function saveEdit(){
   const name=document.getElementById('eN').value.trim();
