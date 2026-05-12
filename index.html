@@ -1524,27 +1524,33 @@ function callDealer(){
 function getField(text,keys){
   for(const key of keys){
     const patterns=[
-      new RegExp('[★☆🔴❎#]\\s*'+key+'\\s*[:\\：]\\s*([^★☆🔴❎#\\n]+)','i'),
-      new RegExp(key+'\\s*[:\\：]\\s*([^★☆🔴❎#\\n]+)','i'),
+      new RegExp('[★☆🔴❎#▶]\\s*'+key+'[^:\\：\\n]{0,10}\\s*[:\\：]\\s*([^★☆🔴❎#▶\\n]+)','i'),
+      new RegExp(key+'[^:\\：\\n]{0,10}\\s*[:\\：]\\s*([^★☆🔴❎#▶\\n]+)','i'),
     ];
     for(const p of patterns){const m=text.match(p);if(m&&m[1].trim())return m[1].trim();}
   }
   return '';
 }
-function isStructured(t){return /[★☆🔴❎]/.test(t)||(/(차량종류|등록일|광고금액|입금금액|사고유무)\s*[:\：]/).test(t);}
+function isStructured(t){return /[★☆🔴❎▶]/.test(t)||(/(차량종류|차종|등록일|광고금액|차량금액|입금금액|사고유무)\s*[:\：]/).test(t);}
 
 function parseStructured(text){
   const cl=t=>t.replace(/[★☆🔴❎#\s]+$/,'').trim();
-  let name=cl(getField(text,['차량종류','차종','모델']));
+  let name=cl(getField(text,['차량종류','차종 및 등급','차종','모델']));
   let yearRaw=cl(getField(text,['등록일','연식','년식']));
-  let priceRaw=cl(getField(text,['광고금액','판매금액','가격']))||cl(getField(text,['입금금액']));
-  let kmRaw=cl(getField(text,['Km','KM','km','주행거리']));
-  let colorRaw=cl(getField(text,['색상','컬러']));
+  let priceRaw=cl(getField(text,['광고금액','차량금액','판매금액','가격']))||cl(getField(text,['입금금액']));
+  let kmRaw=cl(getField(text,['주행거리','Km','KM','km']));
+  // 연료 및 색상 합쳐진 필드 처리
+  const fuelColorRaw=cl(getField(text,['연료 및 색상','연료및색상']));
+  let colorRaw=cl(getField(text,['색상','컬러']))||fuelColorRaw;
+  let fuelRaw=cl(getField(text,['연료']))||fuelColorRaw;
   let accidentRaw=cl(getField(text,['사고유무','사고']));
-  let fuelRaw=cl(getField(text,['연료']));
   let missionRaw=cl(getField(text,['밋션','미션','변속기']));
-  let driveRaw=cl(getField(text,['구동방식']));
-  let optionRaw=cl(getField(text,['옵션']));
+  // 미션 및 구동방식 합쳐진 필드 처리
+  const missionDriveRaw=cl(getField(text,['밋션 및 구동방식','미션 및 구동방식']));
+  if(!missionRaw&&missionDriveRaw)missionRaw=missionDriveRaw.split(/[\s,\/]/)[0];
+  let driveRaw=cl(getField(text,['구동방식']))||'';
+  if(!driveRaw&&missionDriveRaw){const m=missionDriveRaw.match(/(4WD|2WD|AWD|FWD|RWD)/i);if(m)driveRaw=m[1];}
+  let optionRaw=cl(getField(text,['특이사항 및 옵션','옵션','특이사항']));
   let phoneRaw=(text.match(/01[016789]-?\d{3,4}-?\d{4}/)||[''])[0];
   let gradeRaw=cl(getField(text,['등급','트림']));
   let carNumRaw=cl(getField(text,['차량번호']));
@@ -1557,14 +1563,23 @@ function parseStructured(text){
   if(yearM){yearNum=yearM[1].length===4?parseInt(yearM[1]):parseInt((parseInt(yearM[1])>50?'19':'20')+yearM[1]);year=yearNum+'년식';}
   const priceNum=parseInt((priceRaw.match(/\d+/)||[0])[0])||0;
   const price=priceNum?priceNum+'만원':'';
-  const kmM=kmRaw.match(/(\d+\.?\d*)/);
-  const kmNum=kmM?parseFloat(kmM[1]):0;
-  const km=kmNum?kmNum+'만km':'';
-  let color='';for(const c of COLORS){if(colorRaw.includes(c)||text.includes(c)){color=c;break;}}
+  // 콤마 있는 km 처리 (180,097 → 18만km)
+  const kmClean=kmRaw.replace(/,/g,'');
+  const kmM=kmClean.match(/(\d+\.?\d*)\s*만?\s*km/i)||kmClean.match(/(\d{4,})/);
+  let kmNum=0,km='';
+  if(kmM){const raw=parseFloat(kmM[1]);kmNum=raw>9999?Math.round(raw/10000*10)/10:raw;km=kmNum+'만km';}
+  let color='';
+  // 연료 및 색상 합쳐진 필드에서 색상 추출
+  const colorSrc=colorRaw+' '+fuelColorRaw;
+  for(const c of COLORS){if(colorSrc.includes(c)||text.includes(c)){color=c;break;}}
+  // 연료 추출
+  if(fuelColorRaw&&!getField(text,['연료'])){const fm=fuelColorRaw.match(/(디젤|가솔린|휘발유|LPG|하이브리드|전기|수소)/);if(fm)fuelRaw=fm[1];}
   const notes=[];
-  if(historyRaw.includes('무')||accidentRaw.includes('무사고'))notes.push('무사고');
-  if(accidentRaw&&!accidentRaw.includes('무사고')&&accidentRaw.trim()!=='무')notes.push(accidentRaw.length<20?accidentRaw:'사고이력');
-  if(text.includes('단순'))notes.push('단순손상');
+  // 사고유무: 무/없음/무사고 포함이면 무사고, 단순교환/단순은 별도 태그
+  const isNoAcc=accidentRaw.includes('무사고')||/^무$/.test(accidentRaw.trim())||accidentRaw.startsWith('무(');
+  if(isNoAcc)notes.push('무사고');
+  else if(accidentRaw&&accidentRaw.trim()!=='')notes.push(accidentRaw.length<20?accidentRaw:'사고이력');
+  if(accidentRaw.includes('단순')||text.includes('단순교환'))notes.push('단순교환');
   if(missionRaw)notes.push(missionRaw.replace(/[^가-힣a-zA-Z0-9]/g,'').slice(0,5));
   if(fuelRaw)notes.push(fuelRaw.split(/[\s\/]/)[0].slice(0,6));
   if(driveRaw)notes.push(driveRaw.slice(0,5));
@@ -2484,7 +2499,13 @@ window.parsePaste = async function() {
   err.textContent = '';
   let parsed = [];
   if (isStructured(txt)) {
-    const blocks = txt.split(/(?=★\s*차량종류)/);
+    // ▶차량번호 또는 ★차량종류 기준으로 분리
+    let blocks;
+    if(/▶\s*차량번호/.test(txt)){
+      blocks = txt.split(/(?=▶\s*차량번호)/);
+    } else {
+      blocks = txt.split(/(?=★\s*차량종류)/);
+    }
     const results = blocks.map(b=>b.trim()).filter(Boolean)
       .map(b=>isStructured(b)?parseStructured(b):parseLine(b)).filter(Boolean);
     parsed = results.length ? results : [];
