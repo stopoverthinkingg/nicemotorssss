@@ -495,6 +495,7 @@ footer strong{color:#fff;}
 .admin-lock{display:none;}
 .admin-only{display:none!important;}
 .admin-active .admin-only{display:flex!important;}
+.admin-active .admin-only.about-card{display:block!important;}
 .admin-active .admin-lock{display:block;}
 
 .admin-login-wrap{
@@ -1176,9 +1177,9 @@ footer strong{color:#fff;}
       </div>
     </div>
 
-    <!-- 설정: 전화번호 / 카카오 채널 -->
-    <div class="about-card">
-      <div class="rec-title">⚙️ 딜러 설정 (본인만 수정)</div>
+    <!-- 설정: 전화번호 / 카카오 채널 (관리자 전용) -->
+    <div class="about-card admin-only" style="display:none!important;">
+      <div class="rec-title">⚙️ 딜러 설정</div>
       <div class="buy-form-row" style="margin-bottom:10px;"><label class="buy-label">내 전화번호</label><input type="text" class="buy-input" id="settingPhone" placeholder="010-0000-0000" oninput="saveSettings()"/></div>
       <div class="buy-form-row"><label class="buy-label">카카오톡 채널 URL (없으면 전화번호로 대체)</label><input type="text" class="buy-input" id="settingKakao" placeholder="https://open.kakao.com/o/xxxxxxxx" oninput="saveSettings()"/></div>
       <p style="font-size:11px;color:#aaa;margin-top:8px;">입력한 번호/채널이 카카오 상담 버튼과 전화 버튼에 자동 반영됩니다</p>
