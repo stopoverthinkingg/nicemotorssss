@@ -1000,12 +1000,21 @@ footer strong{color:#fff;}
       <div class="rec-form-row">
         <label class="rec-label">중요하게 보시는 것은?</label>
         <div class="rec-options" id="recPriority">
-          <button class="rec-opt" onclick="toggleOpt(this)">무사고</button>
           <button class="rec-opt" onclick="toggleOpt(this)">연비</button>
           <button class="rec-opt" onclick="toggleOpt(this)">공간 넓음</button>
           <button class="rec-opt" onclick="toggleOpt(this)">가성비</button>
           <button class="rec-opt" onclick="toggleOpt(this)">외관 깨끗</button>
           <button class="rec-opt" onclick="toggleOpt(this)">저렴한 보험료</button>
+        </div>
+      </div>
+
+      <div class="rec-form-row">
+        <label class="rec-label">사고 이력 조건</label>
+        <div style="font-size:11px;color:#aaa;margin-bottom:8px;">원하시는 사고 이력 조건을 선택해주세요</div>
+        <div class="rec-options" id="recAccident">
+          <button class="rec-opt" onclick="toggleSingle(this,'recAccident')">완전무사고 <span style="font-size:11px;opacity:0.75;">(외판교환도 없음)</span></button>
+          <button class="rec-opt" onclick="toggleSingle(this,'recAccident')">단순무사고 <span style="font-size:11px;opacity:0.75;">(외판교환 OK, 뼈대 이상 무)</span></button>
+          <button class="rec-opt" onclick="toggleSingle(this,'recAccident')">상관없음</button>
         </div>
       </div>
 
@@ -2153,6 +2162,10 @@ function deleteCar(id){
 
 /* ━━━ 추천 폼 ━━━ */
 function toggleOpt(btn){btn.classList.toggle('sel');}
+function toggleSingle(btn,groupId){
+  document.getElementById(groupId).querySelectorAll('.rec-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
 function submitRecommend(){
   const budgetMin=document.getElementById('recBudgetMin').value.trim();
   const budgetMax=document.getElementById('recBudgetMax').value.trim();
@@ -2162,10 +2175,11 @@ function submitRecommend(){
   const years=[...document.getElementById('recYears').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
   const km=[...document.getElementById('recKm').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
   const priority=[...document.getElementById('recPriority').querySelectorAll('.sel')].map(b=>b.textContent).join(', ');
+  const accident=(document.getElementById('recAccident').querySelector('.sel')||{}).textContent||'';
   const usage=document.getElementById('recUsage').value.trim();
   const must=document.getElementById('recMust').value.trim();
   const never=document.getElementById('recNever').value.trim();
-  const msg=`[맞춤 차량 컨설팅 요청]\n\n💰 총 예산: ${budgetMin||'?'}~${budgetMax||'?'}만원\n🚗 차종: ${carTypes||'미선택'}\n📅 연식: ${years||'미선택'}\n📍 주행거리: ${km||'미선택'}\n🎯 주요 용도: ${usage||'미입력'}\n⭐ 중요사항: ${priority||'미선택'}\n✅ 필수 조건: ${must||'없음'}\n❌ 기피 조건: ${never||'없음'}\n📝 추가 요청: ${memo||'없음'}\n📞 연락처: ${phone||'미입력'}`;
+  const msg=`[맞춤 차량 컨설팅 요청]\n\n💰 총 예산: ${budgetMin||'?'}~${budgetMax||'?'}만원\n🚗 차종: ${carTypes||'미선택'}\n📅 연식: ${years||'미선택'}\n📍 주행거리: ${km||'미선택'}\n🔧 사고 이력 조건: ${accident||'미선택'}\n🎯 주요 용도: ${usage||'미입력'}\n⭐ 중요사항: ${priority||'미선택'}\n✅ 필수 조건: ${must||'없음'}\n❌ 기피 조건: ${never||'없음'}\n📝 추가 요청: ${memo||'없음'}\n📞 연락처: ${phone||'미입력'}`;
   const kakaoUrl = settings.kakao || 'http://pf.kakao.com/_YtXCX/chat';
   navigator.clipboard.writeText(msg).catch(()=>{});
   showSendModal(kakaoUrl);
