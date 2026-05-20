@@ -1103,9 +1103,40 @@ footer strong{color:#fff;}
   <div class="about-wrap">
     <!-- 프로필 카드 -->
     <div class="about-card">
-      <div class="about-avatar">N</div>
-      <div class="about-name">나이스<span>모터스</span></div>
-      <div class="about-sub">청주 엑스포매매단지 · 충북 중고차 전문 딜러 손영준</div>
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+        <div id="dealerAvatarWrap" style="position:relative;flex-shrink:0;">
+          <div id="dealerAvatar" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#1D9E75,#0F6E56);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:#fff;overflow:hidden;">
+            <span id="dealerAvatarInitial">손</span>
+          </div>
+          <div class="admin-only" style="display:none!important;position:absolute;bottom:0;right:0;">
+            <label style="width:24px;height:24px;background:#1D9E75;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              <input type="file" accept="image/*" style="display:none;" onchange="uploadDealerPhoto(event)"/>
+            </label>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:20px;font-weight:900;color:#111;">손영준 딜러</div>
+          <div style="font-size:13px;color:#1D9E75;font-weight:700;margin:2px 0;">나이스모터스 · 청주 엑스포매매단지</div>
+          <div style="font-size:12px;color:#888;margin-top:4px;">충북 중고차 전문 · 허위매물 없는 정직한 거래</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px;text-align:center;">
+        <div style="background:#f4f9f7;border-radius:10px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:900;color:#1D9E75;">500+</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">누적 거래</div>
+        </div>
+        <div style="background:#f4f9f7;border-radius:10px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:900;color:#1D9E75;">0건</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">허위매물</div>
+        </div>
+        <div style="background:#f4f9f7;border-radius:10px;padding:12px 8px;">
+          <div style="font-size:20px;font-weight:900;color:#1D9E75;">즉시</div>
+          <div style="font-size:11px;color:#666;margin-top:2px;">카카오 응답</div>
+        </div>
+      </div>
+      <div class="about-name" style="display:none;">나이스<span>모터스</span></div>
+      <div class="about-sub" style="display:none;">청주 엑스포매매단지 · 충북 중고차 전문 딜러 손영준</div>
       <div class="about-divider"></div>
       <div class="about-row">
         <div class="about-row-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
@@ -1189,6 +1220,35 @@ footer strong{color:#fff;}
         <div class="strength-item">
           <h4>맞춤 차량 추천</h4>
           <p>조건만 알려주시면 딜러가 직접 맞는 차를 찾아드려요</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 지도 카드 -->
+    <div class="about-card">
+      <div class="rec-title" style="margin-bottom:12px;">📍 매장 위치</div>
+      <div style="font-size:13px;color:#555;margin-bottom:12px;">충청북도 청주시 흥덕구 엑스포로 · 청주 엑스포매매단지</div>
+      <div style="border-radius:12px;overflow:hidden;border:1px solid #e8e8e0;background:#f4f4f2;height:200px;display:flex;align-items:center;justify-content:center;">
+        <iframe src="https://map.naver.com/p/entry/place/17777120" style="width:100%;height:100%;border:none;" loading="lazy" title="나이스모터스 위치"></iframe>
+      </div>
+      <a href="https://naver.me/xDJdlgyt" target="_blank" style="display:block;margin-top:10px;text-align:center;padding:11px;background:#03C75A;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;">네이버 지도에서 길찾기 →</a>
+    </div>
+
+    <!-- 고객 후기 카드 -->
+    <div class="about-card">
+      <div class="rec-title" style="margin-bottom:16px;">⭐ 고객 후기</div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="background:#f8f8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #1D9E75;">
+          <div style="font-size:13px;color:#222;line-height:1.7;margin-bottom:8px;">"처음 중고차 사는 거라 걱정이 많았는데, 성능기록부부터 하나하나 같이 보면서 설명해주셨어요. 덕분에 정말 만족스러운 차 샀습니다."</div>
+          <div style="font-size:12px;color:#888;">⭐⭐⭐⭐⭐ &nbsp;30대 직장인 · 아반떼 구매</div>
+        </div>
+        <div style="background:#f8f8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #1D9E75;">
+          <div style="font-size:13px;color:#222;line-height:1.7;margin-bottom:8px;">"예산 안에서 최대한 좋은 차를 찾아주려고 발로 뛰어주셨어요. 허위매물 없이 정직하게 거래해주셔서 믿음이 갔습니다."</div>
+          <div style="font-size:12px;color:#888;">⭐⭐⭐⭐⭐ &nbsp;40대 주부 · 카니발 구매</div>
+        </div>
+        <div style="background:#f8f8f8;border-radius:10px;padding:14px 16px;border-left:3px solid #1D9E75;">
+          <div style="font-size:13px;color:#222;line-height:1.7;margin-bottom:8px;">"카카오로 조건만 보냈는데 딱 맞는 차 2~3개 추려서 보내주셨어요. 시간 낭비 없이 빠르게 결정할 수 있었습니다."</div>
+          <div style="font-size:12px;color:#888;">⭐⭐⭐⭐⭐ &nbsp;20대 사회초년생 · 스파크 구매</div>
         </div>
       </div>
     </div>
@@ -1508,6 +1568,10 @@ async function loadSettings(){
   document.getElementById('settingPhone').value = settings.phone || '';
   document.getElementById('settingKakao').value = settings.kakao || '';
   document.getElementById('aboutPhone').textContent = settings.phone || '번호를 설정해주세요';
+  if(settings.dealer_photo){
+    const avatar=document.getElementById('dealerAvatar');
+    if(avatar)avatar.innerHTML=`<img src="${settings.dealer_photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;
+  }
 }
 
 // 설정 저장
@@ -1519,6 +1583,26 @@ async function saveSettingsDB(){
   document.getElementById('aboutPhone').textContent = phone || '번호를 설정해주세요';
 }
 function saveSettings(){ saveSettingsDB(); }
+
+async function uploadDealerPhoto(e){
+  if(!isAdmin())return;
+  const file=e.target.files[0]; if(!file)return;
+  const compressed=await compressImageFile(file);
+  if(!compressed)return;
+  const avatar=document.getElementById('dealerAvatar');
+  avatar.innerHTML=`<img src="${compressed}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;
+  await sb.from('settings').upsert([{key:'dealer_photo',value:compressed}]);
+}
+
+async function loadDealerPhoto(){
+  try{
+    const {data}=await sb.from('settings').select('value').eq('key','dealer_photo').single();
+    if(data?.value){
+      const avatar=document.getElementById('dealerAvatar');
+      if(avatar)avatar.innerHTML=`<img src="${data.value}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>`;
+    }
+  }catch(e){}
+}
 
 /* ━━━ 탭 ━━━ */
 function showTab(tab){
