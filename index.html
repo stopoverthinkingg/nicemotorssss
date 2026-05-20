@@ -2551,14 +2551,19 @@ async function fetchWithTimeout(url, options, ms) {
   }
 }
 
-async function loadCarsPage({ reset = false, retryCount = 2 } = {}) {
+const RETRY_DELAYS = [1000, 2000, 3000, 5000, 8000, 10000, 15000, 15000]; // 최대 8회
+
+async function loadCarsPage({ reset = false, attempt = 0 } = {}) {
   if (carsLoadingNow) return;
   carsLoadingNow = true;
   const start = reset ? 0 : cars.length;
-  showCarsLoading('<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #1E3A8A;border-top-color:transparent;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>매물 불러오는 중...</span>');
+  const hasCached = cars.length > 0;
+
+  if (!hasCached) {
+    showCarsLoading('<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #1E3A8A;border-top-color:transparent;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>매물 불러오는 중...</span>');
+  }
 
   const btn = document.querySelector('#loadMoreWrap .load-more-btn');
-  const oldBtnText = btn ? btn.textContent : '';
   if (btn) { btn.disabled = true; btn.textContent = '불러오는 중...'; }
 
   try {
@@ -2566,7 +2571,7 @@ async function loadCarsPage({ reset = false, retryCount = 2 } = {}) {
     const url = `${SUPABASE_URL}/rest/v1/cars?select=${cols}&order=regts.desc&offset=${start}&limit=${CAR_PAGE_SIZE}`;
     const res = await fetchWithTimeout(url, {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-    }, 15000);
+    }, 12000);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
 
@@ -2577,23 +2582,27 @@ async function loadCarsPage({ reset = false, retryCount = 2 } = {}) {
     try { localStorage.setItem('nm_cars', JSON.stringify(cars)); } catch(e) {}
     updateTypeFilter(); renderCars(); updateStats();
   } catch (error) {
-    console.error('매물 로딩 실패:', error);
-    const hadCache = cars.length || renderCachedCarsFirst();
-    if (retryCount > 0) {
-      showCarsLoading('<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #ccc;border-top-color:#1E3A8A;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>재시도 중...</span>');
-      setTimeout(() => loadCarsPage({ reset, retryCount: retryCount - 1 }), 2000);
-    } else if (!hadCache) {
-      showCarsLoading('매물을 불러오지 못했습니다.<br><button onclick="loadCarsFromDB(2)" style="margin-top:12px;padding:10px 22px;background:#1E3A8A;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:700;">다시 시도</button>');
+    console.warn(`매물 로딩 실패 (${attempt+1}회):`, error.message);
+    if (!hasCached) renderCachedCarsFirst();
+
+    if (attempt < RETRY_DELAYS.length) {
+      const delay = RETRY_DELAYS[attempt];
+      if (!cars.length) {
+        showCarsLoading(`<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #ccc;border-top-color:#1E3A8A;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>연결 중... (${attempt+1}/${RETRY_DELAYS.length})</span>`);
+      }
+      setTimeout(() => loadCarsPage({ reset, attempt: attempt + 1 }), delay);
+    } else if (!cars.length) {
+      showCarsLoading('매물을 불러오지 못했습니다.<br><button onclick="loadCarsFromDB()" style="margin-top:12px;padding:10px 22px;background:#1E3A8A;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;font-weight:700;">다시 시도</button>');
     }
   } finally {
     carsLoadingNow = false;
-    if (btn) { btn.disabled = false; btn.textContent = oldBtnText || '매물 더보기'; }
+    if (btn) { btn.disabled = false; btn.textContent = btn.dataset.orig || '매물 더보기'; }
     renderLoadMoreButton();
   }
 }
 
-function loadCarsFromDB(retryCount = 1) {
-  return loadCarsPage({ reset: true, retryCount });
+function loadCarsFromDB() {
+  return loadCarsPage({ reset: true, attempt: 0 });
 }
 
 function loadMoreCars() {
@@ -2827,7 +2836,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetch(`${SUPABASE_URL}/rest/v1/cars?select=id&limit=1`, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
   }).catch(()=>{});
-  setTimeout(() => loadCarsFromDB(2), 80);
+  setTimeout(() => loadCarsFromDB(), 80);
 });
 </script>
 
