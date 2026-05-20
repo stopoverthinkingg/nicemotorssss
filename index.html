@@ -188,12 +188,14 @@ footer{background:#0F172A;color:#94A3B8;}
 
 /* 스크롤 힌트 화살표 */
 .scroll-hint{
-  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  opacity:0.4;animation:bounce 2s infinite;
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0.85;animation:bounce 1.8s ease-in-out infinite;
+  cursor:pointer;
 }
-.scroll-hint svg{width:20px;height:20px;}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
+.scroll-hint-text{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;opacity:0.7;}
+.scroll-hint svg{width:28px;height:28px;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.3));}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
 @keyframes nm-spin{to{transform:rotate(360deg);}}
 
 /* 헤더 고정 */
@@ -697,7 +699,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -714,7 +716,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -732,7 +734,7 @@ footer strong{color:#fff;}
         <div class="ls-body" style="font-size:15px;opacity:0.55;">이 깨달음은 자동차 시장에서도 똑같이 적용됩니다.</div>
       </div>
       <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -748,7 +750,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -781,7 +783,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -799,7 +801,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
@@ -815,7 +817,7 @@ footer strong{color:#fff;}
         </div>
       </div>
       <div class="scroll-hint" style="color:#92400e;position:relative;z-index:1;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
