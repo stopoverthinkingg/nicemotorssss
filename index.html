@@ -2486,7 +2486,7 @@ function showCarsLoading(message) {
   const count = document.getElementById('countNum');
   if (count) count.textContent = cars.length || 0;
   if (wrap && !cars.length) {
-    wrap.innerHTML = `<div class="empty-state"><p style="font-size:13px;margin-bottom:4px;">${message || '매물을 불러오는 중입니다...'}</p><small>처음에는 최신 매물 20대만 빠르게 불러옵니다.</small></div>`;
+    wrap.innerHTML = `<div class="empty-state"><p style="font-size:13px;margin-bottom:4px;">${message || '매물을 불러오는 중입니다...'}</p></div>`;
   }
 }
 
@@ -2588,7 +2588,7 @@ async function loadCarsPage({ reset = false, attempt = 0 } = {}) {
     if (attempt < RETRY_DELAYS.length) {
       const delay = RETRY_DELAYS[attempt];
       if (!cars.length) {
-        showCarsLoading(`<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #ccc;border-top-color:#1E3A8A;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>연결 중... (${attempt+1}/${RETRY_DELAYS.length})</span>`);
+        showCarsLoading('<span style="display:flex;align-items:center;gap:8px;"><span style="width:16px;height:16px;border:2px solid #ccc;border-top-color:#1E3A8A;border-radius:50%;display:inline-block;animation:nm-spin 0.8s linear infinite;"></span>매물 불러오는 중...</span>');
       }
       setTimeout(() => loadCarsPage({ reset, attempt: attempt + 1 }), delay);
     } else if (!cars.length) {
