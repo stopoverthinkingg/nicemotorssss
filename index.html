@@ -76,8 +76,8 @@ footer{background:#0F172A;color:#94A3B8;}
 }
 
 /* 섹션 색상 테마 */
-.ls-dark{background:#0a0a0a;color:#fff;}
-.ls-green{background:#1E3A8A;color:#fff;}
+.ls-dark{background:#fff;color:#0F172A;}
+.ls-green{background:#F8FAFC;color:#0F172A;}
 .ls-light{background:#F8FAFC;color:#0F172A;}
 .ls-white{background:#fff;color:#0F172A;}
 .ls-teal{background:#1E3A8A;color:#fff;}
@@ -98,8 +98,8 @@ footer{background:#0F172A;color:#94A3B8;}
   letter-spacing:-0.5px;
 }
 .ls-heading em{font-style:normal;color:#1E3A8A;}
-.ls-dark .ls-heading em{color:#93C5FD;}
-.ls-green .ls-heading em{color:#FEE500;}
+.ls-dark .ls-heading em{color:#1E3A8A;}
+.ls-green .ls-heading em{color:#1E3A8A;}
 .ls-teal .ls-heading em{color:#FEE500;}
 .ls-body{
   font-size:clamp(15px,2vw,18px);
@@ -122,8 +122,8 @@ footer{background:#0F172A;color:#94A3B8;}
   margin:24px 0;
   word-break:keep-all;
 }
-.ls-dark .ls-quote{border-color:#93C5FD;color:#93C5FD;}
-.ls-green .ls-quote{border-color:#FEE500;color:#FEE500;}
+.ls-dark .ls-quote{border-color:#1E3A8A;color:#1E3A8A;}
+.ls-green .ls-quote{border-color:#1E3A8A;color:#1E3A8A;}
 .ls-light .ls-quote{border-color:#1E3A8A;color:#1E3A8A;}
 .ls-white .ls-quote{border-color:#1E3A8A;color:#1E3A8A;}
 
@@ -135,8 +135,8 @@ footer{background:#0F172A;color:#94A3B8;}
   font-size:13px;font-weight:700;
   margin-bottom:16px;
 }
-.ls-dark .ls-chip{background:rgba(255,255,255,0.12);color:#fff;}
-.ls-green .ls-chip{background:rgba(255,255,255,0.18);color:#fff;}
+.ls-dark .ls-chip{background:#DBEAFE;color:#1E3A8A;}
+.ls-green .ls-chip{background:#DBEAFE;color:#1E3A8A;}
 .ls-light .ls-chip{background:#DBEAFE;color:#1E3A8A;}
 .ls-white .ls-chip{background:#DBEAFE;color:#1E3A8A;}
 .ls-teal .ls-chip{background:rgba(255,255,255,0.18);color:#fff;}
@@ -687,9 +687,8 @@ footer strong{color:#fff;}
   <div class="landing-wrap" id="landingWrap">
 
     <!-- 섹션 1: 임팩트 오프닝 -->
-    <div class="ls ls-dark" id="ls0" style="background-image:url('https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.55) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-dark" id="ls0">
+      <div class="fade-up">
         <div class="ls-eyebrow">청주 나이스모터스 · 손영준 딜러</div>
         <div class="ls-heading">"세상에<br/><em>싸고 좋은 차</em>는<br/>없습니다."</div>
         <div class="ls-body">그래도 <strong>합리적이고 안전한 차</strong>는 분명히 있습니다.<br/>제가 직접 찾아드릴게요.</div>
@@ -698,15 +697,14 @@ footer strong{color:#fff;}
           <button class="ls-btn-sub" onclick="enterSite('recommend')">✨ 차량 추천받기</button>
         </div>
       </div>
-      <div class="scroll-hint" style="position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 2: 개인 스토리 -->
-    <div class="ls ls-white" id="ls1" style="background-image:url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-white" id="ls1">
+      <div class="fade-up">
         <div class="ls-chip">저의 이야기</div>
         <div class="ls-heading">저는 평생<br/><em>가성비만</em> 좇았습니다.</div>
         <div class="ls-body">
@@ -715,15 +713,14 @@ footer strong{color:#fff;}
           <em>"내가 시간과 에너지를 쏟아가며 아낀 돈이 과연 그만한 가치가 있었을까?"</em>
         </div>
       </div>
-      <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="color:#0F172A;margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 3: 중복투자 경험 -->
-    <div class="ls ls-light" id="ls2" style="background-image:url('https://images.unsplash.com/photo-1580048915913-4f8f5cb481c4?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(248,248,244,0.88) 0%, rgba(248,248,244,0.75) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-light" id="ls2">
+      <div class="fade-up">
         <div class="ls-chip">뼈아픈 경험</div>
         <div class="ls-heading">싸게 샀다가<br/><em>두 배로 썼습니다.</em></div>
         <div class="ls-body">
@@ -733,15 +730,14 @@ footer strong{color:#fff;}
         <div class="ls-divider"></div>
         <div class="ls-body" style="font-size:15px;opacity:0.55;">이 깨달음은 자동차 시장에서도 똑같이 적용됩니다.</div>
       </div>
-      <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="color:#0F172A;margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 4: 가격은 거짓말을 안 한다 -->
-    <div class="ls ls-green" id="ls3" style="background-image:url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,110,86,0.82) 0%, rgba(15,110,86,0.65) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-green" id="ls3">
+      <div class="fade-up">
         <div class="ls-chip">중고차 시장의 진실</div>
         <div class="ls-quote">"가격은 절대<br/>거짓말을 하지 않습니다."</div>
         <div class="ls-body">
@@ -749,31 +745,14 @@ footer strong{color:#fff;}
           현장에서 큰 피해를 입으시는 사례들을 보면<br/>대부분 <strong>유독 저렴한 차를 좇으시다가</strong> 발생합니다.
         </div>
       </div>
-      <div class="scroll-hint" style="position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 5: 새 차도 멈춘다 -->
-    <div class="ls ls-dark" id="ls4" style="
-      background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600&q=75&fit=crop')
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: right center;
-      background-color: #0a0a0a;
-    ">
-      <!-- 왼쪽 그라데이션 오버레이 -->
-      <div style="
-        position:absolute;inset:0;
-        background:linear-gradient(
-          to right,
-          rgba(10,10,10,0.97) 0%,
-          rgba(10,10,10,0.90) 40%,
-          rgba(10,10,10,0.45) 70%,
-          rgba(10,10,10,0.15) 100%
-        );
-      "></div>
-      <div class="fade-up" style="position:relative;z-index:1;max-width:520px;">
+    <div class="ls ls-dark" id="ls4">
+      <div class="fade-up">
         <div class="ls-chip">새 차도 예외는 아닙니다</div>
         <div class="ls-heading">저희 가족<br/><em>GV80 신차</em>가<br/>터널에서 멈췄습니다.</div>
         <div class="ls-body">
@@ -782,15 +761,14 @@ footer strong{color:#fff;}
           중고차라고 해서 무조건 문제가 생기는 것도 아닙니다.
         </div>
       </div>
-      <div class="scroll-hint" style="position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 6: 최선의 방법 -->
-    <div class="ls ls-white" id="ls5" style="background-image:url('https://images.unsplash.com/photo-1487754180451-c456f719a1fc?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.75) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-white" id="ls5">
+      <div class="fade-up">
         <div class="ls-chip">그렇다면 최선은?</div>
         <div class="ls-heading">리스크를<br/><em>최소화</em>하는 것.</div>
         <div class="ls-body">
@@ -800,15 +778,14 @@ footer strong{color:#fff;}
           100% 완벽한 차가 아니라, <strong>가장 합리적이고 안전한 선택지</strong>를 찾는 것입니다.
         </div>
       </div>
-      <div class="scroll-hint" style="color:#0F172A;position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="color:#0F172A;margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 7: 솔직한 고백 -->
-    <div class="ls ls-yellow" id="ls6" style="background-image:url('https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,251,235,0.88) 0%, rgba(255,251,235,0.75) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-white" id="ls6">
+      <div class="fade-up">
         <div class="ls-chip">솔직하게 말씀드리면</div>
         <div class="ls-heading">아직 저를<br/>먼저 찾아주시는 분이<br/><em>많지 않습니다.</em></div>
         <div class="ls-body">
@@ -816,15 +793,14 @@ footer strong{color:#fff;}
           정직하게 제 몫을 벌면서, 고객님께 좋은 차를 찾아드릴 수 있다면 얼마나 좋을까 늘 생각하며 일하고 있습니다.
         </div>
       </div>
-      <div class="scroll-hint" style="color:#92400e;position:relative;z-index:1;margin-top:128px;">
+      <div class="scroll-hint" style="margin-top:128px;">
         <div class="scroll-hint-text">SCROLL</div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
       </div>
     </div>
 
     <!-- 섹션 8: CTA -->
-    <div class="ls ls-teal" id="ls7" style="background-image:url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1600&q=80&fit=crop');background-size:cover;background-position:center;position:relative;">
-      <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(29,158,117,0.88) 0%, rgba(15,110,86,0.80) 100%);z-index:0;"></div>
-      <div class="fade-up" style="position:relative;z-index:1;">
+    <div class="ls ls-teal" id="ls7">
+      <div class="fade-up">
         <div class="ls-chip">함께 고민해요</div>
         <div class="ls-heading">제가 겪었던<br/>실패를 고객님은<br/><em>겪지 않도록.</em></div>
         <div class="ls-body">
