@@ -14,13 +14,71 @@ html{scroll-behavior:smooth;}
 body{font-family:'Noto Sans KR',sans-serif;background:#F8FAFC;color:#0F172A;font-size:14px;}
 
 /* ━━━ 라이트 미니멀 오버라이드 ━━━ */
-.card{background:#fff;border:1px solid #E2E8F0;border-radius:14px;box-shadow:0 2px 8px rgba(15,23,42,0.06);transition:box-shadow 0.2s,transform 0.2s;}
-.card:hover{box-shadow:0 8px 24px rgba(15,23,42,0.1);transform:translateY(-2px);}
+/* ━━━ 전체 리디자인 오버라이드 ━━━ */
+
+/* 카드: 이미지 비율 4:3, 라운딩 강화 */
+.card{background:#fff;border:1px solid #E8ECF2;border-radius:16px;box-shadow:0 1px 4px rgba(15,23,42,0.05);transition:box-shadow 0.2s,transform 0.2s;overflow:hidden;}
+.card:hover{box-shadow:0 8px 28px rgba(15,23,42,0.12);transform:translateY(-3px);}
+.card-img-wrap{position:relative;width:100%;padding-top:66%;height:0 !important;background:#F1F5F9;overflow:hidden;cursor:pointer;}
+.card-img-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 0.3s;}
+.card:hover .card-img-wrap img{transform:scale(1.04);}
+.no-img{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#CBD5E1;}
+.card-body{padding:14px 14px 12px;}
+.dealer-nm{font-size:11px;color:#94A3B8;font-weight:600;margin-bottom:4px;}
+.car-nm{font-size:15px;font-weight:800;color:#0F172A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;letter-spacing:-0.3px;}
+.car-spec{font-size:12px;color:#94A3B8;margin-bottom:8px;}
+.car-price{font-size:20px;font-weight:900;color:#1E3A8A;margin-bottom:8px;letter-spacing:-0.5px;}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;}
+.card-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;}
+.act-btn{padding:9px 4px;font-size:12px;font-weight:700;border-radius:9px;cursor:pointer;font-family:inherit;text-align:center;border:none;transition:all 0.15s;}
+.act-kakao{background:#FEE500;color:#391B1B;}
+.act-kakao:hover{background:#f5db00;}
+.act-call{background:#F1F5F9;color:#334155;}
+.act-call:hover{background:#E2E8F0;}
+
+/* 딜러 프로필: 컴팩트하게 */
+.dealer-profile{background:#fff;border-bottom:1px solid #E8ECF2;padding:10px 20px;}
+.dp-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.dp-avatar{width:40px;height:40px;border-radius:50%;background:#1E3A8A;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;}
+.dp-name{font-size:14px;font-weight:900;color:#0F172A;}
+.dp-name span{color:#1E3A8A;}
+.dp-title{font-size:11px;color:#94A3B8;margin-top:1px;}
+.dp-badges{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;}
+.dp-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;}
+.dp-actions{display:flex;gap:6px;margin-left:auto;}
+.dp-action-btn{display:flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+
+/* 탭: 토스 스타일 배경 선택 */
+.tab-nav{background:#fff;border-bottom:1px solid #E8ECF2;position:sticky;top:56px;z-index:100;}
+.tab-nav-inner{max-width:1280px;margin:0 auto;display:flex;padding:0 16px;gap:4px;}
+.tab-item{padding:12px 16px;font-size:13px;font-weight:600;color:#94A3B8;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all 0.15s;}
+.tab-item.active{color:#1E3A8A;border-bottom-color:#1E3A8A;font-weight:800;}
+.tab-item:hover:not(.active){color:#475569;}
+
+/* 정렬 버튼 */
+.sort-btn{padding:6px 12px;font-size:12px;border:1.5px solid #E2E8F0;border-radius:20px;background:#fff;cursor:pointer;color:#64748B;font-family:inherit;font-weight:600;transition:all 0.15s;}
+.sort-btn.active{border-color:#1E3A8A;color:#1E3A8A;background:#EFF6FF;font-weight:800;}
+.sort-btn:hover:not(.active){border-color:#94A3B8;color:#334155;}
+
+/* 빈 상태 */
+.empty-state{text-align:center;padding:60px 20px;color:#94A3B8;grid-column:1/-1;}
+.empty-state svg{width:48px;height:48px;margin:0 auto 16px;display:block;opacity:0.3;}
+.empty-state p{font-size:15px;font-weight:700;color:#64748B;margin-bottom:6px;}
+.empty-state small{font-size:13px;color:#94A3B8;}
+
+/* 통계 바 */
+.stat{background:#fff;padding:10px 0;flex:1;text-align:center;}
+.stat-n{font-size:18px;font-weight:800;color:#1E3A8A;letter-spacing:-0.5px;}
+.stat-l{font-size:10px;color:#94A3B8;margin-top:2px;font-weight:600;}
+
+/* 필터 칩 스타일 (모바일 가로 스크롤) */
+.filter-chips{display:flex;gap:8px;overflow-x:auto;padding:10px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;background:#fff;border-bottom:1px solid #E8ECF2;}
+.filter-chips::-webkit-scrollbar{display:none;}
+.filter-chip{flex-shrink:0;padding:7px 14px;border:1.5px solid #E2E8F0;border-radius:20px;font-size:12px;font-weight:700;background:#fff;color:#64748B;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.15s;}
+.filter-chip.active{background:#1E3A8A;border-color:#1E3A8A;color:#fff;}
+
 .about-card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;box-shadow:0 2px 8px rgba(15,23,42,0.05);}
-.hdr{background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #E2E8F0;}
-.tabs{background:#fff;border-bottom:1px solid #E2E8F0;}
-.tab-item.active{border-bottom:2px solid #1E3A8A;color:#1E3A8A;}
-.dealer-profile{background:#fff;border-bottom:1px solid #E2E8F0;}
+.hdr{background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid #E8ECF2;}
 .stat-block{background:#fff;border:1px solid #E2E8F0;}
 footer{background:#0F172A;color:#94A3B8;}
 
@@ -962,6 +1020,16 @@ footer strong{color:#fff;}
         </div>
       </div>
 
+      <!-- 모바일 필터 칩 -->
+      <div class="filter-chips" id="filterChips" style="display:none;">
+        <button class="filter-chip active" onclick="resetFilters()">전체</button>
+        <button class="filter-chip" onclick="setAccidentFilter('완전무사고')">완전무사고</button>
+        <button class="filter-chip" onclick="setAccidentFilter('무사고')">무사고</button>
+        <button class="filter-chip" onclick="setAccidentFilter('사고')">사고</button>
+        <button class="filter-chip" id="chipOwn" onclick="toggleChipFilter('fOwn','chipOwn')">직접매입</button>
+        <button class="filter-chip" id="chipPhoto" onclick="toggleChipFilter('fHasPhoto','chipPhoto')">사진있음</button>
+      </div>
+
       <!-- 결과바 -->
       <div class="result-bar">
         <div class="result-count">총 <strong id="countNum">0</strong>대</div>
@@ -976,8 +1044,8 @@ footer strong{color:#fff;}
       <div class="cards" id="cardsWrap">
         <div class="empty-state">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
-          <p style="font-size:13px;margin-bottom:4px;">등록된 매물이 없어요</p>
-          <small>매물을 등록하거나 샘플을 불러오세요</small>
+          <p>매물을 불러오는 중이에요</p>
+          <small>잠시만 기다려주세요</small>
         </div>
       </div>
     </main>
@@ -1835,8 +1903,30 @@ function resetFilters(){
   ['priceMin','priceMax','searchInput'].forEach(id=>document.getElementById(id).value='');
   ['fHasPhoto','fOwn','fAlson'].forEach(id=>document.getElementById(id).checked=false);
   document.getElementById('fAccident').value='';
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  const all=document.querySelector('.filter-chip');
+  if(all)all.classList.add('active');
   renderCars();
 }
+function setAccidentFilter(val){
+  document.getElementById('fAccident').value=val;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  event.target.classList.add('active');
+  renderCars();
+}
+function toggleChipFilter(checkId, chipId){
+  const cb=document.getElementById(checkId);
+  cb.checked=!cb.checked;
+  document.getElementById(chipId).classList.toggle('active',cb.checked);
+  renderCars();
+}
+// 모바일에서 필터 칩 표시
+function updateFilterChipsVisibility(){
+  const chips=document.getElementById('filterChips');
+  if(chips)chips.style.display=window.innerWidth<=768?'flex':'none';
+}
+window.addEventListener('resize',updateFilterChipsVisibility);
+updateFilterChipsVisibility();
 
 
 
