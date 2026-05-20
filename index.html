@@ -2033,7 +2033,8 @@ function renderCars(){
     const isWished=wishes.has(c.id);
     const hasImg=c.photos&&c.photos.length>0;
     const noteArr=c.notes?c.notes.split('·').filter(Boolean):[];
-    const tagHtml=noteArr.map(n=>`<span class="tag ${n==='완전무사고'?'tag-green':n==='무사고'?'tag-green':n==='사고'?'tag-red':n==='법인차'?'tag-blue':n==='단순손상'?'tag-orange':'tag-gray'}">${n}</span>`).join('');
+    const accidentVal=['완전무사고','무사고','사고'].find(a=>noteArr.includes(a))||'';
+    const accidentTag=accidentVal?`<span class="tag ${accidentVal==='완전무사고'||accidentVal==='무사고'?'tag-green':'tag-red'}">${accidentVal}</span>`:'';
     const typeBadge=isOwn?'<div class="badge-own">직접매입</div>':'<div class="badge-alson">알선</div>';
 
     return `<div class="card" onclick="openDetailModal('${c.id}')">
@@ -2049,16 +2050,12 @@ function renderCars(){
         <input type="file" id="qi_${c.id}" accept="image/*" multiple style="display:none" onchange="quickPhoto(event,'${c.id}')"/>
       </div>
       <div class="card-body">
-        <div class="dealer-nm">${c.dealer||'나이스모터스'} ${isOwn?'· 직접매입':'· 알선'}</div>
-        <div class="car-nm">${c.name}${c.color?' '+c.color:''}</div>
-        <div class="car-spec">${c.year||'연식미상'}${c.km?' · '+c.km:''}</div>
         <div class="car-price">${c.price||'가격문의'}</div>
-        ${miniInfoHtml(c)?`<div class="car-info-mini">${miniInfoHtml(c)}</div>`:''}
-        ${tagHtml?`<div class="card-tags">${tagHtml}</div>`:''}
-        <div class="car-insight">${dealerInsight(c)}</div>
-        ${c.extra?`<div class="car-extra">${c.extra}</div>`:''}
-        <div class="card-actions">
-          <button class="act-btn act-kakao" onclick="event.stopPropagation();kakaoContact('${c.phone||''}','${c.name}','${c.price||''}')">차량상담</button>
+        <div class="car-nm">${c.name}${c.color?' · '+c.color:''}</div>
+        <div class="car-spec">${c.year||''}${c.km?' · '+c.km:''}</div>
+        ${accidentTag?`<div style="margin-top:6px;">${accidentTag}</div>`:''}
+        <div class="card-actions" style="margin-top:10px;">
+          <button class="act-btn act-kakao" onclick="event.stopPropagation();kakaoContact('${c.phone||''}','${c.name}','${c.price||''}')">상담</button>
           <button class="act-btn act-call" onclick="event.stopPropagation();callContact('${c.phone||''}')">📞 전화</button>
           <button class="act-btn act-edit admin-only" onclick="event.stopPropagation();openEditModal('${c.id}')">수정</button>
           <button class="act-btn act-del admin-only" onclick="event.stopPropagation();deleteCar('${c.id}')">삭제</button>
