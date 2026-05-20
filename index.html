@@ -199,15 +199,40 @@ footer{background:#0F172A;color:#94A3B8;}
 /* 헤더 고정 */
 .landing-fixed-hdr{
   position:fixed;top:0;left:0;right:0;z-index:500;
-  background:rgba(10,10,10,0.85);backdrop-filter:blur(12px);
-  padding:12px 24px;display:flex;align-items:center;justify-content:space-between;
+  background:transparent;
+  padding:20px 28px;display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.3s;
 }
-.landing-fixed-hdr .lh-logo{display:flex;align-items:center;gap:8px;}
-.landing-fixed-hdr .lh-mark{width:32px;height:32px;background:#1E3A8A;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.landing-fixed-hdr.scrolled{background:rgba(8,12,30,0.92);backdrop-filter:blur(16px);}
+.landing-fixed-hdr .lh-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.landing-fixed-hdr .lh-mark{width:34px;height:34px;background:#1E3A8A;border-radius:8px;display:flex;align-items:center;justify-content:center;}
 .landing-fixed-hdr .lh-mark svg{width:18px;height:18px;fill:#fff;}
-.landing-fixed-hdr .lh-name{font-size:14px;font-weight:900;color:#fff;}
+.landing-fixed-hdr .lh-name{font-size:15px;font-weight:900;color:#fff;letter-spacing:-0.3px;}
 .landing-fixed-hdr .lh-name span{color:#93C5FD;}
-.lh-skip{padding:7px 16px;background:#1E3A8A;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+.lh-hamburger{background:none;border:none;cursor:pointer;padding:4px;display:flex;flex-direction:column;gap:5px;}
+.lh-hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all 0.2s;}
+
+/* 햄버거 메뉴 드로어 */
+.lh-drawer{
+  position:fixed;top:0;right:-100%;width:260px;height:100vh;
+  background:#fff;z-index:600;
+  box-shadow:-4px 0 24px rgba(0,0,0,0.15);
+  transition:right 0.3s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;
+}
+.lh-drawer.open{right:0;}
+.lh-drawer-header{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #F1F5F9;}
+.lh-drawer-logo{font-size:16px;font-weight:900;color:#0F172A;}
+.lh-drawer-logo span{color:#1E3A8A;}
+.lh-drawer-close{background:none;border:none;cursor:pointer;font-size:20px;color:#64748B;padding:4px;}
+.lh-drawer-menu{flex:1;padding:16px 0;}
+.lh-drawer-item{display:block;width:100%;padding:14px 24px;text-align:left;background:none;border:none;font-size:15px;font-weight:700;color:#0F172A;cursor:pointer;font-family:inherit;transition:background 0.1s;}
+.lh-drawer-item:hover{background:#F8FAFC;}
+.lh-drawer-item.primary{color:#1E3A8A;}
+.lh-drawer-footer{padding:20px 24px;border-top:1px solid #F1F5F9;}
+.lh-drawer-kakao{width:100%;padding:14px;background:#FEE500;color:#391B1B;border:none;border-radius:10px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;}
+.lh-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:599;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.lh-overlay.open{opacity:1;pointer-events:all;}
 
 /* 구분선 */
 .ls-divider{width:40px;height:3px;background:currentColor;opacity:0.3;margin:20px 0;}
@@ -622,16 +647,35 @@ footer strong{color:#fff;}
 <div id="landing-page">
 
   <!-- 고정 헤더 -->
-  <div class="landing-fixed-hdr">
-    <div class="lh-logo">
+  <div class="landing-fixed-hdr" id="landingHdr">
+    <a class="lh-logo" href="#">
       <div class="lh-mark">
         <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/><circle cx="7.5" cy="14.5" r="1.5"/><circle cx="16.5" cy="14.5" r="1.5"/></svg>
       </div>
       <div class="lh-name">나이스<span>모터스</span></div>
+    </a>
+    <button class="lh-hamburger" onclick="openDrawer()" aria-label="메뉴">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <!-- 드로어 오버레이 -->
+  <div class="lh-overlay" id="lhOverlay" onclick="closeDrawer()"></div>
+
+  <!-- 드로어 메뉴 -->
+  <div class="lh-drawer" id="lhDrawer">
+    <div class="lh-drawer-header">
+      <div class="lh-drawer-logo">나이스<span>모터스</span></div>
+      <button class="lh-drawer-close" onclick="closeDrawer()">✕</button>
     </div>
-    <div style="display:flex;gap:8px;">
-      <button class="lh-skip" onclick="enterSite('recommend')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.4);">차량 추천받기 ✨</button>
-      <button class="lh-skip" onclick="enterSite('cars')">매물보기 →</button>
+    <nav class="lh-drawer-menu">
+      <button class="lh-drawer-item primary" onclick="closeDrawer();enterSite('cars')">🚗 매물 보기</button>
+      <button class="lh-drawer-item primary" onclick="closeDrawer();enterSite('recommend')">✨ 차량 추천받기</button>
+      <button class="lh-drawer-item" onclick="closeDrawer();enterSite('buy')">💰 내 차 팔기</button>
+      <button class="lh-drawer-item" onclick="closeDrawer();enterSite('about')">👤 딜러 소개</button>
+    </nav>
+    <div class="lh-drawer-footer">
+      <button class="lh-drawer-kakao" onclick="closeDrawer();goKakao()">카카오톡으로 바로 상담하기</button>
     </div>
   </div>
 
@@ -1382,6 +1426,25 @@ function enterSite(tab){
 }
 
 // 도트 네비 초기화
+function openDrawer(){
+  document.getElementById('lhDrawer').classList.add('open');
+  document.getElementById('lhOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDrawer(){
+  document.getElementById('lhDrawer').classList.remove('open');
+  document.getElementById('lhOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// 스크롤 시 헤더 배경 처리
+window.addEventListener('scroll',()=>{
+  const hdr=document.getElementById('landingHdr');
+  if(!hdr)return;
+  if(window.scrollY>60)hdr.classList.add('scrolled');
+  else hdr.classList.remove('scrolled');
+},{passive:true});
+
 function initLanding(){
   const wrap = document.getElementById('landingWrap');
   const sections = wrap.querySelectorAll('.ls');
