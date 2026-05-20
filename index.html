@@ -600,6 +600,8 @@ footer strong{color:#fff;}
 .admin-only{display:none!important;}
 .admin-active .admin-only{display:flex!important;}
 .admin-active .admin-only.about-card{display:block!important;}
+.admin-active .tab-item.admin-only{display:block!important;}
+.admin-active .section.admin-only{display:block!important;}
 .admin-active .admin-lock{display:block;}
 
 .admin-login-wrap{
@@ -952,6 +954,7 @@ footer strong{color:#fff;}
     <div class="tab-item" id="tab-recommend" onclick="showTab('recommend')">차량 추천 받기</div>
     <div class="tab-item" id="tab-buy" onclick="showTab('buy')">내 차 팔기 (매입)</div>
     <div class="tab-item" id="tab-about" onclick="showTab('about')">딜러 소개</div>
+    <div class="tab-item admin-only" id="tab-dashboard" onclick="showTab('dashboard')" style="display:none!important;color:#1E3A8A;">⚡ 대시보드</div>
   </div>
 </nav>
 
@@ -1049,6 +1052,58 @@ footer strong{color:#fff;}
         </div>
       </div>
     </main>
+  </div>
+</div>
+
+<!-- ━━━ 섹션: 딜러 대시보드 ━━━ -->
+<div class="section admin-only" id="sec-dashboard" style="display:none!important;">
+  <div style="max-width:860px;margin:0 auto;padding:24px 16px;">
+
+    <!-- 오늘 통계 -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px;">
+      <div style="background:#fff;border:1px solid #E8ECF2;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#1E3A8A;" id="dashTotal">-</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:4px;font-weight:600;">전체 매물</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E8ECF2;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#1E3A8A;" id="dashToday">-</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:4px;font-weight:600;">오늘 등록</div>
+      </div>
+      <div style="background:#fff;border:1px solid #E8ECF2;border-radius:14px;padding:20px;text-align:center;">
+        <div style="font-size:28px;font-weight:900;color:#1E3A8A;" id="dashPhoto">-</div>
+        <div style="font-size:12px;color:#94A3B8;margin-top:4px;font-weight:600;">사진 있음</div>
+      </div>
+    </div>
+
+    <!-- 붙여넣기 영역 -->
+    <div style="background:#fff;border:1px solid #E8ECF2;border-radius:16px;padding:24px;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div>
+          <div style="font-size:16px;font-weight:900;color:#0F172A;">밴드 게시글 가져오기</div>
+          <div style="font-size:12px;color:#94A3B8;margin-top:3px;">여러 건을 한번에 붙여넣으면 자동으로 분리해서 파싱합니다</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button onclick="loadBandSample()" style="padding:7px 14px;border:1.5px solid #E2E8F0;border-radius:8px;background:#fff;font-size:12px;font-weight:700;cursor:pointer;color:#64748B;font-family:inherit;">샘플 보기</button>
+        </div>
+      </div>
+      <textarea id="dashPasteInput" placeholder="밴드 게시글을 그대로 붙여넣으세요. ▶ 또는 ★ 형식 모두 인식합니다.
+여러 건은 ▶차량번호 또는 ★차량종류 기준으로 자동 분리됩니다." style="width:100%;min-height:160px;padding:14px;border:1.5px solid #E2E8F0;border-radius:10px;font-size:13px;font-family:inherit;resize:vertical;outline:none;line-height:1.7;color:#334155;" oninput="this.style.borderColor='#1E3A8A';" onblur="this.style.borderColor='#E2E8F0';"></textarea>
+      <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+        <button onclick="clearDashPaste()" style="padding:10px 20px;border:1.5px solid #E2E8F0;border-radius:10px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;color:#64748B;font-family:inherit;">초기화</button>
+        <button onclick="parseDashboard()" style="padding:10px 24px;background:#1E3A8A;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">파싱하기 →</button>
+      </div>
+      <div id="dashParseErr" style="font-size:12px;color:#e74c3c;margin-top:8px;"></div>
+    </div>
+
+    <!-- 파싱 결과 -->
+    <div id="dashPreviewWrap" style="display:none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:15px;font-weight:900;color:#0F172A;"><span id="dashParsedCount">0</span>건 파싱됨 — 확인 후 등록하세요</div>
+        <button onclick="saveAllDash()" id="dashSaveBtn" style="padding:10px 24px;background:#1E3A8A;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;">전체 등록하기</button>
+      </div>
+      <div id="dashCards" style="display:flex;flex-direction:column;gap:10px;"></div>
+    </div>
+
   </div>
 </div>
 
@@ -1888,6 +1943,109 @@ function updateStats(){
   document.getElementById('statOwn').textContent=cars.filter(c=>c.carType==='own').length;
   document.getElementById('statAlson').textContent=cars.filter(c=>c.carType==='alson').length;
   document.getElementById('statWish').textContent=wishes.size;
+  // 대시보드 통계
+  const dt=document.getElementById('dashTotal');
+  const dtoday=document.getElementById('dashToday');
+  const dp=document.getElementById('dashPhoto');
+  if(dt)dt.textContent=cars.length;
+  if(dtoday)dtoday.textContent=cars.filter(c=>c.regDate===todayKey).length;
+  if(dp)dp.textContent=cars.filter(c=>c.photos&&c.photos.length>0).length;
+}
+
+/* ━━━ 딜러 대시보드 ━━━ */
+let dashParsed = [];
+
+function clearDashPaste(){
+  document.getElementById('dashPasteInput').value='';
+  document.getElementById('dashParseErr').textContent='';
+  document.getElementById('dashPreviewWrap').style.display='none';
+  dashParsed=[];
+}
+
+async function parseDashboard(){
+  if(!isAdmin()){alert('관리자 로그인이 필요합니다.');return;}
+  const txt=document.getElementById('dashPasteInput').value.trim();
+  const err=document.getElementById('dashParseErr');
+  if(!txt){err.textContent='게시글을 붙여넣어 주세요.';return;}
+  err.textContent='';
+
+  let parsed=[];
+  if(isStructured(txt)){
+    let blocks=/▶\s*차량번호/.test(txt)?txt.split(/(?=▶\s*차량번호)/):txt.split(/(?=★\s*차량종류)/);
+    parsed=blocks.map(b=>b.trim()).filter(Boolean).map(b=>isStructured(b)?parseStructured(b):parseLine(b)).filter(Boolean);
+    if(!parsed.length){const s=parseStructured(txt)||parseLine(txt);if(s)parsed=[s];}
+  }else{
+    parsed=txt.split('\n').filter(l=>l.trim()).map(parseLine).filter(Boolean);
+  }
+  if(!parsed.length){err.textContent='인식된 매물이 없어요. 형식을 확인해주세요.';return;}
+
+  dashParsed=parsed;
+  renderDashCards();
+}
+
+function renderDashCards(){
+  const wrap=document.getElementById('dashCards');
+  const countEl=document.getElementById('dashParsedCount');
+  document.getElementById('dashPreviewWrap').style.display='block';
+  countEl.textContent=dashParsed.length;
+
+  wrap.innerHTML=dashParsed.map((c,i)=>`
+    <div style="background:#fff;border:1.5px solid #E8ECF2;border-radius:14px;padding:18px 20px;position:relative;" id="dashCard${i}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:#1E3A8A;">매물 ${i+1}</div>
+        <button onclick="removeDashCard(${i})" style="background:none;border:none;font-size:13px;color:#CBD5E1;cursor:pointer;padding:2px 6px;border-radius:6px;" title="제외">✕ 제외</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">차량명</label>
+          <input value="${c.name||''}" onchange="dashParsed[${i}].name=this.value" style="${inputStyle}" placeholder="차량명"/></div>
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">가격</label>
+          <input value="${c.price||''}" onchange="dashParsed[${i}].price=this.value" style="${inputStyle}" placeholder="1200만원"/></div>
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">연식</label>
+          <input value="${c.year||''}" onchange="dashParsed[${i}].year=this.value" style="${inputStyle}" placeholder="2021년식"/></div>
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">주행거리</label>
+          <input value="${c.km||''}" onchange="dashParsed[${i}].km=this.value" style="${inputStyle}" placeholder="6만km"/></div>
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">색상</label>
+          <input value="${c.color||''}" onchange="dashParsed[${i}].color=this.value" style="${inputStyle}" placeholder="흰색"/></div>
+        <div><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">연락처</label>
+          <input value="${c.phone||''}" onchange="dashParsed[${i}].phone=this.value" style="${inputStyle}" placeholder="010-0000-0000"/></div>
+        <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:700;color:#94A3B8;display:block;margin-bottom:4px;">사고유무</label>
+          <select onchange="dashParsed[${i}].notes=this.value+(dashParsed[${i}].notes||'').replace(/완전무사고|무사고|사고/g,'').replace(/^·/,'').replace(/·$/,'')" style="${inputStyle}">
+            <option value="">선택안함</option>
+            <option value="완전무사고" ${(c.notes||'').includes('완전무사고')?'selected':''}>완전무사고</option>
+            <option value="무사고" ${(c.notes||'').includes('무사고')&&!(c.notes||'').includes('완전무사고')?'selected':''}>무사고</option>
+            <option value="사고" ${(c.notes||'').includes('사고')&&!(c.notes||'').includes('무사고')?'selected':''}>사고</option>
+          </select></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+const inputStyle='width:100%;padding:8px 10px;border:1.5px solid #E2E8F0;border-radius:8px;font-size:13px;font-family:inherit;outline:none;color:#334155;';
+
+function removeDashCard(i){
+  dashParsed.splice(i,1);
+  if(dashParsed.length===0){document.getElementById('dashPreviewWrap').style.display='none';}
+  else renderDashCards();
+}
+
+async function saveAllDash(){
+  if(!isAdmin()){alert('관리자 로그인이 필요합니다.');return;}
+  if(!dashParsed.length)return;
+  const btn=document.getElementById('dashSaveBtn');
+  btn.textContent='저장 중...';btn.disabled=true;
+  let saved=0;
+  for(const car of dashParsed){
+    const ok=await saveCarToDB(car);
+    if(ok){cars.unshift(car);todayCount++;saved++;}
+  }
+  localStorage.setItem('nm_today_'+todayKey,todayCount);
+  save();updateTypeFilter();renderCars();updateStats();
+  btn.textContent='전체 등록하기';btn.disabled=false;
+  document.getElementById('dashPasteInput').value='';
+  document.getElementById('dashPreviewWrap').style.display='none';
+  dashParsed=[];
+  alert(`✅ ${saved}건이 등록됐습니다!`);
+  showTab('cars');
 }
 
 function updateTypeFilter(){
