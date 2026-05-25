@@ -64,14 +64,31 @@
       font-weight: 900;
     }
 
-    .step-counter {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 0.05em;
+    .step-dots {
+      display: none;
+      align-items: center;
+      gap: 6px;
     }
 
-    .step-counter span { color: var(--blue); }
+    .step-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .step-dot.done {
+      background: var(--blue);
+      opacity: 0.35;
+    }
+
+    .step-dot.active {
+      background: var(--blue);
+      opacity: 1;
+      width: 20px;
+      border-radius: 4px;
+    }
 
     /* ── 프로그레스 바 ── */
     .progress-bar {
@@ -998,7 +1015,14 @@
     <a href="/" class="logo">나이스모터스</a>
     <div style="display:flex;align-items:center;gap:12px">
       <a href="tel:01045619599" class="call-btn">📞 <span>010-4561-9599</span></a>
-      <div class="step-counter" id="stepCounter" style="display:none"><span id="stepCurrent">1</span> / 6</div>
+      <div class="step-dots" id="stepDots">
+        <div class="step-dot" data-dot="1"></div>
+        <div class="step-dot" data-dot="2"></div>
+        <div class="step-dot" data-dot="3"></div>
+        <div class="step-dot" data-dot="4"></div>
+        <div class="step-dot" data-dot="5"></div>
+        <div class="step-dot" data-dot="6"></div>
+      </div>
     </div>
   </header>
 
@@ -1307,12 +1331,18 @@
     function updateProgress() {
       const pct = currentStep === 0 ? 0 : Math.round((currentStep / totalSteps) * 100);
       $("progressFill").style.width = pct + "%";
-      const counter = $("stepCounter");
+
+      const dots = $("stepDots");
       if (currentStep === 0 || currentStep > totalSteps) {
-        counter.style.display = "none";
+        dots.style.display = "none";
       } else {
-        counter.style.display = "block";
-        $("stepCurrent").textContent = currentStep;
+        dots.style.display = "flex";
+        dots.querySelectorAll(".step-dot").forEach(dot => {
+          const n = parseInt(dot.dataset.dot);
+          dot.classList.remove("active", "done");
+          if (n === currentStep) dot.classList.add("active");
+          else if (n < currentStep) dot.classList.add("done");
+        });
       }
     }
 
