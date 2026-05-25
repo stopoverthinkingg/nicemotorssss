@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중고차 골라드립니다 | 청주 나이스모터스</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --blue: #2563EB;
+      --blue-dark: #1d4ed8;
+      --blue-pale: #eff6ff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Pretendard", -apple-system, sans-serif;
+      background: #fff;
+      color: #0a0a0a;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    /* ══ 스크롤 페이드인 ════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+
+    /* ══ 헤더 ════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      mix-blend-mode: normal;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .nav.scrolled {
+      background: rgba(255,255,255,0.92);
+      border-bottom: 1px solid #e4e4e7;
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: #fff;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav.scrolled .nav-logo { color: #0a0a0a; }
+
+    .nav-logo-mark {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .nav-actions { display: flex; gap: 8px; }
+
+    .nav-btn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.outline {
+      background: transparent;
+      color: rgba(255,255,255,0.8);
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .nav-btn.outline:hover { background: rgba(255,255,255,0.1); }
+
+    .nav.scrolled .nav-btn.outline {
+      color: #3f3f46;
+      border-color: #e4e4e7;
+    }
+    .nav.scrolled .nav-btn.outline:hover { background: #fafafa; }
+
+    .nav-btn.solid { background: var(--blue); color: #fff; }
+    .nav-btn.solid:hover { background: var(--blue-dark); }
+
+    /* ══ 히어로 ════════════════════════════ */
+    .hero {
+      min-height: 100svh;
+      background: #0a0a0a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 28px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 배경 그리드 */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 40%, transparent 100%);
+    }
+
+    /* 블루 글로우 */
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 600px; height: 300px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      background: radial-gradient(ellipse, rgba(37,99,235,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 860px; }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(37,99,235,0.5);
+      background: rgba(37,99,235,0.12);
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 40px;
+    }
+
+    .hero-tag::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #60a5fa;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%,100% { opacity:1; } 50% { opacity:0.3; }
+    }
+
+    .hero-h1 {
+      font-size: clamp(48px, 8vw, 100px);
+      font-weight: 900;
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      color: #fff;
+      word-break: keep-all;
+      margin-bottom: 28px;
+    }
+
+    .hero-h1 .blue { color: var(--blue); }
+
+    .hero-sub {
+      font-size: clamp(16px, 1.8vw, 20px);
+      color: rgba(255,255,255,0.48);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 44px;
+      word-break: keep-all;
+    }
+
+    .hero-sub strong { color: rgba(255,255,255,0.8); font-weight: 600; }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero-primary {
+      height: 52px;
+      padding: 0 28px;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.01em;
+      transition: all 0.2s;
+      box-shadow: 0 0 32px rgba(37,99,235,0.4);
+    }
+
+    .btn-hero-primary:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 40px rgba(37,99,235,0.5);
+    }
+
+    .btn-hero-ghost {
+      height: 52px;
+      padding: 0 24px;
+      border-radius: 10px;
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      font-size: 15px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.18);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-hero-ghost:hover {
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.25);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+      animation: scrolldown 2s ease-in-out infinite;
+    }
+
+    @keyframes scrolldown {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+    }
+
+    /* ══ 이유 섹션 ════════════════════════════ */
+    .why-section {
+      padding: 120px 36px;
+      background: #fff;
+      border-bottom: 1px solid #e4e4e7;
+    }
+
+    .why-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .why-left { position: sticky; top: 80px; }
+
+    .section-eyebrow {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .why-title {
+      font-size: clamp(32px, 3vw, 44px);
+      font-weight: 900;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      word-break: keep-all;
+    }
+
+    .why-title em {
+      font-style: normal;
+      color: var(--blue);
+    }
+
+    .why-desc {
+      margin-top: 16px;
+      font-size: 15px;
+      line-height: 1.75;
+      color: #71717a;
+      word-break: keep-all;
+    }
+
+    .why-list { display: grid; gap: 0; }
+
+    .why-item {
+      padding: 36px 0;
+      border-bottom: 1px solid #e4e4e7;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .why-item:first-child { padding-top: 0; }
+    .why-item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+    .why-num {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--blue);
+      letter-spacing: 0.02em;
+      padding-top: 4px;
+    }
+
+    .why-item h3 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0a0a0a;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .why-item p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #71717a;
+      word-break: keep-all;
+    }
+
+    /* ══ 인용구 섹션 ════════════════════════ */
+    .quote-section {
+      background: #0a0a0a;
+      padding: 120px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-section::before {
+      content: "";
+      position: absolute;
+      width: 800px; height: 400px;
+      top: 50%; left: 30%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(37,99,235,0.15) 0%, transparent 70%);
+    }
+
+    .quote-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quote-mark-big {
+      font-size: 120px;
+      line-height: 0.7;
+      color: var(--blue);
+      font-weight: 900;
+      margin-bottom: 24px;
+      display: block;
+      opacity: 0.7;
+    }
+
+    .quote-main {
+      font-size: clamp(26px, 3.5vw, 42px);
+      font-weight: 800;
+      line-height: 1.4;
+      letter-spacing: -0.025em;
+      color: #fff;
+      word-break: keep-all;
+      margin-bottom: 28px;
+    }
+
+    .quote-sub {
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.45);
+      max-width: 560px;
+      word-break: keep-all;
+    }
+
+    .quote-author {
+      margin-top: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .author-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .author-title {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ══ 폼 섹션 ════════════════════════════ */
+    .form-section {
+      padding: 120px 36px;
+      background: #fafafa;
+    }
+
+    .form-section-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-header { text-align: center; margin-bottom: 48px; }
+
+    .form-title {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      word-break: keep-all;
+    }
+
+    .form-title em { font-style: normal; color: var(--blue); }
+
+    .form-subtitle {
+      font-size: 16px;
+      color: #71717a;
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    .form-card {
+      background: #fff;
+      border: 1.5px solid #e4e4e7;
+      border-radius: 20px;
+      padding: 36px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.03), 0 24px 60px rgba(0,0,0,0.07);
+    }
+
+    .form-row { display: grid; gap: 6px; margin-bottom: 14px; }
+    .form-row:last-of-type { margin-bottom: 0; }
+
+    .field-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #3f3f46;
+      letter-spacing: 0.02em;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1.5px solid #e4e4e7;
+      border-radius: 10px;
+      background: #fff;
+      color: #0a0a0a;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input, select { height: 46px; padding: 0 14px; }
+
+    textarea {
+      min-height: 88px;
+      padding: 12px 14px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+
+    .form-divider {
+      height: 1px;
+      background: #e4e4e7;
+      margin: 20px 0;
+    }
+
+    .form-submit {
+      width: 100%;
+      height: 54px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      border: 0;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: all 0.2s;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.28);
+      margin-top: 20px;
+    }
+
+    .form-submit:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(37,99,235,0.36);
+    }
+
+    .form-guide {
+      margin-top: 14px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      background: #f4f4f5;
+      font-size: 13px;
+      color: #71717a;
+      line-height: 1.65;
+    }
+
+    .form-guide strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #3f3f46;
+      font-weight: 700;
+    }
+
+    .form-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #a1a1aa;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .form-error {
+      min-height: 16px;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #dc2626;
+    }
+
+    /* ══ 절차 섹션 ════════════════════════════ */
+    .process-section {
+      padding: 120px 36px;
+      background: #fff;
+      border-top: 1px solid #e4e4e7;
+    }
+
+    .process-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .process-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 64px;
+      flex-wrap: wrap;
+    }
+
+    .process-title {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .process-cta-link {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .process-cta-link:hover { text-decoration: underline; }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+    }
+
+    .process-grid::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #e4e4e7 20%, #e4e4e7 80%, transparent);
+    }
+
+    .process-item {
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .process-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid #e4e4e7;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .process-item.active .process-dot {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+      box-shadow: 0 0 0 6px rgba(37,99,235,0.12);
+    }
+
+    .process-item h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0a0a0a;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .process-item p {
+      font-size: 13px;
+      color: #71717a;
+      line-height: 1.65;
+      word-break: keep-all;
+    }
+
+    /* ══ 모달 ════════════════════════════════ */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(9,9,11,0.65);
+      backdrop-filter: blur(8px);
+    }
+    .modal.open { display: flex; }
+
+    .modal-box {
+      width: min(400px, 100%);
+      background: #fff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 32px 100px rgba(0,0,0,0.25);
+    }
+
+    .modal-box h2 {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+    }
+
+    .modal-box > p {
+      font-size: 13px;
+      color: #71717a;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .message-preview {
+      width: 100%;
+      max-height: 90px;
+      padding: 10px 12px;
+      border: 1.5px solid #e4e4e7;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #3f3f46;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .modal-alert {
+      margin-bottom: 12px;
+      padding: 10px 13px;
+      border-radius: 8px;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      color: #9a3412;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+      word-break: keep-all;
+    }
+
+    .modal-guide {
+      display: grid;
+      gap: 7px;
+      margin: 10px 0;
+    }
+
+    .modal-guide div {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 8px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #3f3f46;
+    }
+
+    .modal-guide b {
+      width: 24px; height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--blue-pale);
+      color: var(--blue);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-top: 14px;
+    }
+
+    .modal-btn {
+      height: 42px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .modal-btn.fill { background: var(--blue); color: #fff; }
+    .modal-btn.fill:hover { background: var(--blue-dark); }
+    .modal-btn.line { background: #fff; color: #3f3f46; border: 1.5px solid #e4e4e7; }
+    .modal-btn.line:hover { background: #fafafa; }
+
+    /* ══ 모바일 고정 ════════════════════════ */
+    .mobile-stick {
+      display: none;
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 99;
+      padding: 10px 16px 16px;
+      background: rgba(255,255,255,0.94);
+      border-top: 1px solid #e4e4e7;
+      backdrop-filter: blur(16px);
+    }
+
+    .mobile-stick a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 4px 20px rgba(37,99,235,0.3);
+    }
+
+    /* ══ 푸터 ════════════════════════════════ */
+    footer {
+      background: #09090b;
+      padding: 40px 36px 100px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-brand {
+      font-size: 14px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-brand-mark {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .footer-info {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .footer-info a { color: rgba(255,255,255,0.5); }
+
+    /* ══ 반응형 ════════════════════════════════ */
+    @media (max-width: 900px) {
+      .nav { padding: 0 20px; }
+      .nav-btn.outline:not(.solid) { display: none; }
+
+      .why-inner { grid-template-columns: 1fr; gap: 40px; }
+      .why-left { position: static; }
+
+      .process-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .process-grid::before { display: none; }
+
+      .process-header { flex-direction: column; align-items: flex-start; }
+
+      footer { flex-direction: column; text-align: center; padding-bottom: 90px; }
+      .footer-info { text-align: center; }
+
+      .mobile-stick { display: block; }
+      .modal-actions { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .why-section, .quote-section, .form-section, .process-section { padding: 80px 20px; }
+      .form-card { padding: 24px 20px; }
+      .hero { padding: 90px 20px 72px; }
+      .process-grid { grid-template-columns: 1fr; }
+      .field-pair { grid-template-columns: 1fr; }
+      footer { padding: 36px 20px 92px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <a href="/" class="nav-logo">
+      <span class="nav-logo-mark">N</span>
+      나이스모터스
+    </a>
+    <div class="nav-actions">
+      <a class="nav-btn outline" href="tel:01045619599">전화 상담</a>
+      <a class="nav-btn solid" href="#form">신청하기</a>
+    </div>
+  </nav>
+
+  <!-- 히어로 -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-tag">당근에서 오신 분 전용</div>
+      <h1 class="hero-h1 reveal">
+        중고차,<br>
+        <span class="blue">제가 골라드립니다.</span>
+      </h1>
+      <p class="hero-sub reveal reveal-d1">
+        예산과 용도만 보내주세요.<br>
+        <strong>허위매물을 피해</strong> 가격·상태·리스크가<br>현실적인 후보를 추려드립니다.
+      </p>
+      <div class="hero-buttons reveal reveal-d2">
+        <a class="btn-hero-primary" href="#form">지금 조건 보내기 →</a>
+        <a class="btn-hero-ghost" href="tel:01045619599">📞 전화 상담</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      scroll
+    </div>
+  </section>
+
+  <!-- 이유 섹션 -->
+  <section class="why-section">
+    <div class="why-inner">
+      <div class="why-left reveal">
+        <div class="section-eyebrow">Why us</div>
+        <h2 class="why-title">직접 고르면<br><em>손해봅니다.</em></h2>
+        <p class="why-desc">
+          중고차 시장은 정보 비대칭이 심합니다.<br>
+          딜러 입장에서, 솔직하게 말씀드립니다.
+        </p>
+      </div>
+      <div class="why-list">
+        <div class="why-item reveal">
+          <div class="why-num">01</div>
+          <div>
+            <h3>싸기만 한 차는 걸러봅니다</h3>
+            <p>시세보다 유독 낮은 차량은 사고·침수·용도이력·허위 가능성부터 의심합니다. 가격이 낮은 데는 반드시 이유가 있습니다.</p>
+          </div>
+        </div>
+        <div class="why-item reveal reveal-d1">
+          <div class="why-num">02</div>
+          <div>
+            <h3>예산 안에서 현실적으로 봅니다</h3>
+            <p>취등록세, 보험료, 정비 가능성까지 감안해서 무리 없는 선택지를 찾습니다. 차 값만 보면 나중에 후회합니다.</p>
+          </div>
+        </div>
+        <div class="why-item reveal reveal-d2">
+          <div class="why-num">03</div>
+          <div>
+            <h3>바로 사라고 압박하지 않습니다</h3>
+            <p>상담 목적은 판매보다 먼저 후회할 가능성을 줄이는 것입니다. 마음에 드는 차가 있을 때만 진행합니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 인용구 -->
+  <section class="quote-section">
+    <div class="quote-inner">
+      <span class="quote-mark-big reveal">"</span>
+      <p class="quote-main reveal reveal-d1">
+        가격은 절대<br>거짓말을 하지 않습니다.
+      </p>
+      <p class="quote-sub reveal reveal-d2">
+        싸게 샀다가 두 배로 쓰는 경우를 수없이 봤습니다.<br>
+        예산 안에서 상태와 이력을 확인하고, 앞으로 문제가 될<br>
+        가능성을 줄이는 쪽으로 같이 골라드리겠습니다.
+      </p>
+      <div class="quote-author reveal reveal-d3">
+        <div class="author-avatar">손</div>
+        <div>
+          <div class="author-name">손영준 딜러</div>
+          <div class="author-title">청주 엑스포매매단지 나이스모터스</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 폼 섹션 -->
+  <section class="form-section" id="form">
+    <div class="form-section-inner">
+      <div class="form-header reveal">
+        <h2 class="form-title">조건을 보내주시면<br><em>후보를 추려드립니다.</em></h2>
+        <p class="form-subtitle">차종을 몰라도 됩니다. 예산과 용도만 있으면 충분해요.</p>
+      </div>
+      <div class="form-card reveal reveal-d1">
+        <form id="leadForm">
+          <div class="field-pair">
+            <div class="form-row">
+              <label for="budget">예산</label>
+              <select id="budget">
+                <option value="">선택해주세요</option>
+                <option>500만원 이하</option>
+                <option>500~800만원</option>
+                <option>800~1,200만원</option>
+                <option>1,200~1,800만원</option>
+                <option>1,800~2,500만원</option>
+                <option>2,500만원 이상</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="purpose">주 용도</label>
+              <select id="purpose">
+                <option value="">선택해주세요</option>
+                <option>첫 차</option>
+                <option>출퇴근</option>
+                <option>가족용</option>
+                <option>영업/업무용</option>
+                <option>장거리 운행</option>
+                <option>아직 고민 중</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-pair" style="margin-top:14px">
+            <div class="form-row">
+              <label for="carType">원하는 차종</label>
+              <select id="carType">
+                <option>상관없음</option>
+                <option>경차</option>
+                <option>소형/준중형</option>
+                <option>중형/대형 세단</option>
+                <option>SUV</option>
+                <option>미니밴/승합</option>
+                <option>트럭/화물</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label for="phone">연락처</label>
+              <input id="phone" type="tel" inputmode="tel" placeholder="010-0000-0000">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:14px">
+            <label for="avoid">피하고 싶은 조건</label>
+            <input id="avoid" type="text" placeholder="예: 사고차, 렌트이력, 주행거리 많은 차">
+          </div>
+          <div class="form-row" style="margin-top:14px">
+            <label for="memo">추가 요청</label>
+            <textarea id="memo" placeholder="예: 출퇴근 왕복 40km, 아반떼/소나타 고민 중, 엔카 링크 봐주세요"></textarea>
+          </div>
+          <div class="form-divider"></div>
+          <button class="form-submit" type="submit" id="submitLead">카카오로 신청 보내기</button>
+          <div class="form-error" id="formError" role="alert"></div>
+          <div class="form-guide">
+            <strong>버튼을 누른 뒤 이렇게 진행돼요</strong>
+            1. 신청 내용이 자동으로 복사됩니다.<br>
+            2. 카카오톡 채팅창이 열리면 길게 눌러 붙여넣기 해주세요.<br>
+            3. 전송 버튼을 누르면 상담 신청이 도착합니다.
+          </div>
+          <p class="form-note">카카오 정책상 자동 전송은 불가합니다. 붙여넣기 후 직접 전송해주세요.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 절차 섹션 -->
+  <section class="process-section">
+    <div class="process-inner">
+      <div class="process-header">
+        <h2 class="process-title reveal">이렇게 진행됩니다.</h2>
+        <a class="process-cta-link reveal" href="#form">지금 시작하기 →</a>
+      </div>
+      <div class="process-grid">
+        <div class="process-item active reveal">
+          <div class="process-dot">1</div>
+          <h3>조건 보내기</h3>
+          <p>예산, 용도, 원하는 차종을 간단히 보내주세요.</p>
+        </div>
+        <div class="process-item reveal reveal-d1">
+          <div class="process-dot">2</div>
+          <h3>가능 범위 확인</h3>
+          <p>예산에서 현실적으로 볼 수 있는 차종과 조건을 정리합니다.</p>
+        </div>
+        <div class="process-item reveal reveal-d2">
+          <div class="process-dot">3</div>
+          <h3>후보 추리기</h3>
+          <p>상태·가격·이력 기준으로 후보 2~3대를 추려드립니다.</p>
+        </div>
+        <div class="process-item reveal reveal-d3">
+          <div class="process-dot">4</div>
+          <h3>상담 후 결정</h3>
+          <p>마음에 드는 차가 있을 때만 실차 확인으로 넘어갑니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 모달 -->
+  <div class="modal" id="sendModal" aria-hidden="true">
+    <div class="modal-box">
+      <h2>신청 내용이 준비됐습니다</h2>
+      <p>아래 내용이 복사됩니다. 카카오톡이 열리면 붙여넣고 전송해주세요.</p>
+      <div class="modal-alert">중요: 카카오톡 채팅창에 자동으로 보내지지 않습니다. 붙여넣기 후 전송 버튼을 꼭 눌러주세요.</div>
+      <div class="message-preview" id="messagePreview"></div>
+      <div class="modal-guide">
+        <div><b>1</b><span>버튼을 누르면 내용이 다시 복사되고 카카오톡이 열립니다.</span></div>
+        <div><b>2</b><span>대화창을 길게 누른 뒤 <strong>붙여넣기</strong>를 선택해주세요.</span></div>
+        <div><b>3</b><span>내용이 들어가면 <strong>전송</strong>을 눌러야 완료됩니다.</span></div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn fill" id="openKakao">복사 후 카카오톡 열기</button>
+        <button class="modal-btn line" id="sendSms">문자로 보내기</button>
+        <button class="modal-btn line" id="copyAgain">다시 복사</button>
+        <button class="modal-btn line" id="closeModal">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 모바일 하단 고정 -->
+  <div class="mobile-stick">
+    <a href="#form">지금 조건 보내기 →</a>
+  </div>
+
+  <footer>
+    <div class="footer-brand">
+      <span class="footer-brand-mark">N</span>
+      나이스모터스
+    </div>
+    <div class="footer-info">
+      청주 엑스포매매단지 · 손영준 딜러<br>
+      <a href="tel:01045619599">010-4561-9599</a>
+    </div>
+  </footer>
+
+  <script>
+    const KAKAO_URL = "http://pf.kakao.com/_YtXCX/chat";
+    const PHONE = "01045619599";
+    let lastMsg = "";
+
+    const $ = id => document.getElementById(id);
+    const val = id => ($( id)?.value || "").trim();
+
+    // 스크롤 페이드인
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    // 초기 히어로 요소 바로 표시
+    setTimeout(() => {
+      document.querySelectorAll(".hero .reveal").forEach(el => el.classList.add("visible"));
+    }, 100);
+
+    // 헤더 스크롤 변화
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      nav.classList.toggle("scrolled", window.scrollY > 60);
+    }, { passive: true });
+
+    function buildMsg() {
+      return [
+        "[중고차 추천 상담 신청]", "",
+        "예산: " + (val("budget") || "미입력"),
+        "용도: " + (val("purpose") || "미입력"),
+        "원하는 차종: " + (val("carType") || "상관없음"),
+        "피하고 싶은 조건: " + (val("avoid") || "없음"),
+        "추가 요청: " + (val("memo") || "없음"),
+        "연락처: " + (val("phone") || "미입력"), "",
+        "후보 2~3대 추천 부탁드립니다."
+      ].join("\n");
+    }
+
+    async function copy(msg) {
+      try { await navigator.clipboard.writeText(msg); return true; }
+      catch {
+        try {
+          const ta = Object.assign(document.createElement("textarea"), { value: msg });
+          ta.style.cssText = "position:fixed;left:-9999px";
+          document.body.appendChild(ta); ta.select();
+          const ok = document.execCommand("copy"); ta.remove(); return ok;
+        } catch { return false; }
+      }
+    }
+
+    function openModal(msg) {
+      lastMsg = msg;
+      $("messagePreview").textContent = msg;
+      $("sendModal").classList.add("open");
+    }
+
+    function closeModal() { $("sendModal").classList.remove("open"); }
+
+    async function submit(e) {
+      if (e) e.preventDefault();
+      $("formError").textContent = "";
+      if (!val("budget") || !val("purpose")) {
+        $("formError").textContent = "예산과 용도는 꼭 선택해주세요.";
+        return;
+      }
+      const msg = buildMsg();
+      const ok = await copy(msg);
+      openModal(msg);
+      if (!ok) $("copyAgain").textContent = "직접 복사 필요";
+    }
+
+    $("leadForm").addEventListener("submit", submit);
+    $("submitLead").addEventListener("click", submit);
+
+    $("openKakao").addEventListener("click", async () => {
+      await copy(lastMsg);
+      $("openKakao").textContent = "복사 완료 · 카카오톡 열기";
+      window.open(KAKAO_URL, "_blank", "noopener");
+      setTimeout(() => { $("openKakao").textContent = "복사 후 카카오톡 열기"; }, 1800);
+    });
+
+    $("sendSms").addEventListener("click", () => {
+      location.href = "sms:" + PHONE + "?body=" + encodeURIComponent(lastMsg);
+    });
+
+    $("copyAgain").addEventListener("click", async () => {
+      const ok = await copy(lastMsg);
+      $("copyAgain").textContent = ok ? "복사 완료" : "복사 실패";
+      setTimeout(() => { $("copyAgain").textContent = "다시 복사"; }, 1400);
+    });
+
+    $("closeModal").addEventListener("click", closeModal);
+    $("sendModal").addEventListener("click", e => { if (e.target.id === "sendModal") closeModal(); });
+  </script>
+</body>
+</html>
