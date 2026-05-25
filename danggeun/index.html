@@ -276,6 +276,60 @@
       color: #fff;
     }
 
+    /* ── 직접 입력 카드 ── */
+    .other-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      margin-top: -12px;
+      margin-bottom: 20px;
+      animation: fadeSlideIn 0.2s ease;
+    }
+
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .other-input {
+      flex: 1;
+      height: 46px;
+      border: 1.5px solid var(--blue);
+      border-radius: 10px;
+      padding: 0 14px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: inherit;
+      color: var(--white);
+      background: var(--bg);
+      outline: none;
+      transition: box-shadow 0.15s;
+    }
+
+    .other-input:focus {
+      box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+
+    .other-input::placeholder { color: #c4c4c8; }
+
+    .other-confirm {
+      height: 46px;
+      padding: 0 18px;
+      border-radius: 10px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+      font-family: inherit;
+    }
+
+    .other-confirm:hover { background: var(--blue-dark); }
+
     /* ── 텍스트 입력 ── */
     .text-input-wrap {
       width: 100%;
@@ -1020,6 +1074,16 @@
           <div class="opt-label">2,500만원 이상</div>
           <div class="opt-desc">프리미엄 선택 가능</div>
         </div>
+        <div class="opt-card opt-card-other" data-value="__other__" id="budgetOtherCard">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">✏️</div>
+          <div class="opt-label">직접 입력</div>
+          <div class="opt-desc">해당 없으면 여기</div>
+        </div>
+      </div>
+      <div class="other-input-wrap" id="budgetOtherWrap" style="display:none">
+        <input class="other-input" id="budgetOtherInput" type="text" placeholder="예) 1,500만원 정도요" maxlength="30">
+        <button class="other-confirm" id="budgetOtherConfirm">확인 →</button>
       </div>
     </div>
 
@@ -1110,6 +1174,16 @@
           <div class="opt-label">미니밴·승합</div>
           <div class="opt-desc">카니발, 스타리아</div>
         </div>
+        <div class="opt-card opt-card-other" data-value="__other__" id="cartypeOtherCard">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">✏️</div>
+          <div class="opt-label">직접 입력</div>
+          <div class="opt-desc">특정 차종이 있으면</div>
+        </div>
+      </div>
+      <div class="other-input-wrap" id="cartypeOtherWrap" style="display:none">
+        <input class="other-input" id="cartypeOtherInput" type="text" placeholder="예) 아반떼 N라인이요" maxlength="30">
+        <button class="other-confirm" id="cartypeOtherConfirm">확인 →</button>
       </div>
     </div>
 
@@ -1290,6 +1364,39 @@
     setupGrid("budgetGrid", "budget");
     setupGrid("purposeGrid", "purpose");
     setupGrid("cartypeGrid", "cartype");
+
+    // ── 직접 입력 (기타) 처리 ──
+    function setupOther(gridId, cardId, wrapId, inputId, confirmId, answerKey) {
+      const grid = $(gridId);
+      const card = $(cardId);
+      const wrap = $(wrapId);
+      const input = $(inputId);
+      const btn = $(confirmId);
+
+      card.addEventListener("click", () => {
+        const isOpen = wrap.style.display !== "none";
+        if (isOpen) { wrap.style.display = "none"; return; }
+        wrap.style.display = "flex";
+        setTimeout(() => input.focus(), 50);
+      });
+
+      function confirm() {
+        const val = input.value.trim();
+        if (!val) return;
+        answers[answerKey] = val;
+        grid.querySelectorAll(".opt-card").forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+        card.querySelector(".opt-label").textContent = val;
+        wrap.style.display = "none";
+        setTimeout(() => goTo(currentStep + 1), 280);
+      }
+
+      btn.addEventListener("click", confirm);
+      input.addEventListener("keydown", e => { if (e.key === "Enter") confirm(); });
+    }
+
+    setupOther("budgetGrid", "budgetOtherCard", "budgetOtherWrap", "budgetOtherInput", "budgetOtherConfirm", "budget");
+    setupOther("cartypeGrid", "cartypeOtherCard", "cartypeOtherWrap", "cartypeOtherInput", "cartypeOtherConfirm", "cartype");
 
     // ── 웰컴 ──
     $("btnStart").addEventListener("click", () => goTo(1));
