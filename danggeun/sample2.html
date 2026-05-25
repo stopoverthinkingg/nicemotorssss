@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>중고차 추천 | 나이스모터스</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <style>
+    :root {
+      --bg: #09090b;
+      --bg2: #111113;
+      --card: #18181b;
+      --border: #27272a;
+      --border-hover: #3f3f46;
+      --blue: #3b82f6;
+      --blue-dark: #2563eb;
+      --blue-glow: rgba(59,130,246,0.2);
+      --white: #fafafa;
+      --muted: #71717a;
+      --sub: #a1a1aa;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: "Pretendard", -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── 상단 바 ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .logo-mark {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .step-counter {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .step-counter span { color: var(--white); }
+
+    /* ── 프로그레스 바 ── */
+    .progress-bar {
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 50;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--blue);
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 0 8px var(--blue);
+    }
+
+    /* ── 전화 상담 버튼 (우상단) ── */
+    .call-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 8px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .call-btn:hover { border-color: var(--border-hover); color: var(--white); }
+
+    /* ── 스텝 컨테이너 ── */
+    .steps-wrap {
+      position: fixed;
+      inset: 0;
+      top: 58px;
+    }
+
+    .step {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px min(80px, 8vw);
+      max-width: 760px;
+      margin: 0 auto;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+
+    .step.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: all;
+    }
+
+    .step.exit-left {
+      opacity: 0;
+      transform: translateX(calc(-50% - 48px));
+    }
+
+    .step.enter-right {
+      opacity: 0;
+      transform: translateX(calc(-50% + 48px));
+    }
+
+    /* ── 웰컴 스텝 (가운데 정렬) ── */
+    .step.welcome {
+      align-items: center;
+      text-align: center;
+    }
+
+    /* ── 스텝 레이블 ── */
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--blue);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .step-label::before {
+      content: "";
+      width: 16px; height: 1px;
+      background: var(--blue);
+    }
+
+    /* ── 질문 텍스트 ── */
+    .step-q {
+      font-size: clamp(28px, 4.5vw, 52px);
+      font-weight: 900;
+      line-height: 1.14;
+      letter-spacing: -0.03em;
+      word-break: keep-all;
+      margin-bottom: 12px;
+    }
+
+    .step-hint {
+      font-size: 15px;
+      color: var(--muted);
+      margin-bottom: 36px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    /* ── 선택 카드 그리드 ── */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .options-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+    .opt-card {
+      padding: 18px 20px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .opt-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--blue-glow);
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+
+    .opt-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .opt-card:hover::before { opacity: 0.3; }
+
+    .opt-card.selected {
+      border-color: var(--blue);
+      background: rgba(59,130,246,0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px var(--blue), 0 8px 24px var(--blue-glow);
+    }
+
+    .opt-card.selected::before { opacity: 1; }
+
+    .opt-icon { font-size: 22px; line-height: 1; }
+
+    .opt-label {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      position: relative;
+    }
+
+    .opt-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+      position: relative;
+    }
+
+    .opt-check {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      transition: all 0.18s;
+    }
+
+    .opt-card.selected .opt-check {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #fff;
+    }
+
+    /* ── 텍스트 입력 ── */
+    .text-input-wrap {
+      width: 100%;
+      margin-bottom: 28px;
+    }
+
+    .step-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--border);
+      color: var(--white);
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 700;
+      padding: 12px 0;
+      outline: none;
+      letter-spacing: -0.01em;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      caret-color: var(--blue);
+    }
+
+    .step-input::placeholder { color: var(--border-hover); }
+    .step-input:focus { border-bottom-color: var(--blue); }
+
+    textarea.step-input {
+      resize: none;
+      min-height: 80px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.6;
+    }
+
+    textarea.step-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px var(--blue-glow);
+    }
+
+    /* ── 하단 버튼 영역 ── */
+    .step-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-next {
+      height: 50px;
+      padding: 0 28px;
+      border-radius: 12px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.01em;
+      transition: all 0.18s;
+      box-shadow: 0 4px 20px var(--blue-glow);
+    }
+
+    .btn-next:hover { background: var(--blue-dark); transform: translateY(-1px); box-shadow: 0 6px 28px rgba(59,130,246,0.35); }
+    .btn-next:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    .btn-skip {
+      height: 50px;
+      padding: 0 20px;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      border: 0;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+    .btn-skip:hover { color: var(--sub); }
+
+    .btn-back {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+    .btn-back:hover { border-color: var(--border-hover); color: var(--sub); }
+
+    /* ── 웰컴 스텝 특수 스타일 ── */
+    .welcome-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 30px;
+      padding: 0 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,0.4);
+      background: rgba(59,130,246,0.1);
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 32px;
+    }
+
+    .welcome-badge::before {
+      content: "";
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #60a5fa;
+      animation: dot 2s infinite;
+    }
+
+    @keyframes dot { 0%,100%{opacity:1}50%{opacity:0.3} }
+
+    .welcome-title {
+      font-size: clamp(36px, 7vw, 76px);
+      font-weight: 900;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+      margin-bottom: 20px;
+      word-break: keep-all;
+      text-align: center;
+    }
+
+    .welcome-title .accent { color: var(--blue); }
+
+    .welcome-sub {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 44px;
+      max-width: 440px;
+      text-align: center;
+      word-break: keep-all;
+    }
+
+    .btn-start {
+      height: 58px;
+      padding: 0 36px;
+      border-radius: 14px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 900;
+      border: 0;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: all 0.2s;
+      box-shadow: 0 8px 40px rgba(59,130,246,0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-start:hover { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 12px 48px rgba(59,130,246,0.45); }
+
+    .welcome-proof {
+      display: flex;
+      gap: 20px;
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .welcome-proof span::before { content: "✓ "; color: var(--blue); }
+
+    /* ── 완료 스텝 ── */
+    .step.done-step {
+      align-items: center;
+      text-align: center;
+    }
+
+    .done-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(59,130,246,0.15);
+      border: 1.5px solid var(--blue);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      margin-bottom: 28px;
+      animation: pop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes pop { from{transform:scale(0.5);opacity:0} to{transform:scale(1);opacity:1} }
+
+    .done-title {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+
+    .done-sub {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 32px;
+      max-width: 380px;
+      word-break: keep-all;
+    }
+
+    .done-summary {
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .summary-row:last-child { border-bottom: 0; }
+    .summary-row .key { color: var(--muted); font-weight: 600; flex-shrink: 0; }
+    .summary-row .val { color: var(--white); font-weight: 700; text-align: right; word-break: keep-all; }
+
+    .done-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .btn-kakao {
+      width: 100%;
+      height: 56px;
+      border-radius: 14px;
+      background: #FEE500;
+      color: #3C1E1E;
+      font-size: 16px;
+      font-weight: 900;
+      border: 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-kakao:hover { background: #f5db00; transform: translateY(-1px); }
+
+    .btn-sms {
+      width: 100%;
+      height: 46px;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--sub);
+      font-size: 14px;
+      font-weight: 700;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-sms:hover { border-color: var(--border-hover); color: var(--white); }
+
+    .copy-notice {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* ── 에러 ── */
+    .step-error {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f87171;
+      min-height: 18px;
+      margin-top: -16px;
+      margin-bottom: 12px;
+    }
+
+    /* ── 키보드 힌트 ── */
+    .keyboard-hint {
+      font-size: 12px;
+      color: var(--border-hover);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 12px;
+    }
+
+    .kbd {
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 5px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--sub);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* ── 반응형 ── */
+    @media (max-width: 640px) {
+      .step { padding: 32px 20px 100px; }
+      .topbar { padding: 0 16px; }
+      .options-grid { grid-template-columns: 1fr 1fr; }
+      .options-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+      .welcome-proof { gap: 12px; font-size: 12px; }
+      .call-btn span { display: none; }
+    }
+
+    @media (max-width: 400px) {
+      .options-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 상단 바 -->
+  <header class="topbar">
+    <a href="/" class="logo">
+      <span class="logo-mark">N</span>
+      나이스모터스
+    </a>
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="tel:01045619599" class="call-btn">📞 <span>010-4561-9599</span></a>
+      <div class="step-counter" id="stepCounter" style="display:none"><span id="stepCurrent">1</span> / 6</div>
+    </div>
+  </header>
+
+  <!-- 프로그레스 바 -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- 스텝 래퍼 -->
+  <div class="steps-wrap">
+
+    <!-- 스텝 0: 웰컴 -->
+    <div class="step welcome active" data-step="0">
+      <div class="welcome-badge">당근 광고 전용 · 무료 상담</div>
+      <h1 class="welcome-title">중고차,<br><span class="accent">제가 골라드립니다.</span></h1>
+      <p class="welcome-sub">예산과 용도만 알려주세요. 2분이면 충분합니다.<br>후보 2~3대를 카카오톡으로 보내드립니다.</p>
+      <button class="btn-start" id="btnStart">시작하기 <span style="font-size:18px">→</span></button>
+      <div class="welcome-proof">
+        <span>허위매물 체크</span>
+        <span>예산별 후보 추천</span>
+        <span>첫 차 상담 가능</span>
+        <span>압박 없는 상담</span>
+      </div>
+    </div>
+
+    <!-- 스텝 1: 예산 -->
+    <div class="step enter-right" data-step="1">
+      <div class="step-label">예산</div>
+      <h2 class="step-q">예산이 얼마나 되세요?</h2>
+      <p class="step-hint">취등록세·보험 포함해서 편하게 말씀해주세요.</p>
+      <div class="options-grid" id="budgetGrid">
+        <div class="opt-card" data-value="500만원 이하">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">💰</div>
+          <div class="opt-label">500만원 이하</div>
+          <div class="opt-desc">경차·소형 위주</div>
+        </div>
+        <div class="opt-card" data-value="500~800만원">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚗</div>
+          <div class="opt-label">500~800만원</div>
+          <div class="opt-desc">준중형 선택지 多</div>
+        </div>
+        <div class="opt-card" data-value="800~1,200만원">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚙</div>
+          <div class="opt-label">800~1,200만원</div>
+          <div class="opt-desc">상태 좋은 매물 가능</div>
+        </div>
+        <div class="opt-card" data-value="1,200~1,800만원">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚘</div>
+          <div class="opt-label">1,200~1,800만원</div>
+          <div class="opt-desc">중형·SUV 선택 가능</div>
+        </div>
+        <div class="opt-card" data-value="1,800~2,500만원">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">✨</div>
+          <div class="opt-label">1,800~2,500만원</div>
+          <div class="opt-desc">신형·대형 접근 가능</div>
+        </div>
+        <div class="opt-card" data-value="2,500만원 이상">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🏆</div>
+          <div class="opt-label">2,500만원 이상</div>
+          <div class="opt-desc">프리미엄 선택 가능</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스텝 2: 용도 -->
+    <div class="step enter-right" data-step="2">
+      <div class="step-label">용도</div>
+      <h2 class="step-q">주로 어떤 용도로<br>쓰실 건가요?</h2>
+      <p class="step-hint">용도에 따라 추천이 달라집니다.</p>
+      <div class="options-grid cols-2" id="purposeGrid">
+        <div class="opt-card" data-value="첫 차">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🌱</div>
+          <div class="opt-label">첫 차</div>
+          <div class="opt-desc">기준 잡기부터 도와드려요</div>
+        </div>
+        <div class="opt-card" data-value="출퇴근">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🏙</div>
+          <div class="opt-label">출퇴근</div>
+          <div class="opt-desc">연비·유지비 중심</div>
+        </div>
+        <div class="opt-card" data-value="가족용">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">👨‍👩‍👧</div>
+          <div class="opt-label">가족용</div>
+          <div class="opt-desc">공간·안전성 우선</div>
+        </div>
+        <div class="opt-card" data-value="영업/업무용">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">💼</div>
+          <div class="opt-label">영업·업무용</div>
+          <div class="opt-desc">내구성·이미지 고려</div>
+        </div>
+        <div class="opt-card" data-value="장거리 운행">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🛣</div>
+          <div class="opt-label">장거리 운행</div>
+          <div class="opt-desc">주행거리 여유 있는 차</div>
+        </div>
+        <div class="opt-card" data-value="아직 고민 중">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🤔</div>
+          <div class="opt-label">아직 고민 중</div>
+          <div class="opt-desc">같이 정해봐요</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스텝 3: 차종 -->
+    <div class="step enter-right" data-step="3">
+      <div class="step-label">차종</div>
+      <h2 class="step-q">원하는 차종이 있나요?</h2>
+      <p class="step-hint">없으면 '상관없음'을 선택하세요.</p>
+      <div class="options-grid cols-2" id="cartypeGrid">
+        <div class="opt-card" data-value="상관없음">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🔀</div>
+          <div class="opt-label">상관없음</div>
+          <div class="opt-desc">예산·용도 맞는 걸로</div>
+        </div>
+        <div class="opt-card" data-value="경차">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🐾</div>
+          <div class="opt-label">경차</div>
+          <div class="opt-desc">모닝, 레이, 스파크</div>
+        </div>
+        <div class="opt-card" data-value="소형/준중형">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚗</div>
+          <div class="opt-label">소형·준중형</div>
+          <div class="opt-desc">아반떼, K3, 코나</div>
+        </div>
+        <div class="opt-card" data-value="중형/대형 세단">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚘</div>
+          <div class="opt-label">중형·대형</div>
+          <div class="opt-desc">소나타, K5, 그랜저</div>
+        </div>
+        <div class="opt-card" data-value="SUV">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚙</div>
+          <div class="opt-label">SUV</div>
+          <div class="opt-desc">투싼, 스포티지, 팰리</div>
+        </div>
+        <div class="opt-card" data-value="미니밴/승합">
+          <span class="opt-check">✓</span>
+          <div class="opt-icon">🚐</div>
+          <div class="opt-label">미니밴·승합</div>
+          <div class="opt-desc">카니발, 스타리아</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스텝 4: 피하고 싶은 조건 -->
+    <div class="step enter-right" data-step="4">
+      <div class="step-label">조건</div>
+      <h2 class="step-q">피하고 싶은 조건이<br>있나요?</h2>
+      <p class="step-hint">없으면 건너뛰어도 됩니다.</p>
+      <div class="text-input-wrap">
+        <input class="step-input" id="avoidInput" type="text"
+          placeholder="예: 사고차, 렌트이력, 주행거리 많은 차">
+      </div>
+      <div class="step-actions">
+        <button class="btn-next" id="avoidNext">계속하기 →</button>
+        <button class="btn-skip" id="avoidSkip">건너뛰기</button>
+        <button class="btn-back" id="avoidBack">← 이전</button>
+      </div>
+      <div class="keyboard-hint">
+        <span class="kbd">Enter</span> 계속하기
+      </div>
+    </div>
+
+    <!-- 스텝 5: 추가 요청 -->
+    <div class="step enter-right" data-step="5">
+      <div class="step-label">추가 요청</div>
+      <h2 class="step-q">더 하고 싶은 말이<br>있나요?</h2>
+      <p class="step-hint">엔카·당근 링크, 특정 모델, 거리 조건 등 자유롭게.</p>
+      <div class="text-input-wrap">
+        <textarea class="step-input" id="memoInput"
+          placeholder="예: 아반떼 vs 코나 고민 중, 왕복 60km 통근, 이 링크 봐주세요..."></textarea>
+      </div>
+      <div class="step-actions">
+        <button class="btn-next" id="memoNext">계속하기 →</button>
+        <button class="btn-skip" id="memoSkip">건너뛰기</button>
+        <button class="btn-back" id="memoBack">← 이전</button>
+      </div>
+    </div>
+
+    <!-- 스텝 6: 연락처 -->
+    <div class="step enter-right" data-step="6">
+      <div class="step-label">연락처</div>
+      <h2 class="step-q">연락처를 알려주시면<br>더 빠르게 답변드려요.</h2>
+      <p class="step-hint">카카오톡 상담도 가능해서 없어도 됩니다.</p>
+      <div class="text-input-wrap">
+        <input class="step-input" id="phoneInput" type="tel" inputmode="tel"
+          placeholder="010-0000-0000">
+      </div>
+      <div class="step-error" id="phoneError"></div>
+      <div class="step-actions">
+        <button class="btn-next" id="phoneNext">완료하기 →</button>
+        <button class="btn-skip" id="phoneSkip">연락처 없이 진행</button>
+        <button class="btn-back" id="phoneBack">← 이전</button>
+      </div>
+    </div>
+
+    <!-- 스텝 7: 완료 -->
+    <div class="step done-step enter-right" data-step="7">
+      <div class="done-icon">✓</div>
+      <h2 class="done-title">신청 준비 완료!</h2>
+      <p class="done-sub">아래 내용을 카카오톡으로 전송하면<br>빠르게 후보를 추려드립니다.</p>
+      <div class="done-summary" id="doneSummary"></div>
+      <div class="done-actions">
+        <button class="btn-kakao" id="btnKakao">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.76 1.57 5.2 4 6.74V21l3.56-2.1c.79.14 1.61.1 2.44.1 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
+          복사하고 카카오톡 열기
+        </button>
+        <button class="btn-sms" id="btnSms">📱 문자로 보내기</button>
+        <p class="copy-notice">카카오톡이 열리면 대화창에 붙여넣고 전송해주세요.</p>
+      </div>
+    </div>
+
+  </div><!-- /steps-wrap -->
+
+  <script>
+    const KAKAO = "http://pf.kakao.com/_YtXCX/chat";
+    const PHONE = "01045619599";
+
+    const answers = { budget: "", purpose: "", cartype: "", avoid: "", memo: "", phone: "" };
+    let currentStep = 0;
+    const totalSteps = 6;
+
+    // ── 유틸 ──
+    const $ = id => document.getElementById(id);
+
+    function updateProgress() {
+      const pct = currentStep === 0 ? 0 : Math.round((currentStep / totalSteps) * 100);
+      $("progressFill").style.width = pct + "%";
+      const counter = $("stepCounter");
+      if (currentStep === 0 || currentStep > totalSteps) {
+        counter.style.display = "none";
+      } else {
+        counter.style.display = "block";
+        $("stepCurrent").textContent = currentStep;
+      }
+    }
+
+    function goTo(next, direction = "forward") {
+      const steps = document.querySelectorAll(".step");
+      const cur = document.querySelector(`.step[data-step="${currentStep}"]`);
+      const nxt = document.querySelector(`.step[data-step="${next}"]`);
+      if (!nxt) return;
+
+      cur.classList.remove("active");
+      cur.classList.add(direction === "forward" ? "exit-left" : "enter-right");
+
+      nxt.classList.remove("enter-right", "exit-left");
+      // force reflow
+      nxt.getBoundingClientRect();
+      nxt.classList.add("active");
+
+      currentStep = next;
+      updateProgress();
+
+      // 포커스
+      setTimeout(() => {
+        const inp = nxt.querySelector("input, textarea");
+        if (inp) inp.focus();
+      }, 450);
+    }
+
+    function goBack() {
+      if (currentStep <= 1) { goTo(0, "backward"); return; }
+      goTo(currentStep - 1, "backward");
+    }
+
+    // ── 선택 카드 ──
+    function setupGrid(gridId, answerKey, autoAdvance = true) {
+      const grid = $(gridId);
+      if (!grid) return;
+      grid.querySelectorAll(".opt-card").forEach(card => {
+        card.addEventListener("click", () => {
+          grid.querySelectorAll(".opt-card").forEach(c => c.classList.remove("selected"));
+          card.classList.add("selected");
+          answers[answerKey] = card.dataset.value;
+          if (autoAdvance) {
+            setTimeout(() => goTo(currentStep + 1), 280);
+          }
+        });
+      });
+    }
+
+    setupGrid("budgetGrid", "budget");
+    setupGrid("purposeGrid", "purpose");
+    setupGrid("cartypeGrid", "cartype");
+
+    // ── 웰컴 ──
+    $("btnStart").addEventListener("click", () => goTo(1));
+
+    // ── 텍스트 스텝: 피하고 싶은 조건 ──
+    $("avoidNext").addEventListener("click", () => {
+      answers.avoid = $("avoidInput").value.trim();
+      goTo(5);
+    });
+    $("avoidSkip").addEventListener("click", () => { answers.avoid = ""; goTo(5); });
+    $("avoidBack").addEventListener("click", goBack);
+    $("avoidInput").addEventListener("keydown", e => { if (e.key === "Enter") { answers.avoid = e.target.value.trim(); goTo(5); }});
+
+    // ── 텍스트 스텝: 추가 요청 ──
+    $("memoNext").addEventListener("click", () => { answers.memo = $("memoInput").value.trim(); goTo(6); });
+    $("memoSkip").addEventListener("click", () => { answers.memo = ""; goTo(6); });
+    $("memoBack").addEventListener("click", goBack);
+
+    // ── 텍스트 스텝: 연락처 ──
+    $("phoneNext").addEventListener("click", () => {
+      answers.phone = $("phoneInput").value.trim();
+      showDone();
+    });
+    $("phoneSkip").addEventListener("click", () => { answers.phone = ""; showDone(); });
+    $("phoneBack").addEventListener("click", goBack);
+    $("phoneInput").addEventListener("keydown", e => { if (e.key === "Enter") { answers.phone = e.target.value.trim(); showDone(); }});
+
+    // ── 완료 화면 ──
+    function buildMsg() {
+      return [
+        "[중고차 추천 상담 신청]", "",
+        "예산: " + (answers.budget || "미입력"),
+        "용도: " + (answers.purpose || "미입력"),
+        "원하는 차종: " + (answers.cartype || "미입력"),
+        "피하고 싶은 조건: " + (answers.avoid || "없음"),
+        "추가 요청: " + (answers.memo || "없음"),
+        "연락처: " + (answers.phone || "미입력"),
+        "", "후보 2~3대 추천 부탁드립니다."
+      ].join("\n");
+    }
+
+    function showDone() {
+      // 요약 카드
+      const rows = [
+        ["예산", answers.budget || "미입력"],
+        ["용도", answers.purpose || "미입력"],
+        ["차종", answers.cartype || "미입력"],
+        answers.avoid ? ["피할 조건", answers.avoid] : null,
+        answers.memo ? ["추가 요청", answers.memo] : null,
+        answers.phone ? ["연락처", answers.phone] : null,
+      ].filter(Boolean);
+
+      $("doneSummary").innerHTML = rows.map(([k, v]) =>
+        `<div class="summary-row"><span class="key">${k}</span><span class="val">${v}</span></div>`
+      ).join("");
+
+      goTo(7);
+
+      // 자동 복사
+      const msg = buildMsg();
+      copy(msg);
+    }
+
+    async function copy(msg) {
+      try { await navigator.clipboard.writeText(msg); return true; }
+      catch {
+        try {
+          const ta = Object.assign(document.createElement("textarea"), { value: msg });
+          ta.style.cssText = "position:fixed;left:-9999px";
+          document.body.appendChild(ta); ta.select();
+          const ok = document.execCommand("copy"); ta.remove(); return ok;
+        } catch { return false; }
+      }
+    }
+
+    $("btnKakao").addEventListener("click", async () => {
+      await copy(buildMsg());
+      $("btnKakao").textContent = "✓ 복사 완료 · 카카오톡 열기";
+      window.open(KAKAO, "_blank", "noopener");
+      setTimeout(() => { $("btnKakao").innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.76 1.57 5.2 4 6.74V21l3.56-2.1c.79.14 1.61.1 2.44.1 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg> 복사하고 카카오톡 열기`; }, 2500);
+    });
+
+    $("btnSms").addEventListener("click", () => {
+      location.href = "sms:" + PHONE + "?body=" + encodeURIComponent(buildMsg());
+    });
+
+    // ── 초기화 ──
+    updateProgress();
+  </script>
+</body>
+</html>
