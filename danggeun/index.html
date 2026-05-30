@@ -709,40 +709,144 @@
       background: rgba(59,130,246,0.06);
       border: 1px solid rgba(59,130,246,0.2);
       border-radius: 14px;
-      padding: 16px 18px;
+      padding: 18px 18px 20px;
       margin-bottom: 20px;
     }
 
-    .paste-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .paste-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 14px;
-      color: var(--sub);
+    .paste-lead {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--white);
       line-height: 1.5;
+      margin-bottom: 6px;
+      word-break: keep-all;
+    }
+    .paste-lead .hl { color: var(--blue); }
+
+    .paste-lead-sub {
+      font-size: 13px;
+      color: var(--sub);
+      line-height: 1.6;
+      margin-bottom: 4px;
+      word-break: keep-all;
     }
 
-    .paste-step strong { color: var(--white); }
+    /* 카톡 입력창 흉내 일러스트 */
+    .kakao-illust {
+      position: relative;
+      background: #b2c7d9;
+      border-radius: 12px;
+      padding: 52px 12px 30px;
+      margin: 14px 0 14px;
+      overflow: hidden;
+    }
 
-    .paste-num {
+    /* 꾹 눌렀을 때 뜨는 "붙여넣기" 팝업 */
+    .ki-popup {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2b2b2b;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 7px 18px;
+      border-radius: 9px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.28);
+      white-space: nowrap;
+      animation: kiPop 1.8s ease-in-out infinite;
+    }
+    .ki-popup::after {
+      content: "";
+      position: absolute;
+      bottom: -5px; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #2b2b2b;
+      border-bottom: 0;
+    }
+    @keyframes kiPop {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      45%      { transform: translateX(-50%) translateY(-3px); opacity: 1; }
+    }
+
+    /* 입력 바 */
+    .ki-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border-radius: 22px;
+      padding: 9px 9px 9px 16px;
+      position: relative;
+      box-shadow: 0 0 0 0 rgba(37,99,235,0.5);
+      animation: kiPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes kiPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.45); }
+      50%      { box-shadow: 0 0 0 6px rgba(37,99,235,0); }
+    }
+    .ki-input {
+      flex: 1;
+      font-size: 13px;
+      color: #b0b0b0;
+      text-align: left;
+    }
+    .ki-send {
+      background: #f5db00;
+      color: #3c1e1e;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 7px 15px;
+      border-radius: 16px;
       flex-shrink: 0;
-      width: 22px;
-      height: 22px;
+    }
+    /* 꾹 누르는 손가락 */
+    .ki-finger {
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      margin-left: -34px;
+      font-size: 24px;
+      animation: kiTap 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+    }
+    @keyframes kiTap {
+      0%, 100% { transform: translateY(0) scale(1); }
+      45%      { transform: translateY(-3px) scale(0.86); }
+    }
+
+    /* 3단계 칩 */
+    .paste-chips {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .paste-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff;
+      border: 1px solid rgba(59,130,246,0.25);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .paste-chip .pc-num {
+      width: 17px; height: 17px;
       border-radius: 50%;
       background: var(--blue);
       color: #fff;
-      font-size: 11px;
-      font-weight: 900;
+      font-size: 10px;
       display: grid;
       place-items: center;
-      margin-top: 1px;
     }
+    .paste-arrow { color: var(--blue); font-weight: 900; font-size: 13px; }
 
     /* ── 카카오 확인 모달 ── */
     .kakao-modal-overlay {
@@ -1268,27 +1372,28 @@
     <div class="step done-step enter-right" data-step="7">
       <div class="done-icon">✓</div>
       <h2 class="done-title">신청 준비 완료!</h2>
-      <p class="done-sub">아래 내용이 자동으로 복사됩니다.<br>버튼을 누르면 카카오톡 채널이 열려요.</p>
+      <p class="done-sub">신청 내용이 <strong style="color:var(--blue)">자동으로 복사</strong>됐어요.<br>버튼을 누르면 카카오톡이 열립니다.</p>
       <div class="done-summary" id="doneSummary"></div>
 
       <div class="paste-guide">
-        <div class="paste-steps">
-          <div class="paste-step">
-            <span class="paste-num">1</span>
-            <span>버튼을 누르면 <strong>메시지가 자동 복사</strong>되고<br>카카오톡 채널이 열립니다</span>
+        <p class="paste-lead">📋 위 내용이 <span class="hl">이미 복사돼 있어요!</span></p>
+        <p class="paste-lead-sub">카톡이 열리면 채팅창이 비어 보여도 괜찮아요.<br>아래처럼 <strong>딱 한 번만</strong> 하면 끝나요.</p>
+
+        <div class="kakao-illust">
+          <div class="ki-popup">붙여넣기</div>
+          <div class="ki-bar">
+            <span class="ki-input">메시지 입력</span>
+            <span class="ki-send">전송</span>
           </div>
-          <div class="paste-step">
-            <span class="paste-num">2</span>
-            <span>카카오톡 대화창에서 <strong>입력창을 길게 누르세요</strong></span>
-          </div>
-          <div class="paste-step">
-            <span class="paste-num">3</span>
-            <span><strong>붙여넣기</strong>를 선택하면 내용이 들어갑니다</span>
-          </div>
-          <div class="paste-step">
-            <span class="paste-num">4</span>
-            <span>전송 버튼을 누르면 끝!</span>
-          </div>
+          <div class="ki-finger">👆</div>
+        </div>
+
+        <div class="paste-chips">
+          <span class="paste-chip"><span class="pc-num">1</span>입력창 꾹 누르기</span>
+          <span class="paste-arrow">→</span>
+          <span class="paste-chip"><span class="pc-num">2</span>붙여넣기</span>
+          <span class="paste-arrow">→</span>
+          <span class="paste-chip"><span class="pc-num">3</span>전송</span>
         </div>
       </div>
 
@@ -1308,7 +1413,24 @@
     <div class="kakao-modal">
       <p class="kakao-modal-label">전송될 내용</p>
       <pre class="kakao-modal-msg" id="kakaoModalMsg"></pre>
-      <p class="kakao-modal-hint">카카오 공식 채널로 전송됩니다.<br>채널이 열리면 <strong>입력창을 길게 눌러 붙여넣기</strong> 후 전송해주세요.</p>
+      <p class="kakao-modal-hint">위 내용이 <strong>이미 복사됐어요.</strong> 카톡이 열리면<br>채팅창이 비어 보여도 아래처럼 하면 끝!</p>
+
+      <div class="kakao-illust">
+        <div class="ki-popup">붙여넣기</div>
+        <div class="ki-bar">
+          <span class="ki-input">메시지 입력</span>
+          <span class="ki-send">전송</span>
+        </div>
+        <div class="ki-finger">👆</div>
+      </div>
+
+      <div class="paste-chips" style="margin-bottom:20px">
+        <span class="paste-chip"><span class="pc-num">1</span>꾹 누르기</span>
+        <span class="paste-arrow">→</span>
+        <span class="paste-chip"><span class="pc-num">2</span>붙여넣기</span>
+        <span class="paste-arrow">→</span>
+        <span class="paste-chip"><span class="pc-num">3</span>전송</span>
+      </div>
       <button class="kakao-modal-btn" id="kakaoModalConfirm">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.76 1.57 5.2 4 6.74V21l3.56-2.1c.79.14 1.61.1 2.44.1 5.52 0 10-3.58 10-8S17.52 3 12 3z"/></svg>
         복사하고 카카오톡 열기
